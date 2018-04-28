@@ -1,0 +1,292 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<link rel="stylesheet" href="../css/index.css">
+	<title>城市配送管理平台</title>
+</head>
+<body>
+	<div class="city-wrapper">
+		<div class="city-header clearfix">
+			<ul class="city-menu clearfix">
+				<li class="city-menu-item"><a href="javascript:;" class="city-menu-a" title="首页">首页</a></li>
+				<li class="city-menu-item"><a href="javascript:;" class="city-menu-a" title="配送监控">配送监控</a></li>
+				<li class="city-menu-item"><a href="javascript:;" class="city-menu-a" title="订单列表">订单列表</a></li>
+				<li class="city-menu-item active"><a href="javascript:;" class="city-menu-a" title="站点管理">站点管理</a></li>
+			</ul>
+			<ul class="city-submenu clearfix">
+				<li class="city-submenu-item">
+					<a href="javascript:;" class="city-person"><i class="iconfont iconfont-person"></i>用户名<i class="iconfont iconfont-arrow-b"></i></a>
+					<ul class="city-submenu-group hidden">
+						<li class="city-submenu-group-item"><a href="javascript:;">个人中心</a></li>
+						<li class="city-submenu-group-item"><a href="javascript:;">修改密码</a></li>
+					</ul>
+				</li>
+				<li class="city-submenu-item"><a href="javascript:;" title="全屏"><i class="iconfont iconfont-fullscreen"></i></a></li>
+				<li class="city-submenu-item"><a href="javascript:;" title="退出"><i class="iconfont iconfont-logout"></i></a></li>
+			</ul>
+		</div>
+		<div class="city-title-layout">
+			<div class="city-title">站点列表</div>
+			<div class="city-logo"><a href="javascript:;" title="城市配送管理平台"><img src="../images/logo.png" alt=""></a></div>
+		</div>
+		<div class="city-main-scroll">
+			<div class="city-main city-table-search-active"><!-- city-table-search-active -->
+				<div class="city-search-title">
+					<ul class="city-tap clearfix">
+						<li class="tap-item active"><a href="javascript:;">仓库</a></li>
+						<li class="tap-item"><a href="javascript:;">配送点</a></li>
+					</ul>
+					<div class="btns-box">
+						<a href="javascript:;" class="city-btn">导入</a>
+						<a href="javascript:;" class="city-btn disabled">删除</a>
+						<a href="javascript:;" class="city-btn active">新建</a>
+						<a href="javascript:;" class="city-search-listBtn" title="条件筛选"><i class="iconfont iconfont-suo"></i></a>
+					</div>
+				</div>
+				<div class="city-search-lists">
+					<div class="top">
+						<span class="tit fl">条件筛选<i class="iconfont iconfont-arrow-b"></i></span>
+						<a href="javascript:;" class="city-search-listBtn fr active"><i class="iconfont iconfont-suo"></i></a>
+					</div>
+					<div class="list-box">
+						<div>
+							<div class="ipt_box"><input type="text" class="ipt_text ipt_text_search" placeholder="请输入联系人名字"></div>
+							<div class="ipt_box">
+								<select class="city-ipt-select">
+									<option value="-1">请选择部门</option>
+									<option value="1">部门1</option>
+									<option value="2">部门2</option>
+									<option value="3">部门3</option>
+									<option value="4">部门4</option>
+								</select>
+							</div>
+							<div class="ipt_box"><input type="submit" class="ipt_submit" value="查询"></div>
+						</div>
+					</div>
+				</div>
+				<div class="city-table-main">
+					<a href="javascript:;" class="city-table-tap"><i class="iconfont iconfont-tap"></i></a>
+					<div class="city-table-items">
+						<a href="javascript:;" class="city-table-tap"><i class="iconfont iconfont-tap"></i></a>
+						<ul>
+							<li><label class="city-ipt-label"><input type="checkbox" checked="checked"><span class="city-ipt-checkbox"></span>名称</label></li>
+							<li><label class="city-ipt-label"><input type="checkbox" checked="checked"><span class="city-ipt-checkbox"></span>部门</label></li>
+							<li><label class="city-ipt-label"><input type="checkbox" checked="checked"><span class="city-ipt-checkbox"></span>联系人</label></li>
+							<li><label class="city-ipt-label"><input type="checkbox" checked="checked"><span class="city-ipt-checkbox"></span>手机号</label></li>
+							<li><label class="city-ipt-label"><input type="checkbox" checked="checked"><span class="city-ipt-checkbox"></span>位置</label></li>
+							<li><label class="city-ipt-label"><input type="checkbox" checked="checked"><span class="city-ipt-checkbox"></span>创建时间</label></li>
+						</ul>
+					</div>
+					<div class="city-table-box">
+						<table class="city-table">
+							<thead>
+								<tr>
+									<th><label class="city-ipt-label"><input type="checkbox"><span class="city-ipt-checkbox"></span></label></th>
+									<th><div class="limit">操作</div></th>
+									<th><div class="limit">名称</div></th>
+									<th><div class="limit">部门</div></th>
+									<th><div class="limit">联系人</div></th>
+									<th><div class="limit">手机号</div></th>
+									<th><div class="limit">位置</div></th>
+									<th><div class="limit">创建时间</div></th>
+								</tr>
+							</thead>
+							<tbody>
+								<tr>
+									<th><label class="city-ipt-label"><input type="checkbox"><span class="city-ipt-checkbox"></span></label></th>
+									<td><div class="limit">查看</div></td>
+									<td><div class="limit" title="南山一仓">南山一仓</div></td>
+									<td><div class="limit" title="成为深圳总部">成为深圳总部</div></td>
+									<td><div class="limit" title="张三">张三</div></td>
+									<td><div class="limit" title="13800138000">13800138000</div></td>
+									<td><div class="limit" title="深圳南山清华信息港">深圳南山清华信息港</div></td>
+									<td><div class="limit" title="2017-09-30 12:15:12">2017-09-30 12:15:12</div></td>
+								</tr>
+								<tr>
+									<th><label class="city-ipt-label"><input type="checkbox"><span class="city-ipt-checkbox"></span></label></th>
+									<td><div class="limit">查看</div></td>
+									<td><div class="limit" title="南山一仓">南山一仓</div></td>
+									<td><div class="limit" title="成为深圳总部">成为深圳总部</div></td>
+									<td><div class="limit" title="张三">张三</div></td>
+									<td><div class="limit" title="13800138000">13800138000</div></td>
+									<td><div class="limit" title="深圳南山清华信息港">深圳南山清华信息港</div></td>
+									<td><div class="limit" title="2017-09-30 12:15:12">2017-09-30 12:15:12</div></td>
+								</tr>
+								<tr>
+									<th><label class="city-ipt-label"><input type="checkbox"><span class="city-ipt-checkbox"></span></label></th>
+									<td><div class="limit">查看</div></td>
+									<td><div class="limit" title="南山一仓">南山一仓</div></td>
+									<td><div class="limit" title="成为深圳总部">成为深圳总部</div></td>
+									<td><div class="limit" title="张三">张三</div></td>
+									<td><div class="limit" title="13800138000">13800138000</div></td>
+									<td><div class="limit" title="深圳南山清华信息港">深圳南山清华信息港</div></td>
+									<td><div class="limit" title="2017-09-30 12:15:12">2017-09-30 12:15:12</div></td>
+								</tr>
+								<tr>
+									<th><label class="city-ipt-label"><input type="checkbox"><span class="city-ipt-checkbox"></span></label></th>
+									<td><div class="limit">查看</div></td>
+									<td><div class="limit" title="南山一仓">南山一仓</div></td>
+									<td><div class="limit" title="成为深圳总部">成为深圳总部</div></td>
+									<td><div class="limit" title="张三">张三</div></td>
+									<td><div class="limit" title="13800138000">13800138000</div></td>
+									<td><div class="limit" title="深圳南山清华信息港">深圳南山清华信息港</div></td>
+									<td><div class="limit" title="2017-09-30 12:15:12">2017-09-30 12:15:12</div></td>
+								</tr>
+								<tr>
+									<th><label class="city-ipt-label"><input type="checkbox"><span class="city-ipt-checkbox"></span></label></th>
+									<td><div class="limit">查看</div></td>
+									<td><div class="limit" title="南山一仓">南山一仓</div></td>
+									<td><div class="limit" title="成为深圳总部">成为深圳总部</div></td>
+									<td><div class="limit" title="张三">张三</div></td>
+									<td><div class="limit" title="13800138000">13800138000</div></td>
+									<td><div class="limit" title="深圳南山清华信息港">深圳南山清华信息港</div></td>
+									<td><div class="limit" title="2017-09-30 12:15:12">2017-09-30 12:15:12</div></td>
+								</tr>
+								<tr>
+									<th><label class="city-ipt-label"><input type="checkbox"><span class="city-ipt-checkbox"></span></label></th>
+									<td><div class="limit">查看</div></td>
+									<td><div class="limit" title="南山一仓">南山一仓</div></td>
+									<td><div class="limit" title="成为深圳总部">成为深圳总部</div></td>
+									<td><div class="limit" title="张三">张三</div></td>
+									<td><div class="limit" title="13800138000">13800138000</div></td>
+									<td><div class="limit" title="深圳南山清华信息港">深圳南山清华信息港</div></td>
+									<td><div class="limit" title="2017-09-30 12:15:12">2017-09-30 12:15:12</div></td>
+								</tr>
+								<tr>
+									<th><label class="city-ipt-label"><input type="checkbox"><span class="city-ipt-checkbox"></span></label></th>
+									<td><div class="limit">查看</div></td>
+									<td><div class="limit" title="南山一仓">南山一仓</div></td>
+									<td><div class="limit" title="成为深圳总部">成为深圳总部</div></td>
+									<td><div class="limit" title="张三">张三</div></td>
+									<td><div class="limit" title="13800138000">13800138000</div></td>
+									<td><div class="limit" title="深圳南山清华信息港">深圳南山清华信息港</div></td>
+									<td><div class="limit" title="2017-09-30 12:15:12">2017-09-30 12:15:12</div></td>
+								</tr>
+								<tr>
+									<th><label class="city-ipt-label"><input type="checkbox"><span class="city-ipt-checkbox"></span></label></th>
+									<td><div class="limit">查看</div></td>
+									<td><div class="limit" title="南山一仓">南山一仓</div></td>
+									<td><div class="limit" title="成为深圳总部">成为深圳总部</div></td>
+									<td><div class="limit" title="张三">张三</div></td>
+									<td><div class="limit" title="13800138000">13800138000</div></td>
+									<td><div class="limit" title="深圳南山清华信息港">深圳南山清华信息港</div></td>
+									<td><div class="limit" title="2017-09-30 12:15:12">2017-09-30 12:15:12</div></td>
+								</tr>
+								<tr>
+									<th><label class="city-ipt-label"><input type="checkbox"><span class="city-ipt-checkbox"></span></label></th>
+									<td><div class="limit">查看</div></td>
+									<td><div class="limit" title="南山一仓">南山一仓</div></td>
+									<td><div class="limit" title="成为深圳总部">成为深圳总部</div></td>
+									<td><div class="limit" title="张三">张三</div></td>
+									<td><div class="limit" title="13800138000">13800138000</div></td>
+									<td><div class="limit" title="深圳南山清华信息港">深圳南山清华信息港</div></td>
+									<td><div class="limit" title="2017-09-30 12:15:12">2017-09-30 12:15:12</div></td>
+								</tr>
+								<tr>
+									<th><label class="city-ipt-label"><input type="checkbox"><span class="city-ipt-checkbox"></span></label></th>
+									<td><div class="limit">查看</div></td>
+									<td><div class="limit" title="南山一仓">南山一仓</div></td>
+									<td><div class="limit" title="成为深圳总部">成为深圳总部</div></td>
+									<td><div class="limit" title="张三">张三</div></td>
+									<td><div class="limit" title="13800138000">13800138000</div></td>
+									<td><div class="limit" title="深圳南山清华信息港">深圳南山清华信息港</div></td>
+									<td><div class="limit" title="2017-09-30 12:15:12">2017-09-30 12:15:12</div></td>
+								</tr>
+								<tr>
+									<th><label class="city-ipt-label"><input type="checkbox"><span class="city-ipt-checkbox"></span></label></th>
+									<td><div class="limit">查看</div></td>
+									<td><div class="limit" title="南山一仓">南山一仓</div></td>
+									<td><div class="limit" title="成为深圳总部">成为深圳总部</div></td>
+									<td><div class="limit" title="张三">张三</div></td>
+									<td><div class="limit" title="13800138000">13800138000</div></td>
+									<td><div class="limit" title="深圳南山清华信息港">深圳南山清华信息港</div></td>
+									<td><div class="limit" title="2017-09-30 12:15:12">2017-09-30 12:15:12</div></td>
+								</tr>
+								<tr>
+									<th><label class="city-ipt-label"><input type="checkbox"><span class="city-ipt-checkbox"></span></label></th>
+									<td><div class="limit">查看</div></td>
+									<td><div class="limit" title="南山一仓">南山一仓</div></td>
+									<td><div class="limit" title="成为深圳总部">成为深圳总部</div></td>
+									<td><div class="limit" title="张三">张三</div></td>
+									<td><div class="limit" title="13800138000">13800138000</div></td>
+									<td><div class="limit" title="深圳南山清华信息港">深圳南山清华信息港</div></td>
+									<td><div class="limit" title="2017-09-30 12:15:12">2017-09-30 12:15:12</div></td>
+								</tr>
+								<tr>
+									<th><label class="city-ipt-label"><input type="checkbox"><span class="city-ipt-checkbox"></span></label></th>
+									<td><div class="limit">查看</div></td>
+									<td><div class="limit" title="南山一仓">南山一仓</div></td>
+									<td><div class="limit" title="成为深圳总部">成为深圳总部</div></td>
+									<td><div class="limit" title="张三">张三</div></td>
+									<td><div class="limit" title="13800138000">13800138000</div></td>
+									<td><div class="limit" title="深圳南山清华信息港">深圳南山清华信息港</div></td>
+									<td><div class="limit" title="2017-09-30 12:15:12">2017-09-30 12:15:12</div></td>
+								</tr>
+								<tr>
+									<th><label class="city-ipt-label"><input type="checkbox"><span class="city-ipt-checkbox"></span></label></th>
+									<td><div class="limit">查看</div></td>
+									<td><div class="limit" title="南山一仓">南山一仓</div></td>
+									<td><div class="limit" title="成为深圳总部">成为深圳总部</div></td>
+									<td><div class="limit" title="张三">张三</div></td>
+									<td><div class="limit" title="13800138000">13800138000</div></td>
+									<td><div class="limit" title="深圳南山清华信息港">深圳南山清华信息港</div></td>
+									<td><div class="limit" title="2017-09-30 12:15:12">2017-09-30 12:15:12</div></td>
+								</tr>
+								<tr>
+									<th><label class="city-ipt-label"><input type="checkbox"><span class="city-ipt-checkbox"></span></label></th>
+									<td><div class="limit">查看</div></td>
+									<td><div class="limit" title="南山一仓">南山一仓</div></td>
+									<td><div class="limit" title="成为深圳总部">成为深圳总部</div></td>
+									<td><div class="limit" title="张三">张三</div></td>
+									<td><div class="limit" title="13800138000">13800138000</div></td>
+									<td><div class="limit" title="深圳南山清华信息港">深圳南山清华信息港</div></td>
+									<td><div class="limit" title="2017-09-30 12:15:12">2017-09-30 12:15:12</div></td>
+								</tr>
+							</tbody>
+						</table>
+					</div>
+					<div class="city-table-pages clearfix">
+						<div class="city-pages-left fl">
+							<span class="fl">每页显示</span>
+							<select class="city-ipt-select fl">
+								<option value="">10</option>
+								<option value="">20</option>
+								<option value="">50</option>
+								<option value="">100</option>
+								<option value="">200</option>
+							</select>
+							<span class="fl">条,共 130 条</span>
+						</div>
+						<div class="city-pages-right fr">
+							<ul class="clearfix">
+								<li class="prev fl disabled"><a href="javascript:;" title="上一页"><i class="iconfont iconfont-prev"></i></a></li>
+								<li class="page fl active"><a href="javascript:;">1</a></li>
+								<li class="page fl"><a href="javascript:;">2</a></li>
+								<li class="page fl"><a href="javascript:;">3</a></li>
+								<li class="page fl"><a href="javascript:;">4</a></li>
+								<li class="page fl"><a href="javascript:;">5</a></li>
+								<li class="page fl"><a href="javascript:;">6</a></li>
+								<li class="page fl"><a href="javascript:;">7</a></li>
+								<li class="page fl"><a href="javascript:;">8</a></li>
+								<li class="page fl"><a href="javascript:;">9</a></li>
+								<li class="page fl"><a href="javascript:;">10</a></li>
+								<li class="next fl"><a href="javascript:;" title="下一页"><i class="iconfont iconfont-next"></i></a></li>
+							</ul>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="city-footer clearfix">
+			<div class="fl clearfix">
+				<a href="javascript:;" class="active"><i class="iconfont iconfont-home"></i>首页</a>
+				<a href="javascript:;">站点列表</a>
+			</div>
+			<div class="fr">
+				<div class=""><a href="javascript:;">深圳市卡友帮智能物流服务有限公司</a> &nbsp;&nbsp;&nbsp; 版本号: <span class="version">1.0.0</span></div>
+			</div>
+		</div>
+	</div>
+</body>
+</html>

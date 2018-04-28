@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black">
+<title>卡友帮配送</title>
+<link rel="stylesheet" href="css/mui.min.css">
+<link rel="stylesheet" href="css/mui.picker.min.css">
+<link rel="stylesheet" href="css/app.css">
+<style type="text/css">
+.mui-view,
+.mui-pages,
+.mui-page,
+.mui-page-content {
+	position: absolute;
+	left: 0;
+	right: 0;
+	top: 0;
+	width: 100%;
+	bottom: 0;
+	background-color: #efeff4;
+}
+.mui-views{
+	left: 0;
+	right: 0;
+	width: 100%;
+	bottom: 0;
+	background-color: #efeff4;
+}
+.mui-view{top:125px;}
+.mui-scroll-wrapper,
+.mui-scroll {
+	background-color: #efeff4;
+}
+.mui-page.mui-transitioning {
+	-webkit-transition: -webkit-transform 300ms ease;
+	transition: transform 300ms ease;
+}
+.mui-page-left {
+	-webkit-transform: translate3d(0, 0, 0);
+	transform: translate3d(0, 0, 0);
+}
+.mui-ios .mui-page-left {
+	-webkit-transform: translate3d(-20%, 0, 0);
+	transform: translate3d(-20%, 0, 0);
+}
+.mui-navbar {
+	position: fixed;
+	right: 0;
+	left: 0;
+	z-index: 10;
+	height: 44px;
+	background-color: #f7f7f8;
+}
+
+.mui-page-shadow {
+	position: absolute;
+	right: 100%;
+	top: 0;
+	width: 16px;
+	height: 100%;
+	z-index: -1;
+	content: '';
+}
+.mui-page-shadow {
+	background: -webkit-linear-gradient(left, rgba(0, 0, 0, 0) 0, rgba(0, 0, 0, 0) 10%, rgba(0, 0, 0, .01) 50%, rgba(0, 0, 0, .2) 100%);
+	background: linear-gradient(to right, rgba(0, 0, 0, 0) 0, rgba(0, 0, 0, 0) 10%, rgba(0, 0, 0, .01) 50%, rgba(0, 0, 0, .2) 100%);
+}
+.mui-navbar-inner.mui-transitioning,
+.mui-navbar-inner .mui-transitioning {
+	-webkit-transition: opacity 300ms ease, -webkit-transform 300ms ease;
+	transition: opacity 300ms ease, transform 300ms ease;
+}
+.mui-page {
+	display: none;
+}
+.mui-pages .mui-page {
+	display: block;
+}
+.mui-page .mui-table-view:first-child {
+	margin-top: 15px;
+}
+.mui-page .mui-table-view:last-child {
+	margin-bottom: 30px;
+}
+.mui-table-view {
+	margin-top: 20px;
+}
+
+.mui-table-view span.mui-pull-right {
+	color: #999;
+}
+.mui-table-view-divider {
+	background-color: #efeff4;
+	font-size: 14px;
+}
+.mui-table-view-divider:before,
+.mui-table-view-divider:after {
+	height: 0;
+}
+.update {
+	font-style: normal;
+	color: #999999;
+	margin-right: -25px;
+	font-size: 15px
+}
+.mui-fullscreen {
+	position: fixed;
+	z-index: 20;
+	background-color: #000;
+}
+.mui-ios .mui-navbar .mui-bar .mui-title {
+	position: static;
+}
+/**/
+
+.mui-page-content li{height: 50px;line-height: 50px;background: #fff;padding-left: 15px;position: relative;}
+.radio_list ._radio::before{top:16px;}
+.radio_list ._radio::after{top:20px;}
+.dept-select-name {color:dodgerblue;}
+.dept-select-name a{color:dodgerblue;}
+.search-box{background: #fff;position: relative;padding-top:6px;}
+.mui-icon-search{position: absolute;top: 8px;left: 5px;}
+.search-box .mui-input-clear{margin-bottom: 0;padding: 5px 12px;padding-left: 30px;height: 40px;line-height: 30px;font-size: 14px;}
+.searchDept-suggest{padding: 0 8px !important;}
+</style>
+
+</head>
+<body style="background:#EFEFF4">
+<header class="mui-bar mui-bar-nav">
+	<a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"></a>
+	<h1 class="mui-title main-title">部门选择</h1>
+</header>
+
+<div id="app" class="mui-views mui-content">
+	<div class="search-box">
+		    <input type="text" id="searchDept" class="mui-input-clear" placeholder="输入部门名称搜索">
+		    <span class="mui-icon mui-icon-search"></span>
+	</div>
+	<div class="dept-select-level">
+		<div class="dept-levelshow-box">
+			<span class="dept-select-name first-page-title" >首页</span>
+		</div>
+	</div>
+	<div class="mui-view">
+		<div class="mui-pages">
+		</div>
+	</div>
+	<div class="subimt-box box-position" style="z-index: 99;">
+		<button class="mui-btn mui-btn-outlined submit-btn">确定</button>
+	</div>
+</div>
+
+<script src="js/zepto.min.js"></script>
+<script src="js/zepto.fx.js"></script>
+<script src="js/mui.min.js"></script>
+<script src="js/comUtils.js"></script>
+<script src="js/mui.view.js"></script>
+<script src="js/driverManage/select.js"></script>
+<script src="js/driverManage/selectDept.js"></script>
+</body>
+</html>

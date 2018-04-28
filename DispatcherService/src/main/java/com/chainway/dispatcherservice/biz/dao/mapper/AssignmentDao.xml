@@ -1,0 +1,162 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!-- namespace命名规则: 表对应java类的名称-->
+<mapper namespace="com.chainway.dispatcherservice.biz.dao.AssignmentDao">
+	<select id="listPublishedOrders" parameterType="string" resultType="java.util.Map">
+		SELECT
+			t.order_no orderNo,
+			t.distance,
+			t.weight,
+			t.volume,
+			t.package_num packageNum,
+			t.pre_pickup_time prePickupTime,
+			t.pre_finish_time preFinishTime,
+			t.fee,
+			t.fee_type feeType,
+			t.goods_type goodsType,
+			t.district_id districtId,
+			t1.address startAddr,
+			t1.site_name startSiteName,
+			t2.address endAddr,
+			t2.site_name endSiteName,
+			t3.`name` goodsTypeName,
+			t4.`name` vehicleTypeName
+		FROM
+			t_order t
+		LEFT JOIN t_order_site t1 ON (t.start_site_id = t1.site_id and t.order_no = t1.order_no)
+		LEFT JOIN t_order_site t2 ON (t.end_site_id = t2.site_id and t.order_no = t2.order_no)
+		LEFT JOIN t_goods_type_dict t3 ON t.goods_type = t3.id
+		LEFT JOIN t_vehicle_type_dict t4 ON t.vehicle_type = t4.id
+		WHERE
+			t.order_status =  ${@com.chainway.dispatchercore.common.OrderStatus@PUBLISHED}
+		order by t.pre_pickup_time
+	</select>
+	<select id="listReadyVehicles" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT
+			t.vehicle_id vehicleId,
+			t.vehicle_id_other vehicleIdOther,
+			t.plate_no plateNo,
+			t.load_rate loadRate,
+			t1.driver_id driverId,
+			t1.driver_name driverName,
+			t1.phone_no phoneNo,
+			t1.online_status onlineStatus,
+			t3.`name` vehicleTypeName
+		FROM
+			t_vehicle t
+		JOIN t_driver t1 ON t.vehicle_id = t1.vehicle_id
+		JOIN t_dept t2 ON t1.dept_id = t2.id
+		LEFT JOIN t_vehicle_type_dict t3 ON t.vehicle_type_id = t3.id
+		WHERE
+			t2.dna LIKE CONCAT(#{deptDNA},'%')
+		AND t.load_rate = 0
+		<include refid="vehicleListCondition"></include>
+	</select>
+	
+	<select id="listReadyVehiclesCount" parameterType="java.util.Map" resultType="int">
+		SELECT
+			count(*) num
+		FROM
+			t_vehicle t
+		JOIN t_driver t1 ON t.vehicle_id = t1.vehicle_id
+		JOIN t_dept t2 ON t1.dept_id = t2.id
+		LEFT JOIN t_vehicle_type_dict t3 ON t.vehicle_type_id = t3.id
+		WHERE
+			t2.dna LIKE CONCAT(#{deptDNA},'%')
+			AND t.load_rate = 0
+		<include refid="vehicleListCondition"></include>
+	</select>
+	<sql id="vehicleListCondition">
+		<if test="carryTypeId!=null">
+			AND EXISTS(SELECT * FROM t_vehicle_carry_type_dict_rel r WHERE r.vehicle_id = t.vehicle_id AND r.carry_type_id = #{carryTypeId})
+		</if>
+		<if test="vehicleType">
+			AND t.vehicle_type_id = #{vehicleType}
+		</if>
+		<if test="content!=null">
+			AND (t.plate_no LIKE CONCAT('%', #{content}, '%') 
+				OR t1.driver_name LIKE CONCAT('%',#{content},'%') 
+				OR t1.phone_no LIKE CONCAT('%',#{content},'%'))
+		</if>
+	</sql>
+	<select id="getCarrierMileages" parameterType="string" resultType="java.util.Map">
+		SELECT
+			t.mileage_min mileageMin,
+			t.mileage_max mileageMax
+		FROM
+			t_customer_info t
+		WHERE
+			t.dept_id = #{carrierDept}
+		limit 1
+	</select>
+	<select id="listCarrierAreas" parameterType="string" resultType="java.util.Map">
+		SELECT
+			t.province_id provinceId,  t.city_id cityId, t.district_id districtId
+		FROM
+			t_customer_area t
+		WHERE
+			t.dept_id = #{carrierDept}
+	</select>
+	<select id="listCarrierGoodsType" parameterType="string" resultType="java.util.Map">
+		SELECT
+			t.goods_type_id typeId
+		FROM
+			t_customer_goods_type t
+		WHERE
+			t.dept_id = #{carrierDept}
+	</select>
+	<insert id="recordOrderCarrierRel" parameterType="java.util.Map" useGeneratedKeys="true" keyProperty="id">
+		INSERT INTO t_order_carrier_rel (
+			`status`,
+			order_no,
+			carrier_dept,
+			creater,
+			create_time
+		)
+		VALUES
+		(
+			#{status},
+			#{orderNo},
+			#{carrierDept},
+			#{userId},
+			UTC_TIMESTAMP()
+		);
+		UPDATE t_order
+		SET order_status = ${@com.chainway.dispatchercore.common.OrderStatus@ACCEPTED},
+		carrier_dept = #{carrierDept}
+		WHERE
+			order_no = #{orderNo}
+	</insert>
+	<insert id="recordOrderVehicleRel" parameterType="java.util.Map">
+		INSERT INTO t_order_vehicle_rel (
+			order_no,
+			vehicle_other_id,
+			vehicle_id,
+			vehicle_no,
+			driver_id,
+			driver_name,
+			driver_phone,
+			creater,
+			create_time
+		)
+		VALUES
+			(
+				#{orderNo},
+				#{vehicle.vehicleIdOther},
+				#{vehicle.vehicleId},
+				#{vehicle.plateNo},
+				#{driver.driverId},
+				#{driver.driverName},
+				#{driver.phoneNo},
+				#{userId},
+				UTC_TIMESTAMP ()
+			);
+		UPDATE t_order
+		SET order_status = ${@com.chainway.dispatchercore.common.OrderStatus@ASSIGNED},
+		driver_dept = #{driver.deptId}
+		WHERE
+			order_no = #{orderNo}
+	</insert>
+</mapper>

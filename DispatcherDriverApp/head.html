@@ -1,0 +1,48 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+	<meta name="apple-mobile-web-app-capable" content="yes">
+	<meta name="apple-mobile-web-app-status-bar-style" content="black">
+	<title>货主APP</title>
+	<link rel="stylesheet" href="css/mui.min.css">
+	<link rel="stylesheet" href="css/index.css">
+</head>
+<body>
+	<header class="mui-bar mui-bar-nav ct-bar">
+		<a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left" id="J_goBack"></a>
+		<h1 class="mui-title ct-title" id="J_title">创建订单</h1>
+	</header>
+	<script src="js/mui.min.js"></script>
+	<script>
+		(function($, window, undefined){
+			$.plusReady(function() {
+				var immersed = 0;
+				var ms = (/Html5Plus\/.+\s\(.*(Immersed\/(\d+\.?\d*).*)\)/gi).exec(navigator.userAgent);
+				if(ms && ms.length >= 3) {
+					immersed = parseFloat(ms[2]);
+				}
+				if(immersed) {
+					var headerClass = document.querySelector('.mui-bar.mui-bar-nav');
+					headerClass && (headerClass.style.paddingTop = immersed + 'px', headerClass.style.height = immersed + 48 + 'px');
+				}
+
+				var cur = plus.webview.currentWebview();
+				var opts = cur.options || {};
+				$.openWindow(opts.url, {
+					styles: {
+						top: immersed + 48+'',
+						bottom: '0'
+					},
+					extras: opts.extras || {}
+				});
+
+				$('#J_title')[0].innerHTML = opts.title || '卡友帮配送';
+				opts.noGoBack && $('#J_goBack')[0].classList.add('hide');
+			})
+
+		})(mui, window);
+	</script>
+</body>
+</html>

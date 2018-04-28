@@ -1,0 +1,412 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!-- namespace命名规则: 表对应java类的名称--> 
+<mapper namespace="com.chainway.dispatcherservice.biz.dao.CarrierStatsDao">
+	<select id="getTotalFinishedOrderNum" parameterType="java.util.Map" resultType="int">
+		SELECT
+			count(*) amount
+		FROM
+			t_order t
+		JOIN t_dept t1 ON t.driver_dept = t1.id
+		WHERE
+			t.order_status = ${@com.chainway.dispatchercore.common.OrderStatus@FINISHED}
+		AND t1.dna LIKE CONCAT(#{deptDNA},'%')
+		<if test="startTime!=null and endTime!=null">
+			AND t.finish_time BETWEEN #{startTime} AND #{endTime}
+		</if>
+	</select>
+	
+	<select id="listConsignorOrderRanking" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT
+			b.`name` consignorName,
+			a.total,
+			IFNULL(c.amount, 0) amount
+		FROM
+			(
+				SELECT
+					consignor_dept,
+					count(*) total
+				FROM
+					t_order t
+				JOIN t_dept t1 ON t.driver_dept = t1.id
+				WHERE
+					t.order_status = ${@com.chainway.dispatchercore.common.OrderStatus@FINISHED}
+				AND t1.dna LIKE  CONCAT(#{deptDNA},'%')
+				GROUP BY
+					t.consignor_dept
+			) a
+		LEFT JOIN t_dept b ON a.consignor_dept = b.id
+		LEFT JOIN 
+			(
+				SELECT
+					consignor_dept,
+					count(*) amount
+				FROM
+					t_order t
+				JOIN t_dept t1 ON t.driver_dept = t1.id
+				WHERE
+					t.order_status = ${@com.chainway.dispatchercore.common.OrderStatus@FINISHED}
+				AND t.finish_time BETWEEN #{startTime} and #{endTime}
+				AND t1.dna LIKE  CONCAT(#{deptDNA},'%')
+				GROUP BY
+					t.consignor_dept
+			)  c on c.consignor_dept = a.consignor_dept
+		ORDER BY
+			a.total desc
+		<!-- 图表展示 -->
+		<if test="maxNum">
+			limit #{maxNum}
+		</if>
+		<!-- 表格控件使用 -->
+		<if test="pageSize!=null and offset!=null">
+			limit #{offset},#{pageSize}
+		</if>
+	</select>
+	<select id="getConsignorOrderRankingCount" parameterType="java.util.Map" resultType="int">
+		SELECT
+			count(*) total
+		FROM
+			(
+				SELECT
+					consignor_dept,
+					count(*) total
+				FROM
+					t_order t
+				JOIN t_dept t1 ON t.driver_dept = t1.id
+				WHERE
+					t.order_status = ${@com.chainway.dispatchercore.common.OrderStatus@FINISHED}
+				AND t1.dna LIKE  CONCAT(#{deptDNA},'%')
+				GROUP BY
+					t.consignor_dept
+			) a
+	</select>
+	
+	<select id="listFinishedOrderDist" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT
+			`day`,
+			count(*) amount
+		FROM
+			(
+				SELECT
+					DATE_FORMAT(
+						CONVERT_TZ(
+							finish_time,
+							'+00:00',
+							#{gmtZone}							
+						),
+						'%m-%d'
+					) `day`,
+					t.order_no
+				FROM
+					t_order t
+				LEFT JOIN t_dept t1 ON t.driver_dept = t1.id
+				WHERE
+					t1.dna LIKE  CONCAT(#{deptDNA},'%')
+				AND t.order_status = ${@com.chainway.dispatchercore.common.OrderStatus@FINISHED}
+				AND t.finish_time BETWEEN #{startTime}
+				AND #{endTime}
+			) a
+		GROUP BY
+			a.`day`
+		ORDER BY
+			a.`day`
+	</select>
+	
+	<select id="listDeptOrderDist" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT
+			b.`name` deptName,
+			count(*) amount
+		FROM
+			(
+				SELECT
+					t.order_no,
+					CONCAT(SUBSTRING_INDEX(t1.dna, '-', #{length} + 1), '-') dept_dna
+				FROM
+					t_order t
+				LEFT JOIN t_dept t1 ON t.driver_dept = t1.id
+				WHERE
+					t.order_status = ${@com.chainway.dispatchercore.common.OrderStatus@FINISHED}
+				AND t.finish_time BETWEEN #{startTime} AND #{endTime}
+				AND t1.dna LIKE CONCAT(#{deptDNA}, '%')
+				AND t1.dna != #{deptDNA}
+			) a
+		LEFT JOIN t_dept b ON a.dept_dna = b.dna
+		GROUP BY
+			a.dept_dna,
+			b.`name`
+	</select>
+	<select id="listDeptDayOrderDist" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT
+			b.`name` deptName,
+			a.`day`,
+			count(*) amount
+		FROM
+			(
+				SELECT
+					t.order_no,
+					DATE_FORMAT(
+						CONVERT_TZ(
+							finish_time,
+							'+00:00',
+							#{gmtZone}							
+						),
+						'%m-%d'
+					) `day`,
+					CONCAT(SUBSTRING_INDEX(t1.dna, '-', #{length} + 1), '-') dept_dna
+				FROM
+					t_order t
+				LEFT JOIN t_dept t1 ON t.driver_dept = t1.id
+				WHERE
+					t.order_status = ${@com.chainway.dispatchercore.common.OrderStatus@FINISHED}
+				AND t.finish_time BETWEEN #{startTime} AND #{endTime}
+				AND t1.dna LIKE CONCAT(#{deptDNA}, '%')
+				AND t1.dna != #{deptDNA}
+			) a
+		LEFT JOIN t_dept b ON a.dept_dna = b.dna
+		GROUP BY
+			a.dept_dna,
+			a.`day`,
+			b.`name`
+		order by b.`name`, a.`day`
+	</select>
+	<select id="listSubDepts" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT
+			`name` deptName,
+			id deptId
+		FROM
+			t_dept
+		WHERE
+			`status` = 1
+		AND parent_id = #{deptId}
+		ORDER BY
+			id
+	</select>
+	
+	<select id="statsSettlement" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT
+			tt.`month`,
+			SUM(tt.order_num) order_num,
+			SUM(tt.cust_num) cust_num,
+			SUM(tt.receivable) receivable,
+			SUM(tt.receipt) receipt
+		FROM
+			(
+			SELECT
+				a.`day`,
+				DATE_FORMAT(a.`day`, '%y-%m') MONTH,
+				a.order_num,
+				b.cust_num,
+				a.receivable,
+				a.receipt
+			FROM
+				(
+					SELECT
+						`day`,
+						count(i.order_no) order_num,
+						sum(IFNULL(i.fee, 0)) receivable,
+						sum(IFNULL(i.receipt, 0)) receipt
+					FROM
+						(
+							SELECT
+								DATE_FORMAT(
+									CONVERT_TZ(
+										finish_time,
+										'+00:00',
+										#{gmtZone}
+									),
+									'%y-%m-%d'
+								) `day`,
+								t.order_no,
+								t.fee,
+								t2.fee receipt
+							FROM
+								t_order t
+							LEFT JOIN t_dept t1 ON t.driver_dept = t1.id
+							LEFT JOIN t_order_payment t2 ON t.order_no = t2.order_no
+							WHERE
+								t.order_status = ${@com.chainway.dispatchercore.common.OrderStatus@FINISHED}
+							AND t1.dna LIKE CONCAT(#{deptDNA}, '%')
+							<include refid="statsSettlementCondition"></include>
+						) i
+					GROUP BY
+						i.`day`
+				) a
+				INNER JOIN (
+					SELECT
+						ii.`day`,
+						count(ii.consignor_dept) cust_num
+					FROM
+						(
+							SELECT
+								i.`day`,
+								i.consignor_dept
+							FROM
+								(
+									SELECT
+										DATE_FORMAT(
+											CONVERT_TZ(
+												finish_time,
+												'+00:00',
+												#{gmtZone}
+											),
+											'%y-%m-%d'
+										) `day`,
+										t.consignor_dept
+									FROM
+										t_order t
+									LEFT JOIN t_dept t1 ON t.driver_dept = t1.id
+									WHERE
+										t.order_status = ${@com.chainway.dispatchercore.common.OrderStatus@FINISHED}
+									AND t1.dna LIKE CONCAT(#{deptDNA}, '%')
+									<include refid="statsSettlementCondition"></include>
+								) i
+							GROUP BY
+								i.`day`,
+								i.consignor_dept
+						) ii
+					GROUP BY
+						ii.`day`
+				) b ON a.`day` = b.`day`
+			) tt
+			GROUP BY
+				tt.`month`
+		<if test="pageSize!=null and offset!=null">
+			limit #{offset},#{pageSize}
+		</if>
+	</select>
+	
+	<sql id="statsSettlementCondition">
+		<if test="startTime!=null and endTime!=null">
+			AND t.publish_time BETWEEN #{startTime} AND #{endTime}
+		</if>
+	</sql>
+	
+	<select id="getCustomerCount" parameterType="java.util.Map" resultType="int">
+		SELECT
+			count(*)
+		FROM
+			(
+				SELECT
+					t.consignor_dept,
+					substring_index(group_concat(t.publish_time),',',	1) earliest_time
+				FROM
+					(
+						SELECT
+							o.consignor_dept,
+							o.publish_time,
+							o.order_no
+						FROM
+							t_order o
+						LEFT JOIN t_dept d ON o.driver_dept = d.id
+						WHERE
+							o.order_status = 90
+						AND d.dna = #{deptDNA}	
+						ORDER BY
+							o.consignor_dept,
+							o.publish_time
+					) t
+				GROUP BY
+					t.consignor_dept
+			) tt
+		WHERE
+			1 = 1
+		<if test="startTime!=null and endTime!=null">
+			AND tt.earliest_time BETWEEN #{startTime} AND #{endTime}
+		</if>
+	</select>
+	
+	<select id="getSettleStatsCount" parameterType="java.util.Map" resultType="int">
+		SELECT COUNT(*) 
+			FROM(
+			SELECT
+				tt.`month`,
+				SUM(tt.order_num) order_num,
+				SUM(tt.cust_num) cust_num,
+				SUM(tt.receivable) receivable,
+				SUM(tt.receipt) receipt
+			FROM
+				(
+				SELECT
+					a.`day`,
+					DATE_FORMAT(a.`day`, '%y-%m') MONTH,
+					a.order_num,
+					b.cust_num,
+					a.receivable,
+					a.receipt
+				FROM
+					(
+					SELECT
+						`day`,
+						count(i.order_no) order_num,
+						sum(IFNULL(i.fee, 0)) receivable,
+						sum(IFNULL(i.receipt, 0)) receipt
+					FROM
+						(
+							SELECT
+								DATE_FORMAT(
+									CONVERT_TZ(
+										finish_time,
+										'+00:00',
+										#{gmtZone}
+									),
+									'%y-%m-%d'
+								) `day`,
+								t.order_no,
+								t.fee,
+								t2.fee receipt
+							FROM
+								t_order t
+							LEFT JOIN t_dept t1 ON t.driver_dept = t1.id
+							LEFT JOIN t_order_payment t2 ON t.order_no = t2.order_no
+							WHERE
+								t.order_status = ${@com.chainway.dispatchercore.common.OrderStatus@FINISHED}
+							AND t1.dna LIKE CONCAT(#{deptDNA}, '%')
+							<include refid="statsSettlementCondition"></include>
+						) i
+					GROUP BY
+						i.`day`
+				) a
+				INNER JOIN (
+					SELECT
+						ii.`day`,
+						count(ii.consignor_dept) cust_num
+					FROM
+						(
+							SELECT
+								i.`day`,
+								i.consignor_dept
+							FROM
+								(
+									SELECT
+										DATE_FORMAT(
+											CONVERT_TZ(
+												finish_time,
+												'+00:00',
+												#{gmtZone}
+											),
+											'%y-%m-%d'
+										) `day`,
+										t.consignor_dept
+									FROM
+										t_order t
+									LEFT JOIN t_dept t1 ON t.driver_dept = t1.id
+									WHERE
+										t.order_status = ${@com.chainway.dispatchercore.common.OrderStatus@FINISHED}
+									AND t1.dna LIKE CONCAT(#{deptDNA}, '%')
+									<include refid="statsSettlementCondition"></include>
+								) i
+							GROUP BY
+								i.`day`,
+								i.consignor_dept
+						) ii
+					GROUP BY
+						ii.`day`
+				) b ON a.`day` = b.`day`
+			) tt
+			GROUP BY
+				tt.`month`
+			) ttt
+	</select>
+</mapper>

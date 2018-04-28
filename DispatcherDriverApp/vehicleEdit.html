@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black">
+<title>卡友帮配送</title>
+<link rel="stylesheet" href="css/mui.min.css">
+<link rel="stylesheet" href="css/mui.picker.min.css" />
+<link rel="stylesheet" href="css/app.css">
+
+</head>
+<header class="mui-bar mui-bar-nav">
+	<a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"></a>
+	<h1 class="mui-title main-title">车辆信息</h1>
+</header>
+<div class="mui-content">
+	<div class="mui-scroll-wrapper">
+		<div class="mui-scroll">
+			<div class="add-pic" id="headImage">
+				<div class="add-icon-box">
+					<div class="add-icon"></div>
+					<p>上传车辆图片</p>
+				</div>
+				<div class="delete-img">
+					<span class="delete-img-icon"></span>
+				</div>
+			</div>
+			<div class="input-area">
+				<ul>
+					<li>
+						<div class="ipt-item">
+							<label ><i class="must-icon">*</i>车牌号</label>
+							<input class="plateNo" type="text" placeholder="请输入车牌号">
+						</div>
+					</li>
+					<li>
+						<div class="ipt-item">
+							<label ><i class="must-icon">*</i>PN号</label>
+							<input class="equipmentPn" type="text" placeholder="请输入设备PN号">
+						</div>
+					</li>
+					<li>
+						<div class="ipt-item selectVehicleType">
+							<label ><i class="must-icon">*</i>车辆类型</label>
+							<input type="text" id="VehicleTypeText" readonly="readonly" placeholder="封闭式货车/冷藏">
+							<input type="text" id="VehicleTypeId" class="hide" readonly="readonly" placeholder="封闭式货车/冷藏">
+		                </div>
+					</li>
+					<li>
+						<div class="ipt-item selectCargoAttr" >
+							<label ><i class="must-icon">*</i>货载属性</label>
+		                   	<input readonly="readonly" class="carryTypeName" type="text" placeholder="快递快运/医药保健/粮油谷物">
+		                   	<input readonly="readonly" class="carryTypeId hide" type="text" >
+		                </div>
+					</li>
+					<li>
+						<div class="ipt-item">
+							<label ><i class="must-icon">*</i>最大允许总质量(kg)</label>
+							<input class="vehicleWeightMax" type="text" placeholder="请输入对应的值">
+						</div>
+					</li>
+					<li>
+						<div class="ipt-item">
+							<label ><i class="must-icon">*</i>整车总长(mm)</label>
+							<input class="vehicleLength" type="text" placeholder="请输入对应的值">
+						</div>
+					</li>
+					<li>
+						<div class="ipt-item">
+							<label ><i class="must-icon">*</i>货箱内部尺寸</label>
+							<div class="clearfix">
+								<span class="w33"><input type="number" class="vehicleInsideLength" placeholder="长度">米</span>
+								<span class="w33"><input type="number" class="vehicleInsideWidth" placeholder="宽度">米</span>
+								<span class="w33"><input type="number" class="vehicleInsideHeight" placeholder="高度">米</span>
+							</div>
+						</div>
+					</li>
+					<li>
+						<div class="ipt-item">
+							<label ><i class="must-icon">*</i>载质量(kg)</label>
+							<input class="carryWeigthMax" type="text" placeholder="请输入对应的值">
+						</div>
+					</li>
+					<li>
+						<div class="ipt-item">
+							<label >载质量利用系数</label>
+							<input class="weigthUseFactor" type="text" placeholder="请输入对应的值">
+						</div>  
+					</li>
+					<li>
+						<div class="ipt-item">
+							<label >车辆最小转弯直径(m)</label>
+							<input class="swerveRadiusMin" type="text" placeholder="请输入对应的值">
+						</div>
+					</li>
+					<li>
+						<div class="ipt-item">
+							<label >比功率(KW/t)</label>
+							<input class="powerRate" type="text" placeholder="请输入对应的值">
+						</div>
+					</li>
+				</ul>
+			</div>
+			<div class="subimt-box">
+				<button class="mui-btn mui-btn-outlined submit-btn">保存修改</button>
+			</div>
+		</div>
+		
+	</div>
+</div>
+		
+<script src="js/zepto.min.js"></script>
+<script src="js/mui.min.js"></script>
+<script src="js/mui.picker.min.js"></script>
+<script src="js/common.js"></script>
+<script src="js/comUtils.js"></script>
+<script src="js/vehicleEdit.js"></script>
+
+</body>
+</html>

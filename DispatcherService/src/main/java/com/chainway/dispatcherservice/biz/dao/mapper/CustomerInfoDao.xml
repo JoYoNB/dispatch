@@ -1,0 +1,227 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!-- namespace命名规则: 表对应java类的名称-->
+<mapper namespace="com.chainway.dispatcherservice.biz.dao.CustomerInfoDao">
+	
+	<insert id="addCustomerInfo" parameterType="com.chainway.dispatcherservice.dto.CustomerInfo">
+		insert into t_customer_info(
+		dept_id,
+		user_id,
+		remark,
+		registered_capital,
+		scc,
+		business_licence,
+		mileage_min,
+		mileage_max,
+		updater,
+		update_time,
+		creater,
+		create_time,
+		logo,
+		auth_status,
+		settle_type
+		)value(
+		#{id},
+		#{userId},
+		#{remark},
+		#{registeredCapital},
+		#{scc},
+		#{businessLicence},
+		#{mileageMin},
+		#{mileageMax},
+		#{updater},
+		UTC_TIMESTAMP(),
+		#{creater},
+		UTC_TIMESTAMP(),
+		#{logo},
+		#{authStatus},
+		#{settleType}
+		)
+	</insert>
+	<update id="updateCustomerInfo" parameterType="com.chainway.dispatcherservice.dto.CustomerInfo">
+		UPDATE t_customer_info
+		SET 
+			registered_capital=#{registeredCapital},
+			scc=#{scc},
+			<if test="businessLicence!=null and businessLicence!=''">
+				business_licence=#{businessLicence},	
+			</if>
+			<if test="logo!=null and logo!=''">
+				logo=#{logo},	
+			</if>
+			settle_type=#{settleType},
+			auth_status=#{authStatus},
+			updater=#{updater},
+			remark=#{remark},
+			update_time=UTC_TIMESTAMP(),
+			mileage_min=#{mileageMin},
+			mileage_max=#{mileageMax}
+		WHERE dept_id=#{id};
+	</update>
+	
+	<delete id="deleteCustomerGoodsType" parameterType="com.chainway.dispatcherservice.dto.CustomerInfo">
+		DELETE
+		FROM
+			t_customer_goods_type
+		WHERE
+			dept_id = #{id}
+	</delete>
+	
+	<delete id="deleteCustomerArea" parameterType="com.chainway.dispatcherservice.dto.CustomerInfo">
+		DELETE
+		FROM
+			t_customer_area
+		WHERE
+			dept_id = #{id}
+	</delete>
+	
+	<insert id="addCustomerGoodsType" parameterType="com.chainway.dispatcherservice.dto.CustomerInfo">
+		INSERT INTO `t_customer_goods_type`(`dept_id` , `goods_type_id`)
+		VALUES
+        <foreach collection="goodsTypes" item="obj" separator=",">
+           (#{id} , #{obj.id})
+        </foreach>
+	</insert>
+	
+	<insert id="addCustomerArea" parameterType="com.chainway.dispatcherservice.dto.CustomerInfo">
+		INSERT INTO `t_customer_area`(
+			`dept_id` ,
+			`province_id`,
+			`city_id`,
+			`district_id`
+		)
+		VALUES
+		<foreach collection="areas" item="obj" separator=",">
+			(#{id} ,#{obj.provinceId},#{obj.cityId}, #{obj.districtId})
+		</foreach>
+	</insert>
+	
+	<resultMap id="customerResultMap" type="com.chainway.dispatcherservice.dto.CustomerInfo"> 
+  		<id column="id" property="id" /> 
+  		<result column="userId" property="userId" />
+  		<result column="name" property="name" />
+  		<result column="account" property="account" />
+  		<result column="logo" property="logo" />
+  		<result column="gmtZone" property="gmtZone" />
+  		<result column="role" property="role" />
+  		<result column="settleType" property="settleType" />
+  		<result column="authStatus" property="authStatus" />
+  		<result column="contacter" property="contacter" />
+		<result column="createTime" property="createTime" />
+		<result column="phone" property="phone" />
+  		<result column="email" property="email" />
+  		<result column="remark" property="remark" />
+  		<result column="mileageMin" property="mileageMin" />
+  		<result column="mileageMax" property="mileageMax" />
+  		<result column="registeredCapital" property="registeredCapital" />
+  		<result column="scc" property="scc" />
+  		<result column="businessLicence" property="businessLicence" />
+  		<collection property="areas" javaType="ArrayList" ofType="com.chainway.dispatcherservice.dto.Area">
+  			<id column="areaId" property="areaId" /> 
+  			<result column="districtId" property="districtId" />
+	  		<result column="districtName" property="districtName" />
+	  		<result column="districtI18nKey" property="districtI18nKey" />
+	  		<result column="cityId" property="cityId" />
+	  		<result column="cityName" property="cityName" />
+	  		<result column="cityI18nKey" property="cityI18nKey" />
+	  		<result column="provinceId" property="provinceId" />
+	  		<result column="provinceName" property="provinceName" />
+	  		<result column="provinceI18nKey" property="provinceI18nKey" />
+  		</collection>
+  		<collection property="goodsTypes" javaType="ArrayList" ofType="com.chainway.dispatcherservice.dto.GoodsType">
+  			<id column="gtId" property="id" /> 
+  		    <result column="gtName" property="name" />
+  		    <result column="gtI18nKey" property="i18nKey" />
+  		</collection>
+ 	</resultMap>
+ 	
+	<select id="getInfo" parameterType="int" resultMap="customerResultMap">
+		SELECT
+			td.id ,
+			td.name ,
+			td.contacter ,
+			td.create_time createTime ,
+			td.phone ,
+			td.email ,
+			tu.id userId,
+			tu.account ,
+			tu.gmt_zone gmtZone ,
+			tc.remark ,
+			tc.auth_status authStatus,
+			tc.logo,
+			tc.registered_capital registeredCapital ,
+			tc.scc ,
+			tc.business_licence businessLicence ,
+			tc.mileage_min mileageMin ,
+			tc.mileage_max mileageMax ,
+			tc.settle_type settleType,
+			td.role ,
+			tg.id gtId ,
+			tg.name gtName ,
+			tg.i18n_key gtI18nKey ,
+			ta1.id provinceId ,
+			ta1.name provinceName ,
+			ta1.i18n_key provinceI18nKey,
+			ta2.id cityId ,
+			ta2.name cityName ,
+			ta2.i18n_key cityI18nKey ,
+			ta3.id districtId ,
+			ta3.name districtName ,
+			ta3.i18n_key districtI18nKey ,
+			IF(tca.district_id is NULL or tca.district_id='',IF(tca.city_id IS NULL OR tca.city_id='',tca.province_id,tca.city_id),tca.district_id) areaId
+		FROM t_customer_info tc 
+		INNER JOIN t_dept td ON tc.dept_id = td.id 
+		INNER JOIN t_user tu ON tc.user_id = tu.id 
+		LEFT JOIN t_customer_goods_type tcg ON tc.dept_id = tcg.dept_id 
+		LEFT JOIN t_goods_type_dict tg ON tcg.goods_type_id = tg.id 
+		LEFT JOIN t_customer_area tca ON tc.dept_id = tca.dept_id 
+		LEFT JOIN(SELECT id ,name,parent,i18n_key FROM t_area WHERE LEVEL = 1) ta1 ON tca.province_id = ta1.id 
+		LEFT JOIN(SELECT id ,name , parent,i18n_key FROM t_area WHERE LEVEL = 2) ta2 ON tca.city_id = ta2.id 
+		LEFT JOIN(SELECT id ,name, parent,i18n_key FROM t_area WHERE LEVEL = 3) ta3 ON tca.district_id = ta3.id
+		WHERE tc.dept_id=#{id}
+	</select>
+	<sql id="getListConditions">
+		WHERE td.`status` <![CDATA[ <> ]]> 2 AND tu.`status` <![CDATA[ <> ]]> 2
+		<if test="role!=null and role!=''">
+			and td.role=#{role}
+		</if>
+		<if test="name!=null and name!=''">
+			and td.name like CONCAT('%',#{name},'%')
+		</if>
+	</sql>
+	<select id="getList" parameterType="java.util.Map" resultMap="customerResultMap">
+		SELECT
+			td.id ,
+			td.name ,
+			td.phone ,
+			td.email ,
+			td.contacter ,
+			td.create_time createTime ,
+			tu.account ,
+			tc.remark ,
+			tc.registered_capital registeredCapital ,
+			tc.scc ,
+			tc.business_licence businessLicence ,
+			tc.mileage_min mileageMin ,
+			tc.mileage_max mileageMax ,
+			td.role 
+		FROM t_customer_info tc 
+		INNER JOIN t_dept td ON tc.dept_id = td.id 
+		INNER JOIN t_user tu ON tc.user_id = tu.id 
+		<include refid="getListConditions"></include>
+		ORDER BY tc.update_time DESC
+		<if test="pageSize!=null and offset!=null">
+			limit #{offset},#{pageSize}
+		</if>
+	</select>
+	<select id="getListCount" parameterType="java.util.Map" resultType='int'>
+		SELECT
+			COUNT(1) AS n
+		FROM t_customer_info tc 
+		INNER JOIN t_dept td ON tc.dept_id = td.id 
+		INNER JOIN t_user tu ON tc.user_id = tu.id 
+		<include refid="getListConditions"></include>
+	</select>
+</mapper>

@@ -1,0 +1,48 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<!--#include file="/layout/libs.html"-->
+	<title>城市配送管理平台</title>
+</head>
+<body>
+<div class="city-wrapper">
+		<!-- 公共header 开始 -->
+		<!--#include file="/layout/header.html"-->
+		<!-- 公共header 结束 -->
+		<div class="city-title-layout">
+			<div class="city-title">站点列表</div>
+			<div class="city-logo"><a href="javascript:;" title="城市配送管理平台"><img src="../../../images/logo.png" alt=""></a></div>
+		</div>
+		<div class="city-main-scroll">
+			<div class="city-main city-table-search-active"><!-- city-table-search-active -->
+				<div class="city-search-title">
+					<div class="btns-box">
+						<a id="batchDelete" class="city-btn">删除</a>
+						<a href="/dsp/consignor/site/siteAdd.html" class="city-btn active">新建</a>
+						<a href="javascript:;" class="city-search-listBtn" title="条件筛选"><i class="iconfont iconfont-suo"></i></a>
+					</div>
+				</div>
+				<!-- 搜索区域 -->
+				<div class="select-box">
+				  	<span class="toggle-select clearfix">条件筛选 <i class="iconfont iconfont-arrow-b fr"></i></span>
+					<span class="change-status"><i class="iconfont iconfont-suo"></i></span>
+					<div class="search-area">
+						<div id="deptWidget" class="ipt_box"></div>
+						<div class="ipt_box"><input id="name" type="text" class="ipt_text" placeholder="请输入站点名称"></div>
+						<div class="ipt_box"><input id="linkMan" type="text" class="ipt_text" placeholder="请输入联系人名字"></div>
+						<div class="ipt_box"><input id="linkPhone" type="text" class="ipt_text" placeholder="请输入联系人手机号"></div>
+						<div class="ipt_box"><input id="queryList" type="button" class="ipt_submit" value="查询"></div>
+					</div>
+				</div>
+				<div class="city-table-main" id="tableWidget">
+				</div>
+			</div>
+		</div>
+		<!-- 底部 开始 -->
+		<!--#include file="/layout/footer.html"-->
+		<!-- 底部 结束 -->
+	</div>
+	<script type="text/javascript" src="/js/consignor/site/siteList.js"></script>	
+</body>
+</html>

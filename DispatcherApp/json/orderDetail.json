@@ -1,0 +1,54 @@
+{
+	"errCode": 0,
+	"data": {
+		"plateNo": "粤B 12345",
+		"driver": "张三",
+		"phone": "13032154568",
+		"depart": "产品研发部",
+		"state": "1",
+		"load": "1",
+		"height": "4.2",
+		"carDoor": "开侧门",
+		"speed": "40",
+		"point": {"lng": 114.025974, "lat": 22.546054},
+		"position": "深圳南山区清华信息港",
+		"orderId": "a123456789",
+		"goodsType": "饮料",
+		"goods": {"ton": 7, "piece": 0, "cube": 0},
+		"logistics": "a物流",
+		"takeGoodsTime": "2018-02-05 15:00:00",
+		"routes": [{
+			"time": "04-18 10:36:19",
+			"state": 0,
+			"logistics": "xx物流",
+			"plateNo": "粤122345",
+			"driver": "张三",
+			"phone": "13021546598"
+		},{
+			"time": "04-18 10:36:19",
+			"state": 1,
+			"position": "深圳南山区清华信息港",
+			"depot": "南山1仓",
+			"contacts": "李四",
+			"phone": "13065487965",
+			"point": {"lng": 114.025974, "lat": 22.546054}
+		},{
+			"time": "04-18 10:36:19",
+			"state": 2,
+			"position": "深圳南山区清华信息港",
+			"depot": "南山1仓",
+			"contacts": "李四",
+			"phone": "13065487965",
+			"point": {"lng": 114.025974, "lat": 22.546054},
+			"goods": {"ton": 2, "piece": 0, "cube": 0}
+		},{
+			"state": 3,
+			"position": "深圳南山区清华信息港",
+			"depot": "南山1仓",
+			"contacts": "李四",
+			"phone": "13065487965",
+			"point": {"lng": 114.025974, "lat": 22.546054},
+			"goods": {"ton": 3, "piece": 0, "cube": 0}
+		}]
+	}
+}

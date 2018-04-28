@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.chainway.dispatcherdriverservice.biz.dao.DriverInfoDao">
+    
+    <!--查询司机信息 -->
+    <select id="getDriver" parameterType="com.chainway.dispatchercore.dto.Driver" 
+        resultType="com.chainway.dispatchercore.dto.Driver">
+        SELECT 
+        	t1.driver_id as driverId, t1.driver_name as driverName, t1.password, t1.gmt_zone as gmtZone, t1.vehicle_id as vehicleId, 
+	  	    t1.phone_no as phoneNo , t1.dept_id as deptId, t1.status, t1.entry_time as entryTime, t1.create_time as createTime, 
+	   	    t1.update_time as updateTime, t1.remark, t1.online_status as onlineStatus,t2.dna deptDNA
+        from t_driver t1 
+        left join t_dept t2 on t1.dept_id=t2.id
+        where t1.status=1 and t2.status=1
+        <if test="driverId!=null and driverId!=''">
+         AND  t1.driver_id=#{driverId}
+        </if> 
+        <if test="phoneNo!=null and phoneNo!=''">
+         AND  t1.phone_no=#{phoneNo}
+        </if>
+        limit 1;
+    </select>
+    
+    <!--查询司机信息及相关信息 -->
+    <select id="getDriverInfo" parameterType="com.chainway.dispatchercore.dto.Driver"
+        resultType="java.util.Map">
+        SELECT
+        	t1.driver_id driverId,
+			t1.driver_name driverName,
+			t1.phone_no phoneNo,
+			t1.entry_time entryTime,
+			t2.plate_no plateNo,
+			t2.vehicle_id vehicleId,
+			t3.name deptName
+		FROM
+			t_driver t1
+		LEFT JOIN t_vehicle t2 ON t1.vehicle_id = t2.vehicle_id AND t2.status = 1
+		LEFT JOIN t_dept t3 ON t1.dept_id = t3.id AND t3.status = 1
+		WHERE t1.status = 1
+		AND t1.driver_id =#{driverId}
+    </select>
+    
+    <!--统计  -->
+    <select id="getDriverStatis" parameterType="com.chainway.dispatchercore.dto.Driver"
+         resultType="java.util.Map">
+        SELECT
+			count(1) as orderCount
+		FROM
+			t_order t1
+		INNER JOIN t_order_vehicle_rel t2 ON t1.order_no = t2.order_no
+		WHERE
+			t1. STATUS = 1
+		AND t2.driver_id = #{driverId}
+    </select>
+    
+    
+    
+    <!--查询司机关联车辆信息  -->
+    <select id="getVehicleInfo" parameterType="com.chainway.dispatchercore.dto.Driver" resultMap="vehicleResult">
+        SELECT
+			 t2.vehicle_id vehicleId, t2.plate_no plateNo,t2.vehicle_type_id vehicleTypeId,t2.image_url imageUrl,
+			 t2.equipment_pn equipmentPn,t2.vehicle_weight_max vehicleWeightMax,t2.vehicle_length vehicleLength,
+			 t2.vehicle_inside_length vehicleInsideLength, t2.vehicle_inside_width vehicleInsideWidth,
+			 t2.vehicle_inside_height vehicleInsideHeight,t2.carry_weigth_max carryWeigthMax,
+			 t2.weigth_use_factor weigthUseFactor, t2.swerve_radius_min swerveRadiusMin,t2.power_rate powerRate,
+			 t3.`name` vehicleTypeName,t5.carry_type_id carryTypeId,t5.carry_type_name carryTypeName 
+		FROM
+			`t_driver` t1
+		LEFT JOIN t_vehicle t2 ON t1.vehicle_id = t2.vehicle_id AND t2.`status` = 1
+		LEFT JOIN t_vehicle_type_dict t3 on t2.vehicle_type_id=t3.id 
+		LEFT JOIN t_vehicle_carry_type_dict_rel t4 on t2.vehicle_id=t4.vehicle_id
+		LEFT JOIN t_vehicle_carry_type_dict t5 on t4.carry_type_id=t5.carry_type_id 
+		WHERE
+			t1.`status` = 1
+		AND t1.driver_id =#{driverId}
+    </select>
+    <resultMap type="java.util.Map" id="vehicleResult">
+  	    <result column="vehicleId" property="vehicleId"/>
+  	    <result column="plateNo" property="plateNo"/>
+  	    <result column="vehicleTypeId" property="vehicleTypeId"/>
+  	    <result column="vehicleTypeName" property="vehicleTypeName"/>
+  	    <result column="equipmentPn" property="equipmentPn"/>
+  	    <result column="vehicleWeightMax" property="vehicleWeightMax"/>
+  	    <result column="vehicleLength" property="vehicleLength"/>
+  	    <result column="vehicleInsideLength" property="vehicleInsideLength"/>
+  	    <result column="vehicleInsideWidth" property="vehicleInsideWidth"/>
+  	    <result column="vehicleInsideHeight" property="vehicleInsideHeight"/>
+  	    <result column="carryWeigthMax" property="carryWeigthMax"/>
+  	    <result column="weigthUseFactor" property="weigthUseFactor"/>
+  	    <result column="swerveRadiusMin" property="swerveRadiusMin"/>
+  	    <result column="powerRate" property="powerRate"/>
+  	    <result column="imageUrl" property="imageUrl"/>
+  	    <collection property="carryTypes" javaType="java.util.List" ofType="java.util.Map" >
+  	        <result column="carryTypeId" property="carryTypeId"/>
+  	        <result column="carryTypeName" property="carryTypeName"/>
+  	    </collection>
+  	</resultMap>
+  	
+    <!--更新司机在线状态   1:在线;  0:下线-->
+    <select id="updateOnlineStatus" parameterType="java.util.Map">
+		update t_driver set online_status=#{onlineStatus} where driver_id=#{driverId}
+    </select>
+</mapper>

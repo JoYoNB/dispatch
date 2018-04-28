@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!-- namespace命名规则: 表对应java类的名称-->
+<mapper namespace="com.chainway.fileservice.biz.dao.FileTemplateDao">
+	<insert id="addFileTemplate" parameterType="com.chainway.dispatchercore.dto.FileTemplate">
+		insert into t_file_template(
+		type,
+		name,
+		code,
+		verify_rule,
+		create_time,
+		update_time
+		)value(
+		#{type},
+		#{name},
+		#{code},
+		#{verifyRule},
+		UTC_TIMESTAMP(),
+		UTC_TIMESTAMP()
+		)
+	</insert>
+	
+	<delete id="deleteFileTemplate" parameterType="com.chainway.dispatchercore.dto.FileTemplate">
+		delete from t_file_template
+		where id=#{id}
+	</delete>
+	
+	<update id="updateFileTemplate" parameterType="com.chainway.dispatchercore.dto.FileTemplate">
+		update t_file_template
+		set update_time=now()
+		<if test="name!=null and name!=''">
+		,name=#{name}
+		</if>
+		<if test="verifyRule!=null">
+		,verify_rule=#{verifyRule}
+		</if>
+		where id=#{id}
+	</update>
+	
+	<select id="getFileTemplate" parameterType="com.chainway.dispatchercore.dto.FileTemplate" resultType="com.chainway.dispatchercore.dto.FileTemplate">
+		select 
+		id,
+		type,
+		name,
+		code,
+		verify_rule as verifyRule,
+		create_time as createTime,
+		update_time as updateTime
+		
+		from t_file_template
+		where 
+		<if test="id!=null">
+		id=#{id}
+		</if>
+		<if test="code!=null and code!=''">
+		code=#{code}
+		</if>
+	</select>
+	
+	<sql id="getFileTemplateListCondition">
+		<if test="likeName!=null and likeName!=''">
+		and name like concat('%',#{likeName},'%')
+		</if>
+		<if test="code!=null and code!=''">
+		and code=#{code}
+		</if>
+		<if test="type!=null and type!=''">
+		and type=#{type}
+		</if>
+	</sql>
+	
+	<select id="getFileTemplateList" parameterType="java.util.Map" resultType="com.chainway.dispatchercore.dto.FileTemplate">
+		select 
+		id,
+		type,
+		name,
+		code,
+		verify_rule as verifyRule,
+		create_time as createTime,
+		update_time as updateTime
+		
+		from t_file_template
+		where 1=1
+		<include refid="getFileTemplateListCondition"></include>
+		order by update_time desc
+		<if test="pageSize!=null and offset!=null">
+		limit #{offset},#{pageSize}
+		</if>
+	</select>
+	
+	<select id="getFileTemplateListCount" parameterType="java.util.Map" resultType="int">
+		select count(1) n
+		
+		from t_file_template
+		where 1=1
+		<include refid="getFileTemplateListCondition"></include>
+	</select>
+</mapper>

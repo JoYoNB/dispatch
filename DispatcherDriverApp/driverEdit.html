@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black">
+<title>卡友帮配送</title>
+<link rel="stylesheet" href="css/mui.min.css">
+<link rel="stylesheet" href="css/mui.picker.min.css">
+<link rel="stylesheet" href="css/app.css">
+
+</head>
+
+<body onresize="document.activeElement.scrollIntoView(true);">
+<header class="mui-bar mui-bar-nav">
+	<a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"></a>
+	<h1 class="mui-title main-title">个人资料</h1>
+</header>
+<div class="mui-content">
+	<div class="mui-scroll-wrapper">
+		<div class="input-area">
+			<ul>
+				<li>
+					<div class="ipt-item">
+						<label ><i class="must-icon">*</i>司机姓名</label>
+						<input type="text" class="driverName" placeholder="司机姓名">
+					</div>
+				</li>
+				<li>
+					<div class="ipt-item">
+						<label ><i class="must-icon">*</i>部门</label>
+						<input type="text" class="deptName" readonly="readonly" placeholder="部门">
+						<input type="text" class="hide deptId">
+					</div>
+				</li>
+				<li>
+					<div class="ipt-item mui-select select-vehicle">
+						<label ><i class="must-icon">*</i>关联车辆</label>
+						<input type="text" readonly="readonly" class="vehicle vehicleText" placeholder="请选择车辆">
+						<input type="text" class="hide vehicleId">
+	                </div>
+				</li>
+				<li>
+					<div class="ipt-item">
+						<label ><i class="must-icon">*</i>手机号</label>
+	                   <input type="text" class="phone" placeholder="请输入手机号码">
+	                </div>
+				</li>
+				<li>
+					<div class="ipt-item mui-select">
+						<label ><i class="must-icon">*</i>入职时间</label>
+						<input type="text" class="time" readonly="readonly" placeholder="请选择入职时间">
+					</div>
+				</li>
+			</ul>
+		</div>
+		
+		<div class="subimt-box box-position">
+			<button class="mui-btn mui-btn-outlined submit-btn">保存修改</button>
+		</div>
+	</div>
+</div>
+
+<script src="js/zepto.min.js"></script>
+<script src="js/mui.min.js"></script>
+<script src="js/mui.picker.min.js"></script>
+<script src="js/validator.min.js"></script>
+<script src="js/common.js"></script>
+<script src="js/comUtils.js"></script>
+<script src="js/driverEdit.js"></script>
+
+</body>
+</html>

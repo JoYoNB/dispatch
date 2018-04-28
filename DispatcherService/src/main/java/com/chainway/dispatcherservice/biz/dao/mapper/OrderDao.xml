@@ -1,0 +1,475 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!-- namespace命名规则: 表对应java类的名称 --> 
+<mapper namespace="com.chainway.dispatcherservice.biz.dao.OrderDao">
+
+	<select id="orderStatistics" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT COUNT(*) AS
+		total,DATE_FORMAT(CONVERT_TZ(o.`finish_time`,'+00:00',#{userZone}),'%m-%d')
+		AS `day` FROM t_order o
+		LEFT JOIN t_dept d ON d.`id` = o.`dept_id` AND
+		d.`status`=1
+		WHERE o.order_status = 90
+		AND o.`status` = 1
+		AND d.`dna` LIKE CONCAT(#{deptDNA},'%')
+		AND o.`finish_time` BETWEEN #{startTime} AND #{endTime}
+		GROUP BY
+		DATE_FORMAT(CONVERT_TZ(o.`finish_time`,'+00:00',#{userZone}),'%Y-%m-%d')
+		ORDER BY `day`
+	</select>
+
+
+	<select id="cargoStatistics" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT ROUND(SUM(IFNULL(weight,0)),2) AS totalWeight,
+		ROUND(SUM(IFNULL(volume,0)),2) AS totalVolume,
+		SUM(IFNULL(package_num,0)) AS
+		totalNum,
+		DATE_FORMAT(CONVERT_TZ(o.`finish_time`,'+00:00',#{userZone}),'%m-%d')
+		AS `day` FROM t_order o
+		LEFT JOIN t_dept d ON d.`id` = o.`dept_id` AND d.`status`= 1
+		WHERE o.order_status =90
+		AND o.`status` = 1
+		AND d.`dna` LIKE CONCAT(#{deptDNA},'%')
+		AND o.`finish_time` BETWEEN #{startTime} AND #{endTime}
+		GROUP BY
+		DATE_FORMAT(CONVERT_TZ(o.`finish_time`,'+00:00',#{userZone}),'%Y-%m-%d')
+		ORDER BY `day`
+	</select>
+
+	<select id="orderRank" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT COUNT(*) AS total,s.name FROM t_order o
+		LEFT JOIN t_dept d ON d.`id` = o.`dept_id` AND d.`status` = 1
+		LEFT JOIN t_site s ON s.id = o.`start_site_id`
+		WHERE o.order_status =90
+		AND o.`status` = 1
+		AND d.`dna` LIKE CONCAT(#{deptDNA},'%')
+		AND o.`finish_time` BETWEEN #{startTime}
+		AND #{endTime}
+		GROUP BY o.`start_site_id`
+		ORDER BY total DESC
+		limit 10
+	</select>
+
+	<select id="deliveryCargoRank" parameterType="java.util.Map" resultType="java.util.Map">
+	SELECT * FROM (
+		SELECT
+		<if test="type=='weight'">
+		ROUND(SUM(IFNULL(unload_weight,0)),2) AS total,
+		</if>
+		<if test="type=='volume'">
+		ROUND(SUM(IFNULL(unload_volume,0)),2) AS total,
+		</if>
+		<if test="type=='num'">
+		SUM(IFNULL(unload_package_num,0)) AS total,
+		</if>
+		s.name FROM t_order_site os
+		LEFT JOIN t_order o ON os.order_no = o.`order_no`
+		LEFT JOIN t_dept d ON d.`id` = o.`dept_id` AND d.`status` = 1
+		LEFT JOIN t_site s ON s.id = os.`site_id`
+		WHERE o.order_status =90
+		AND o.`status` = 1
+		AND d.`dna` LIKE CONCAT(#{deptDNA},'%')
+		AND o.`finish_time` BETWEEN #{startTime} AND #{endTime}
+		AND os.site_type IN(2,3)
+		GROUP BY os.site_id	
+		ORDER BY total DESC
+		limit 10
+		)t WHERE t.total>0
+	</select>
+
+	<select id="totalStatistics" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT ROUND(SUM(IFNULL(weight,0)),2) AS totalWeight,
+		ROUND(SUM(IFNULL(volume,0)),2) AS totalVolume,
+		SUM(IFNULL(package_num,0)) AS totalNum,
+		COUNT(*) AS totalOrder
+		FROM t_order o
+		LEFT JOIN t_dept d ON d.`id` = o.`dept_id` AND d.`status` = 1
+		WHERE
+		o.order_status =90
+		AND o.`status` = 1
+		AND d.`dna` LIKE CONCAT(#{deptDNA},'%')
+	</select>
+
+	<select id="mapOrderList" parameterType="java.util.Map"
+		resultType="java.util.Map">
+		<choose>
+			<when test="orderNo!=null and orderNo!=''">
+				<include refid="mapOrderList_orderNo"></include>
+			</when>
+			<otherwise>
+				<include refid="mapOrderList_non_orderNo"></include>
+			</otherwise>
+		</choose>
+	</select>
+	<sql id="mapOrderList_orderNo">
+		SELECT
+		o.`order_no` orderNo,
+		o.`order_status` orderStatus,
+		o.`pre_pickup_time` pickupTime,
+		oss.coordinate startCoordinate,
+		oss.`site_name` startName,
+		oss.address startAddress,
+		oss.`link_man` startMan,
+		oss.`link_phone` startPhone,
+		ose.`site_name` endName,
+		ose.address endAddress,
+		tg.`name` goodsName,
+		o.`volume`,
+		o.`weight`,
+		o.`package_num` num,
+		v.vehicle_no plateNo,
+		v.driver_name driverName,
+		v.driver_phone driverPhone,
+		v.vehicle_other_id vehicleId,
+		<!-- td.online_status driverStatus, -->
+		tvt.`name` vehicleType
+		FROM t_order o
+		LEFT JOIN t_order_vehicle_rel v ON v.order_no = o.`order_no`
+		<!-- LEFT JOIN t_driver td ON td.`driver_id` = v.`driver_id` -->
+		LEFT JOIN t_dept d ON d.`id` = o.`dept_id` AND d.`status`=1
+		LEFT JOIN t_order_site oss ON oss.order_no = o.`order_no` and o.`start_site_id` =oss.site_id
+		LEFT JOIN t_order_site ose ON ose.`order_no` = o.`order_no` AND o.`end_site_id` = ose.`site_id`
+		LEFT JOIN `t_goods_type_dict` tg ON tg.`id` = o.`goods_type`
+		LEFT JOIN t_vehicle tv ON tv.`vehicle_id` = v.`vehicle_id`
+		LEFT JOIN `t_vehicle_type_dict` tvt ON tvt.`id` = tv.`vehicle_type_id`
+		WHERE o.order_status IN(70,80)
+		AND o.`status` = 1
+		AND o.`order_no`=#{orderNo}
+		AND d.`dna` LIKE CONCAT(#{deptDNA},'%')
+		<if test="pageSize!=null and offset!=null">
+			limit #{offset},#{pageSize}
+		</if>
+	</sql>
+	<sql id="mapOrderList_non_orderNo">
+		SELECT
+		o.`order_no` orderNo,
+		o.`order_status` orderStatus,
+		o.`pre_pickup_time` pickupTime,
+		oss.coordinate startCoordinate,
+		oss.`site_name` startName,
+		oss.address startAddress,
+		oss.`link_man` startMan,
+		oss.`link_phone` startPhone,
+		ose.`site_name` endName,
+		ose.address endAddress,
+		tg.`name` goodsName,
+		o.`volume`,
+		o.`weight`,
+		o.`package_num` num,
+		v.vehicle_no plateNo,
+		v.driver_name driverName,
+		v.driver_phone driverPhone,
+		v.vehicle_other_id vehicleId,
+		<!-- td.online_status driverStatus, -->
+		tvt.`name` vehicleType
+		<!-- GROUP_CONCAT(os.name ORDER BY os.site_type SEPARATOR '-') AS siteColumnName -->
+		FROM t_order o
+		LEFT JOIN t_order_vehicle_rel v ON v.order_no = o.`order_no`
+		<!-- LEFT JOIN t_driver td ON td.`driver_id` = v.`driver_id` -->
+		LEFT JOIN t_dept d ON d.`id` = o.`dept_id` AND d.`status`=1
+		LEFT JOIN t_order_site oss ON oss.order_no = o.`order_no` and o.`start_site_id` =oss.site_id
+		LEFT JOIN t_order_site os ON oss.order_no = o.`order_no` and o.`start_site_id` != os.site_id
+		LEFT JOIN t_order_site ose ON ose.`order_no` = o.`order_no` AND o.`end_site_id` = ose.`site_id`
+		LEFT JOIN `t_goods_type_dict` tg ON tg.`id` = o.`goods_type`
+		LEFT JOIN t_vehicle tv ON tv.`vehicle_id` = v.`vehicle_id`
+		LEFT JOIN `t_vehicle_type_dict` tvt ON tvt.`id` = tv.`vehicle_type_id`
+		WHERE o.order_status IN(70,80)
+		AND o.`status` = 1
+		AND d.`dna` LIKE CONCAT(#{deptDNA},'%')
+		<if test="startSiteName!=null and startSiteName!=''">
+			<!-- AND SUBSTRING_INDEX(t.siteColumnName,'-',1) LIKE
+			CONCAT('%',#{startSiteName},'%') -->
+			AND oss.site_name LIKE CONCAT('%',#{startSiteName},'%')
+		</if>
+		<if test="middleOrEnd!=null and middleOrEnd!=''">
+			<!-- AND
+			SUBSTRING(t.siteColumnName,CHAR_LENGTH(SUBSTRING_INDEX(t.siteColumnName,'-',1))+2)
+			LIKE CONCAT('%',#{middleOrEnd},'%') -->
+			AND os.site_name LIKE CONCAT('%',#{middleOrEnd},'%')
+		</if>
+		GROUP BY o.order_no
+		ORDER BY o.`create_time` DESC
+		<if test="pageSize!=null and offset!=null">
+			limit #{offset},#{pageSize}
+		</if>
+	</sql>
+
+	<select id="orderList" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT o.`order_no` id,
+		g.name goodsType,
+		o.`create_time` createTime,
+		o.`order_status` orderStatus,
+		o.`weight`,
+		o.`volume`,
+		o.`package_num` packageNum,
+		o.pay_status payStatus,
+		o.distance,
+		oss.site_name startSiteName,
+		oss.address startSiteAddress,
+		ose.site_name endSiteName,
+		ose.address endSiteAddress,
+		v.carry_weigth_max maxWeight,
+		ROUND(IFNULL(v.vehicle_inside_length,0)/1000*IFNULL(v.vehicle_inside_width,0)/1000*IFNULL(v.vehicle_inside_height,0)/1000,2)
+		AS maxVolume,
+		
+		tvtd.name as vehicleTypeName
+		
+		
+		FROM t_order o
+		LEFT JOIN t_goods_type_dict g ON g.id = o.`goods_type`
+		LEFT JOIN t_order_site oss ON oss.order_no = o.`order_no` AND
+		o.`start_site_id` = oss.site_id
+		LEFT JOIN t_order_site ose ON ose.order_no = o.`order_no` AND
+		o.`end_site_id` = ose.site_id
+		LEFT JOIN t_order_site os ON os.`order_no` = o.`order_no` AND 
+		os.`site_id` != o.`start_site_id`
+		LEFT JOIN t_order_vehicle_rel ov ON ov.order_no = o.`order_no`
+		LEFT JOIN t_vehicle v ON v.vehicle_id = ov.vehicle_id
+		LEFT JOIN t_driver dr on dr.vehicle_id = v.vehicle_id
+		LEFT JOIN t_dept d ON d.`id` = o.`dept_id` AND d.`status` = 1
+		LEFT JOIN t_vehicle_type_dict tvtd on tvtd.id=v.vehicle_type_id
+		WHERE 1=1
+		AND o.`status` = 1
+		<include refid="orderListCondition"></include>
+		AND d.`dna` LIKE CONCAT(#{deptDNA},'%')
+		GROUP BY o.`order_no`
+		order by o.`create_time` desc
+		<if test="pageSize!=null and offset!=null">
+			LIMIT #{offset},#{pageSize}
+		</if>
+	</select>
+	
+	<select id="totalOrder" parameterType="java.util.Map" resultType="java.lang.Integer">
+		SELECT count(distinct(o.`order_no`))
+		FROM t_order o
+		LEFT JOIN t_goods_type_dict g ON g.id = o.`goods_type`
+		LEFT JOIN t_order_site oss ON oss.order_no = o.`order_no` AND
+		o.`start_site_id` = oss.site_id
+		LEFT JOIN t_order_site ose ON ose.order_no = o.`order_no` AND
+		o.`end_site_id` = ose.site_id
+		LEFT JOIN t_order_site os ON os.`order_no` = o.`order_no` AND 
+		os.`site_id` != o.`start_site_id`
+		LEFT JOIN t_order_vehicle_rel ov ON ov.order_no = o.`order_no`
+		LEFT JOIN t_vehicle v ON v.vehicle_id = ov.vehicle_id
+		LEFT JOIN t_driver dr on dr.vehicle_id = v.vehicle_id
+		LEFT JOIN t_dept d ON d.`id` = o.`dept_id` AND d.`status` = 1
+		WHERE 1=1
+		AND o.`status` = 1
+		<include refid="orderListCondition"></include>
+		AND d.`dna` LIKE CONCAT(#{deptDNA},'%')
+	</select>
+	<sql id="orderListCondition">
+		<if test="orderNo!=null and orderNo!=''">
+			AND o.`order_no` = #{orderNo}
+		</if>
+		<if test="status!=null">
+			AND o.`order_status` = #{status}
+		</if>
+		<if test="startSiteName!=null and startSiteName!=''">
+			AND oss.site_name LIKE CONCAT('%',#{startSiteName},'%')
+		</if>
+		<if test="middleOrEnd!=null and middleOrEnd!=''">
+			AND os.site_name LIKE CONCAT('%',#{middleOrEnd},'%')
+		</if>
+		<if test="startTime!=null and startTime!=null">
+			AND o.`create_time` &gt;= #{startTime}
+		</if>
+		<if test="endTime!=null and endTime!=null">
+			AND o.`create_time` &lt;= #{endTime}
+		</if>
+		<if test="cargoType!=null">
+			AND o.goods_type = #{cargoType}
+		</if>
+		<if test="plateNo!=null and plateNo!=''">
+			AND v.plate_no LIKE CONCAT('%',#{plateNo},'%')
+		</if>
+		<if test="driver!=null and driver!=''">
+			AND dr.driver_name like CONCAT('%',#{driver},'%')
+		</if>
+	</sql>
+
+
+	<select id="getOrderDetails" parameterType="java.util.Map"
+		resultType="java.util.Map">
+		SELECT o.`order_no` orderNo,
+		g.name goodsType,
+		v.name vehicleType,
+		o.`pickup_time` pickupTime,
+		o.`finish_time` finishTime,
+		o.`pre_finish_time` preFinishTime,
+		o.pre_pickup_time prePickupTime,
+		o.`remark` remark,
+		o.`create_time` createTime,
+		o.`order_status` orderStatus,
+		ovr.vehicle_other_id vehicleId,
+		ovr.vehicle_no plateNo,
+		ovr.driver_name driverName,
+		ovr.driver_phone driverPhone,
+		dr.online_status driverStatus,
+		dd.name carrierName,
+		o.weight,
+		o.volume,
+		o.package_num packageNum,
+		o.fee_type feeType,
+		o.fee
+		FROM t_order o
+		LEFT JOIN t_goods_type_dict g ON g.id = o.`goods_type`
+		LEFT JOIN t_vehicle_type_dict v ON v.id = o.`vehicle_type`
+		LEFT JOIN t_order_vehicle_rel ovr ON ovr.order_no = o.`order_no`
+		LEFT JOIN t_driver dr ON dr.driver_id = ovr.driver_id
+		LEFT JOIN t_dept d ON d.`id` = o.`dept_id` AND d.`status` = 1
+		LEFT JOIN t_dept dd ON dd.id = o.`carrier_dept` 
+		WHERE 1=1
+		AND o.`status` = 1
+		AND o.`order_no` = #{orderNo}
+		AND d.`dna` LIKE CONCAT(#{deptDNA},'%')
+	</select>
+
+	<select id="getOrderSiteDetails" parameterType="java.util.Map"
+		resultType="java.util.Map">
+		SELECT
+		os.site_id as id, 
+		os.site_name AS siteName,
+		os.address AS siteAddress,
+		os.link_man AS linkmanName,
+		os.link_phone AS linkPhone,
+		os.unload_package_num AS packageNum,
+		os.unload_weight AS packageWeight,
+		os.unload_volume AS unloadVolume,
+		os.site_type AS siteType,
+		os.idx_no AS idxNO,
+		os.coordinate,
+		s.district_id AS districtId
+		FROM t_order_site os
+		LEFT JOIN t_site s ON s.id = os.site_id
+		<!-- LEFT JOIN t_linkman l ON l.id = os.link_man -->
+		WHERE os.order_no = #{orderNo}
+		ORDER BY idx_no
+	</select>
+	<insert id="createOrder" parameterType="com.chainway.dispatcherservice.dto.OrderParam">
+		INSERT INTO t_order 
+		VALUES(#{orderNo},1,10,10,#{createrId},UTC_TIMESTAMP(),#{deptId},#{consignorDept},#{cargoType},
+		#{vehicleType},#{weight},#{volume},#{amount},#{senderName},#{senderPhone},
+		#{startSiteId},#{endSiteId},#{districtId},#{distance},#{feeType},#{fee},null,#{pickupTime},
+		null,#{arriveTime},null,null,null,#{remark},null)
+	</insert>
+	
+	<update id="modifyOrder" parameterType="com.chainway.dispatcherservice.dto.OrderParam">
+		UPDATE t_order SET
+		<if test="cargoType!=null and cargoType!=''">
+			goods_type=#{cargoType},
+		</if>
+		<if test="vehicleType!=null and vehicleType!=''">
+			vehicle_type=#{vehicleType},
+		</if>
+		<if test="weight!=null">
+			weight=#{weight},
+		</if>
+		<if test="volume!=null">
+			volume=#{volume},
+		</if>
+		<if test="amount!=null">
+			package_num=#{amount},
+		</if>
+		<if test="senderName!=null and senderName!=''">
+			sender_name=#{senderName},
+		</if>
+		<if test="senderPhone!=null and senderPhone!=''">
+			sender_phone=#{senderPhone},
+		</if>
+		<if test="startSiteId!=null and startSiteId!=''">
+			start_site_id=#{startSiteId},
+		</if>
+		<if test="endSiteId!=null and endSiteId!=''">
+			end_site_id=#{endSiteId},
+		</if>
+		<if test="districtId!=null and districtId!=''">
+			district_id=#{districtId},
+		</if>
+		<if test="distance!=null and distance!=''">
+			distance=#{distance},
+		</if>
+		<if test="feeType!=null">
+			fee_type=#{feeType},
+		</if>
+		<if test="fee!=null">
+			fee=#{fee},
+		</if>
+		<if test="payStatus!=null and payStatus!=''">
+			pay_status = #{payStatus},
+		</if>
+		<if test="payStatus==20">
+			publish_time = UTC_TIMESTAMP(),
+		</if>
+		<if test="pickupTime!=null and pickupTime!=''">
+			pre_pickup_time=#{pickupTime},
+		</if>
+		<if test="arriveTime!=null and arriveTime!=''">
+			pre_finish_time=#{arriveTime},
+		</if>
+		<if test="remark!=null and remark!=''">
+			remark=#{remark},
+		</if>
+		<if test="status!=null">
+			status=#{status},
+		</if>
+		<if test="orderOperation!=null and orderOperation=='cancel'">
+			order_status=#{orderStatus},carrier_dept=null,driver_dept=null,comfirm_time=null,
+		</if>
+		order_no=#{orderNo}
+		WHERE order_no=#{orderNo}
+	</update>
+	
+	<insert id="createOrderSites" parameterType="com.chainway.dispatcherservice.dto.SiteParam">
+		INSERT INTO t_order_site
+		VALUES
+		<foreach collection="list" index="index" item="bean" open="" close="" separator=",">
+			(#{bean.orderNo},#{bean.siteId},#{bean.name},#{bean.coordinate},#{bean.address},#{bean.linkMan},
+			#{bean.linkPhone},#{bean.uploadNum},#{bean.uploadWeight},#{bean.uploadVolume},#{bean.siteType},
+			#{bean.idxNo},null,null,null,0,null)
+		</foreach>
+	</insert>
+	<delete id="deleteOrderSites" parameterType="java.lang.String">
+		delete from t_order_site
+		where order_no = #{orderNo}
+	</delete>
+	
+	<insert id="createOrderLog" parameterType="java.util.Map">
+		INSERT INTO t_order_status_log
+		VALUES(#{orderNo},#{orderStatus},#{creater},UTC_TIMESTAMP(),null,#{remark})
+	</insert>
+
+	<select id="getPCDIdByName" parameterType="java.util.Map"
+		resultType="java.util.Map">
+		SELECT CAST(SUM(pId) AS CHAR) pid,CAST(SUM(cId) AS CHAR) cid,CAST(SUM(dId) AS CHAR) did FROM (
+		SELECT id pId,0 cId,0 dId FROM t_area WHERE `name`=#{province} AND LEVEL=1
+		UNION ALL
+		SELECT 0 pId,id cId,0 dId FROM t_area WHERE `name`=#{city} AND LEVEL=2 AND
+		parent =(SELECT id FROM t_area WHERE `name`=#{province} AND LEVEL=1)
+		UNION ALL
+		SELECT 0 pId,0 cId,id dId FROM t_area WHERE `name`=#{district} AND LEVEL=3 AND
+		parent =
+		(SELECT id FROM t_area WHERE `name`=#{city} AND LEVEL=2 AND parent =
+		(SELECT id FROM t_area WHERE `name`=#{province} AND LEVEL=1)
+		))t
+	</select>
+	
+	<select id="getOrderStatus" parameterType="java.lang.String" resultType="java.util.Map">
+		select order_status,pay_status from t_order
+		where order_no=#{orderNo}
+		and status = 1
+	</select>
+	
+	<!-- 删除订单承运商关系 -->
+	<delete id="deleteOrderCarrierRel" parameterType="java.util.Map">
+		delete from t_order_carrier_rel where order_no=#{orderNo}
+	</delete>
+	<!-- 删除订单车辆关系 -->
+	<delete id="deleteOrderVehicleRel" parameterType="java.util.Map">
+		delete from t_order_vehicle_rel where order_no=#{orderNo}
+	</delete>
+	
+	
+</mapper>

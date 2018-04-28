@@ -1,0 +1,135 @@
+<!doctype html>
+<html lang="en">
+<head>
+<!--#include file="/layout/libs.html"-->
+<!-- 加载地图资源 -->
+<!--#include file="/layout/maplibs.html"-->
+<title>城市配送管理平台</title>
+</head>
+<body>
+	<div class="city-wrapper">
+		<!-- 公共header 开始 -->
+		<!--#include file="/layout/header.html"-->
+		<!-- 公共header 结束 -->
+		<div class="city-title-layout">
+			<div class="city-title">承运商首页</div>
+			<div class="city-logo"><a href="javascript:;" title="城市配送管理平台"><img src="../images/logo.png" alt=""></a></div>
+		</div>
+		<div class="city-main-scroll" style="background: #f7f7f7;">
+			<div id="allmap"></div>
+		</div>
+		<!-- 底部 开始 -->
+		<!--#include file="/layout/footer.html"-->
+		<!-- 底部 结束 -->
+	</div>
+	
+<script type="text/javascript">
+$(function(){
+	var mapWidget=$("#allmap").MapWidget({});
+	
+	if(false){
+		//画点  render是配置点的图标和图标大小
+		setTimeout(function(){
+			mapWidget.addPoint({id:1,lon:116.387112,lat:39.920977},function(){
+				var icon={
+					url:"http://lbsyun.baidu.com/jsdemo/img/fox.gif",
+					width:300,
+					height:157
+				};
+				return icon;
+			});
+		},500);
+		//画线 render是配置先的颜色和大小
+		setTimeout(function(){
+			mapWidget.addLine([
+		        {lon:116.387112,lat:39.920977},
+		        {lon:116.385243,lat:39.913063},
+		        {lon:116.385243,lat:39.913063},
+		        {lon:116.401772,lat:39.921364},
+		        {lon:116.41248,lat:39.927893}
+			],function(){
+				var config={
+					strokeColor:"red",
+					strokeWeight:8,
+					strokeOpacity:0.5
+				};
+				return config;
+			});
+		},500);
+		//画圆
+		setTimeout(function(){
+			mapWidget.addCircle({lon:116.404, lat:39.915},500);
+		},500);
+		//画多边形
+		setTimeout(function(){
+			mapWidget.addPolygon([
+				{lon:116.387112,lat:39.920977},
+				{lon:116.385243,lat:39.913063},
+				{lon:116.394226,lat:39.917988},
+				{lon:116.401772,lat:39.921364},
+				{lon:116.41248,lat:39.927893}                      
+			]);
+		},500);
+		//画区域
+		setTimeout(function(){
+			mapWidget.addBoundary("深圳市","南山区");
+		},500);
+	}
+	
+	if(false){
+		//开启画笔功能
+		setTimeout(function(){
+			//画圆形
+			/*
+			mapWidget.invokeBrush("circle",function(list,center){
+				console.info(list);
+				console.info(center);
+			});
+			*/
+			//画矩形
+			/*
+			mapWidget.invokeBrush("rectangle",function(list){
+				console.info(list);
+			});
+			*/
+			//画多边形
+			/*mapWidget.invokeBrush("polygon",function(list){
+				console.info(list);
+			});
+			*/
+			
+		},500);
+	}
+	
+	//点击地图事件   点击地图画一个点
+	setTimeout(function(){
+		mapWidget.bind("click",function(point){
+			//先清除所有的点
+			mapWidget.clear();
+			//地图画一个点
+			point.id=11111;
+			mapWidget.addPoint(point);
+		});
+	},500);
+	
+	//获取最新定位
+	setTimeout(function(){
+		mapWidget.getLocation(function(location){
+			//console.info(location);
+			//设置地图中心为当前位置
+			mapWidget.setLocation(location);
+		});
+	},500);
+	
+	//检索关键字
+	setTimeout(function(){
+		mapWidget.search("深圳饭店",function(results){
+			console.info(results);
+		});
+	},500);
+	
+	
+});
+</script>
+</body>
+</html>

@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:task="http://www.springframework.org/schema/task"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:context="http://www.springframework.org/schema/context"
+    xmlns:p="http://www.springframework.org/schema/p" 
+    xmlns:aop="http://www.springframework.org/schema/aop"
+    xmlns:tx="http://www.springframework.org/schema/tx"
+    xmlns:mvc="http://www.springframework.org/schema/mvc"
+    xmlns:hdp="http://www.springframework.org/schema/hadoop"
+    xmlns:util="http://www.springframework.org/schema/util"
+    xmlns:dubbo="http://code.alibabatech.com/schema/dubbo"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans
+    http://www.springframework.org/schema/beans/spring-beans-4.0.xsd
+    http://www.springframework.org/schema/context 
+    http://www.springframework.org/schema/context/spring-context-4.0.xsd 
+    http://www.springframework.org/schema/aop 
+    http://www.springframework.org/schema/aop/spring-aop-4.0.xsd 
+    http://www.springframework.org/schema/tx 
+    http://www.springframework.org/schema/tx/spring-tx-4.0.xsd
+    http://www.springframework.org/schema/mvc
+    http://www.springframework.org/schema/mvc/spring-mvc-4.0.xsd
+    http://www.springframework.org/schema/task
+   	http://www.springframework.org/schema/task/spring-task-4.0.xsd
+   	http://www.springframework.org/schema/hadoop 
+	http://www.springframework.org/schema/hadoop/spring-hadoop-2.0.xsd
+	http://www.springframework.org/schema/util
+	http://www.springframework.org/schema/util/spring-util-4.0.xsd
+	http://code.alibabatech.com/schema/dubbo
+    http://code.alibabatech.com/schema/dubbo/dubbo.xsd">
+    
+    <bean id="propertyConfig" class="com.chainway.cacheService.common.DecodePropertyPlaceholderConfigurer">
+		<property name="locations">
+			<list>
+				<value>classpath:configure.properties</value>
+			</list>
+		</property>
+	</bean>
+	
+	<!--开启扫面注解生成Bean-->
+    <context:annotation-config></context:annotation-config>
+	
+	<!-- 通过注解方式 -->
+	<!-- 使用注解方式暴露接口   -->
+    <dubbo:annotation package="com.chainway.cacheService.biz.service" />  
+    
+    <dubbo:application name="cache_service_provider" />  
+    <dubbo:registry address="${dubbo.registry}" />  
+    <dubbo:protocol name="${dubbo.protocol.name}" port="${dubbo.protocol.port}" />
+    
+    <!-- 加入spring注解扫描 -->
+    <context:component-scan base-package="com.chainway.cacheService" />
+	<!-- 配置AOP -->
+	<aop:aspectj-autoproxy/>
+	
+	<!-- redis配置 -->
+	<bean id="poolConfig" class="redis.clients.jedis.JedisPoolConfig">  
+        <property name="maxIdle" value="300" />
+        <property name="maxWaitMillis" value="1000" />
+        <property name="testOnBorrow" value="true" />
+    </bean>
+	<!-- 单机 -->
+    <bean id="connectionFactory" class="org.springframework.data.redis.connection.jedis.JedisConnectionFactory">
+    	<property name="hostName" value="${redis.alone.host}" />
+    	<property name="port" value="${redis.alone.port}" />
+    	<property name="password" value="${redis.alone.password}" />
+    	<property name="poolConfig" ref="poolConfig" />
+    </bean>
+    
+	<!-- 集群 -->
+  	<bean id="redisClusterConfigurationExt" class="com.chainway.cacheService.biz.redis.RedisClusterConfigurationExt">
+  		<property name="maxRedirects" value="3" ></property>
+    	<property name="nodes" value="${redis.group}"/>
+  	</bean>
+  	<bean id="jedisConnectionFactory" class="org.springframework.data.redis.connection.jedis.JedisConnectionFactory">
+    	<constructor-arg index="0" ref="redisClusterConfigurationExt" />
+    	<constructor-arg index="1" ref="poolConfig"></constructor-arg>
+    	<property name="usePool" value="true" />
+  	</bean >
+	
+	<!-- connectionFactory=connectionFactory为单机，connectionFactory=jedisConnectionFactory为集群 -->
+	<bean id="redisTemplate" class="org.springframework.data.redis.core.StringRedisTemplate">
+        <property name="connectionFactory" ref="${redis.mode}" />
+    </bean>
+	
+	
+	
+	
+	
+	
+	
+	
+	
+</beans>

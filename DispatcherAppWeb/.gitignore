@@ -1,0 +1,7 @@
+/target/
+/.settings/
+/deploy/
+.classpath
+.project
+DispatcherAppWeb.jar
+DispatcherAppWeb.war

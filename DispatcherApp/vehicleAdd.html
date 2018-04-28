@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black">
+<title>卡友帮配送</title>
+<link rel="stylesheet" href="css/mui.min.css">
+<link rel="stylesheet" href="css/mui.picker.min.css" />
+<link rel="stylesheet" href="css/app.css">
+
+</head>
+<header class="mui-bar mui-bar-nav">
+	<a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"></a>
+	<h1 class="mui-title main-title">新建司机</h1>
+</header>
+<div class="mui-content">
+	<div class="mui-scroll-wrapper">
+		<div class="mui-scroll">
+			<div class="add-pic">
+				<div class="add-icon-box">
+					<div class="add-icon"></div>
+					<p>上传车辆图片</p>
+				</div>
+				<div class="delete-img">
+					<span class="delete-img-icon"></span>
+				</div>
+			</div>
+			<div class="input-area">
+				<ul>
+					<li>
+						<div class="ipt-item">
+							<label >车牌号</label>
+							<input class="plateNo" type="text" placeholder="请输入车牌号">
+						</div>
+					</li>
+					<li>
+						<div class="ipt-item">
+							<label >PN号</label>
+							<input class="pn" type="text" placeholder="请输入设备PN号">
+						</div>
+					</li>
+					<li>
+						<div class="ipt-item selectVehicleType">
+							<label >车辆类型</label>
+							<input type="text" id="VehicleTypeText" readonly="readonly" placeholder="封闭式货车/冷藏">
+							<input type="text" id="VehicleTypeId" class="hide" readonly="readonly" placeholder="封闭式货车/冷藏">
+		                </div>
+					</li>
+					<li>
+						<div class="ipt-item selectCargoAttr" >
+							<label >货载属性</label>
+		                   	<input readonly="readonly" class="cargoAttrText" type="text" placeholder="快递快运/医药保健/粮油谷物">
+		                   	<input readonly="readonly" class="cargoAttrId hide" type="text" >
+		                </div>
+					</li>
+					<li>
+						<div class="ipt-item">
+							<label >最大允许总质量(kg)</label>
+							<input class="maxWeight" type="text" placeholder="请输入对应的值">
+						</div>
+					</li>
+					<li>
+						<div class="ipt-item">
+							<label >整车总长(mm)</label>
+							<input class="totalLength" type="text" placeholder="请输入对应的值">
+						</div>
+					</li>
+					<li>
+						<div class="ipt-item">
+							<label >货箱内部尺寸</label>
+							<div class="clearfix">
+								<span class="w33"><input type="number" class="length" placeholder="长度">米</span>
+								<span class="w33"><input type="number" class="width" placeholder="宽度">米</span>
+								<span class="w33"><input type="number" class="height" placeholder="高度">米</span>
+							</div>
+						</div>
+					</li>
+					<li>
+						<div class="ipt-item">
+							<label >载质量(kg)</label>
+							<input class="payload" type="text" placeholder="请输入对应的值">
+						</div>
+					</li>
+					<li>
+						<div class="ipt-item">
+							<label >载质量利用系数</label>
+							<input class="payloadRatio" type="text" placeholder="请输入对应的值">
+						</div>  
+					</li>
+					<li>
+						<div class="ipt-item">
+							<label >车辆最小转弯直径(m)</label>
+							<input class="minR" type="text" placeholder="请输入对应的值">
+						</div>
+					</li>
+					<li>
+						<div class="ipt-item">
+							<label >比功率(KW/t)</label>
+							<input class="powerDensity" type="text" placeholder="请输入对应的值">
+						</div>
+					</li>
+				</ul>
+			</div>
+			<div class="subimt-box">
+				<button class="mui-btn mui-btn-outlined submit-btn">完成新建</button>
+			</div>
+		</div>
+		
+	</div>
+</div>
+		
+<script src="js/zepto.min.js"></script>
+<script src="js/mui.min.js"></script>
+<script src="js/mui.picker.min.js"></script>
+<script src="js/comUtils.js"></script>
+<script src="js/vehicleManage/vehicleAdd.js"></script>
+
+</body>
+</html>

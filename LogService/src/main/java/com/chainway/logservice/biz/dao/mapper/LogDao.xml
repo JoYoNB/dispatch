@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!-- namespace命名规则: 表对应java类的名称-->
+<mapper namespace="com.chainway.logservice.biz.dao.LogDao">
+	
+	<select id="getLogList" parameterType="java.util.Map" resultType="com.chainway.logservice.dto.LogInfo">
+		select 
+		id,
+		target_id as targetId,
+		target_type as targetType,
+		target,
+		ip,
+		url,
+		result,
+		data,
+		create_time as createTime
+		
+		from t_log
+		where 1=1
+		<if test="target!=null">
+			and target=#{target}
+		</if>
+		<if test="targetType!=null and targetType!=''">
+			and target_type=#{targetType}
+		</if>
+		<if test="ip!=null and ip!=''">
+			and ip=#{ip}
+		</if>
+		<if test="result!=null and result!=''">
+			and result=#{result}
+		</if>
+	</select>
+	
+	<insert id="addLog" parameterType="com.chainway.logservice.dto.LogInfo">
+		insert into t_log(
+		target_id,
+		target_type,
+		target,
+		ip,
+		url,
+		result,
+		data,
+		create_time
+		)value(
+		#{targetId},
+		#{targetType},
+		#{target},
+		#{ip},
+		#{url},
+		#{result},
+		#{data},
+		UTC_TIMESTAMP()
+		)
+	</insert>
+</mapper>

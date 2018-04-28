@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+	<meta name="apple-mobile-web-app-capable" content="yes">
+	<meta name="apple-mobile-web-app-status-bar-style" content="black">
+	<title>货主APP</title>
+	<link rel="stylesheet" href="css/mui.min.css">
+	<link rel="stylesheet" href="css/index.css">
+</head>
+<body>
+	<div class="mui-content ct-content" style="padding: 0;">
+		<div class="ct-inner-wrap">
+			<div class="ct-map-wrapper">
+				<div class="ct-map-full" id="myMap"></div>
+			</div>
+			<div class="ct-map-search">
+				<div class="ct-input-control">
+					<a href="javascript:;" class="goback" id="J_back"><i class="ifont ifont-back"></i></a>
+					<form id="J_inputPositForm" action=""><input type="text" value="" id="J_inputPosit" autofocus="autofocus"></form>
+					<a href="javascript:;" class="delete" id="J_empty"><i class="ifont ifont-delete"></i></a>
+				</div>
+				<div class="ct-map-searchList">
+					<div class="mui-scroll-wrapper">
+						<div class="mui-scroll">
+							<div class="ct-map-curPisition" id="J_curPositionBox">
+								<div class="top"><i class="icon icon-curPosit"></i>当前位置</div>
+								<div class="address" id="J_curPosition"></div>
+							</div>
+							<ul class="list hide" id="J_addressList"></ul>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<script src="js/mui.min.js"></script>
+	<script src="js/common/common.js"></script>
+	<script src="js/map/BMap.js"></script>
+	<script src="js/positionInfo-search.js"></script>
+	<script>
+		mui('.mui-scroll-wrapper').scroll();
+	</script>
+</body>
+</html>

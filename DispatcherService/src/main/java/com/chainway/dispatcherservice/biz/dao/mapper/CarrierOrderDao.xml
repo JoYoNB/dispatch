@@ -1,0 +1,179 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!-- namespace命名规则: 表对应java类的名称-->
+<mapper namespace="com.chainway.dispatcherservice.biz.dao.CarrierOrderDao">
+	<select id="getOrderStatusAndLock" parameterType="string" resultType="int">
+		select order_status from t_order where order_no = #{orderNo} for update
+	</select>
+	
+	<select id="getOrderStatus" parameterType="string" resultType="int">
+		select order_status from t_order where order_no = #{orderNo}
+	</select>
+	
+	<select id="getOrderList" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT
+			CONCAT(t.order_no, '-', t.order_status) id,
+			t.order_no orderNo,
+			t1.`name` consignorName,
+			t2.site_name startSiteName,
+			t2.address startAddr,
+			t3.site_name endSiteName,
+			t3.address endAddr,
+			t4.`name` goodsTypeName,
+			t.weight,
+			t.volume,
+			t.package_num packageNum,
+			t.publish_time publishTime,
+			t.fee_type feeType,
+			t.fee,
+			t.order_status orderStatus
+		FROM
+			t_order t
+		LEFT JOIN t_dept t1 ON t.consignor_dept = t1.id
+		LEFT JOIN t_order_site t2 ON (t.start_site_id = t2.site_id and t.order_no = t2.order_no)
+		LEFT JOIN t_order_site t3 ON (t.end_site_id = t3.site_id and t.order_no = t3.order_no)
+		LEFT JOIN t_goods_type_dict t4 ON t.goods_type = t4.id
+		LEFT JOIN t_dept t5 ON t.driver_dept = t5.id
+		WHERE
+			t.`status` = 1
+		AND (t5.dna LIKE CONCAT(#{deptDNA}, '%')
+			 OR (t.order_status = ${@com.chainway.dispatchercore.common.OrderStatus@PUBLISHED}
+			 AND f_is_carrier_order_matching(t.order_no, #{mileageMin}, #{mileageMax}, #{districts}, #{goodsTypes}) = 1))
+		<include refid="getOrderListConditions"></include>
+		ORDER BY t.publish_time desc
+		<if test="pageSize!=null and offset!=null">
+		limit #{offset},#{pageSize}
+		</if>
+	</select>
+	
+	<sql id="getOrderListConditions">
+		<if test="startTime!=null and endTime!=null">
+			AND t.publish_time BETWEEN #{startTime} AND #{endTime}
+		</if>
+		<if test="startSiteName!=null">
+			AND t2.site_name LIKE CONCAT('%',#{startSiteName},'%')
+		</if>
+		<if test="endSiteName!=null">
+			AND EXISTS (SELECT * FROM t_order_site s WHERE t.order_no = s.order_no AND s.site_name LIKE CONCAT('%',#{endSiteName},'%'))
+		</if>
+		<if test="goodsType!=null">
+			AND t.goods_type = #{goodsType}
+		</if>
+		<if test="orderNo != null">
+			AND t.order_no LIKE CONCAT('%',#{orderNo},'%')
+		</if>
+		<if test="plateNo != null">
+			AND EXISTS (SELECT * FROM t_order_vehicle_rel r WHERE t.order_no = r.order_no AND r.vehicle_no LIKE CONCAT('%',#{plateNo},'%'))
+		</if>
+		<if test="driverName != null">
+			AND EXISTS (SELECT * FROM t_order_vehicle_rel rel WHERE t.order_no = rel.order_no AND rel.driver_name LIKE CONCAT('%',#{driverName},'%'))
+		</if>
+		<if test="orderStatus != null">
+			AND t.order_status = #{orderStatus}
+		</if>
+	</sql>
+	
+	<sql id="getOrderSql">
+		SELECT
+			t.order_no orderNo,
+			t1.`name` consignorName,
+			t2.site_name startSiteName,
+			t2.address startAddr,
+			t2.coordinate startCoordinate,
+			t3.site_name endSiteName,
+			t3.address endAddr,
+			t3.coordinate endCoordinate,
+			t4.`name` goodsTypeName,
+			t.weight,
+			t.volume,
+			t.package_num packageNum,
+			t.publish_time publishTime,
+			t.fee_type feeType,
+			t.fee,
+			t.order_status orderStatus,
+			t.distance,
+			t.district_id districtId,
+			t.goods_type goodsType,
+			t.pay_status payStatus,
+			t.sender_name senderName,
+			t.sender_phone senderPhone,
+			t8.`name` vehicleTypeName,
+			t.pickup_time pickupTime,
+			t.finish_time finishTime,
+			t.remark remark,
+			t9.`name` carrierName,
+			t6.vehicle_no plateNo,
+			t6.driver_name driverName,
+			t6.driver_phone driverPhone
+		FROM
+			t_order t
+		LEFT JOIN t_dept t1 ON t.consignor_dept = t1.id
+		LEFT JOIN t_order_site t2 ON (t.start_site_id = t2.site_id and t.order_no = t2.order_no)
+		LEFT JOIN t_order_site t3 ON (t.end_site_id = t3.site_id and t.order_no = t3.order_no)
+		LEFT JOIN t_goods_type_dict t4 ON t.goods_type = t4.id
+		LEFT JOIN t_dept t5 ON t.driver_dept = t5.id
+		LEFT JOIN t_order_vehicle_rel t6 ON t.order_no = t6.order_no
+		LEFT JOIN t_vehicle t7 ON t6.vehicle_id = t7.vehicle_id
+		LEFT JOIN t_vehicle_type_dict t8 ON t7.vehicle_type_id = t8.id
+		LEFT JOIN t_dept t9 ON t.carrier_dept = t9.id
+	</sql>
+	<select id="getOrder" parameterType="java.util.Map" resultType="java.util.Map">
+		<include refid="getOrderSql"></include>
+		WHERE
+			t.`status` = 1
+		AND (t5.dna LIKE CONCAT(#{deptDNA}, '%') or t.order_status = ${@com.chainway.dispatchercore.common.OrderStatus@PUBLISHED})
+		AND t.order_no = #{orderNo}
+	</select>
+	
+	<select id="getAnyOrder" parameterType="java.util.Map" resultType="java.util.Map">
+		<include refid="getOrderSql"></include>
+		WHERE
+			t.`status` = 1
+		AND t.order_no = #{orderNo}
+	</select>
+	
+	<select id="getOrderListCount" parameterType="java.util.Map" resultType="int">
+		SELECT
+			count(*) n
+		FROM
+			t_order t
+		LEFT JOIN t_dept t1 ON t.consignor_dept = t1.id
+		LEFT JOIN t_order_site t2 ON (t.start_site_id = t2.site_id and t.order_no = t2.order_no)
+		LEFT JOIN t_order_site t3 ON (t.end_site_id = t3.site_id and t.order_no = t3.order_no)
+		LEFT JOIN t_goods_type_dict t4 ON t.goods_type = t4.id
+		LEFT JOIN t_dept t5 ON t.driver_dept = t5.id
+		WHERE
+			t.`status` = 1
+		AND (t5.dna LIKE CONCAT(#{deptDNA}, '%')
+			 OR (t.order_status = ${@com.chainway.dispatchercore.common.OrderStatus@PUBLISHED}
+			 AND f_is_carrier_order_matching(t.order_no, #{mileageMin}, #{mileageMax}, #{districts}, #{goodsTypes}) = 1))
+		<include refid="getOrderListConditions"></include>
+	</select>
+	<select id="listOrderSites" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT
+			t1.site_id siteId,
+			t1.site_name siteName,
+			t1.address,
+			t1.site_type siteType,
+			t1.coordinate,
+			t1.arrived_time arrivedTime,
+			t1.link_man receiverName,
+			t1.link_phone receiverPhone,
+			t1.unload_package_num unloadPackageNum,
+			t1.unload_volume unloadVolume,
+			t1.unload_weight unloadWeight,
+			t1.idx_no idxNo
+		FROM
+			t_order t
+		LEFT JOIN t_order_site t1 ON t.order_no = t1.order_no
+		LEFT JOIN t_dept t3 ON t.driver_dept = t3.id
+		WHERE
+			t.`status` = 1
+		AND t3.dna LIKE CONCAT(#{deptDNA}, '%')
+		AND t.order_no = #{orderNo}
+		ORDER BY
+			ISNULL(t1.arrived_time), t1.arrived_time, t1.idx_no
+	</select>
+</mapper>

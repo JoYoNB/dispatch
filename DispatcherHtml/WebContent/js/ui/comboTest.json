@@ -1,0 +1,17 @@
+{
+	"code":0,
+	"msg":null,
+	"data":{
+		"total":3,
+		"list":[{
+			"name":"北京",
+			"value":"beijing"
+		},{
+			"name":"上海",
+			"value":"shanghai"
+		},{
+			"name":"深圳",
+			"value":"shenzhen"
+		}]
+	}
+}

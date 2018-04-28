@@ -1,0 +1,104 @@
+{
+	"errCode": 0,
+	"data": [{
+		"start": "起点名称",
+		"end": "终点名称",
+		"goodsType": "饮料",
+		"number": 20,
+		"distance": 12,
+		"height": 4.2,
+		"carDoor": "开侧门",
+		"time": "2018-04-13 12:15:12",
+		"state": 0
+	},{
+		"start": "起点名称",
+		"end": "终点名称",
+		"goodsType": "饮料",
+		"number": 20,
+		"distance": 12,
+		"height": 4.2,
+		"carDoor": "开侧门",
+		"time": "2018-04-13 12:15:12",
+		"state": 1
+	},{
+		"start": "起点名称",
+		"end": "终点名称",
+		"goodsType": "饮料",
+		"number": 20,
+		"distance": 12,
+		"height": 4.2,
+		"carDoor": "开侧门",
+		"time": "2018-04-13 12:15:12",
+		"state": 2
+	},{
+		"start": "起点名称",
+		"end": "终点名称",
+		"goodsType": "饮料",
+		"number": 20,
+		"distance": 12,
+		"height": 4.2,
+		"carDoor": "开侧门",
+		"time": "2018-04-13 12:15:12",
+		"state": 3
+	},{
+		"start": "起点名称",
+		"end": "终点名称",
+		"goodsType": "饮料",
+		"number": 20,
+		"distance": 12,
+		"height": 4.2,
+		"carDoor": "开侧门",
+		"time": "2018-04-13 12:15:12",
+		"state": 4
+	},{
+		"start": "起点名称",
+		"end": "终点名称",
+		"goodsType": "饮料",
+		"number": 20,
+		"distance": 12,
+		"height": 4.2,
+		"carDoor": "开侧门",
+		"time": "2018-04-13 12:15:12",
+		"state": 0
+	},{
+		"start": "起点名称",
+		"end": "终点名称",
+		"goodsType": "饮料",
+		"number": 20,
+		"distance": 12,
+		"height": 4.2,
+		"carDoor": "开侧门",
+		"time": "2018-04-13 12:15:12",
+		"state": 1
+	},{
+		"start": "起点名称",
+		"end": "终点名称",
+		"goodsType": "饮料",
+		"number": 20,
+		"distance": 12,
+		"height": 4.2,
+		"carDoor": "开侧门",
+		"time": "2018-04-13 12:15:12",
+		"state": 2
+	},{
+		"start": "起点名称",
+		"end": "终点名称",
+		"goodsType": "饮料",
+		"number": 20,
+		"distance": 12,
+		"height": 4.2,
+		"carDoor": "开侧门",
+		"time": "2018-04-13 12:15:12",
+		"state": 3
+	},{
+		"start": "起点名称",
+		"end": "终点名称",
+		"goodsType": "饮料",
+		"number": 20,
+		"distance": 12,
+		"height": 4.2,
+		"carDoor": "开侧门",
+		"time": "2018-04-13 12:15:12",
+		"state": 4
+	}]
+}

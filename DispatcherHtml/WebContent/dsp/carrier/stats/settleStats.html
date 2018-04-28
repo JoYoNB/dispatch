@@ -1,0 +1,60 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<!--#include file="/layout/libs.html"-->
+	<title>城市配送管理平台</title>
+</head>
+<body>
+	<div class="city-wrapper">
+		<!-- 公共header 开始 -->
+		<!--#include file="/layout/header.html"-->
+		<!-- 公共header 结束 -->
+		<div class="city-title-layout">
+			<div class="city-title">结算统计</div>
+			<div class="city-logo"><a href="javascript:;" title="城市配送管理平台"><img src="../../../images/logo.png" alt=""></a></div>
+		</div>
+		<div class="city-main-scroll" style="background: #f7f7f7;">
+			<div class="mian-head clearfix">
+				<div class="city-search-title">
+					<div class="btns-box">
+						<a href="javascript:;" class="city-btn" id="exportBtn">导出</a>
+					</div>
+				</div>
+				<!-- 搜索区域 -->
+				<div class="select-box">
+				  	<span class="toggle-select clearfix">条件筛选 <i class="iconfont iconfont-arrow-b fr"></i></span>
+					<span class="change-status"><i class="iconfont iconfont-suo"></i></span>
+					<div class="search-area">
+						<div class="ipt_box">
+							<select class="city-ipt-select"  id="timeFlag">
+								<option value="-1">请选择</option>
+								<!-- 
+								<option value="5">今天</option>
+								<option value="6">昨天</option>
+								 -->
+								<option value="0" selected="selected">本周</option>
+								<option value="1">上周</option>
+								<option value="2">本月</option>
+								<option value="3">上月</option>
+							</select>
+						</div>
+						<div class="ipt_box"><div id="timeWidgetStart"></div></div>
+						<div class="ipt_box"><div id="timeWidgetEnd"></div></div>
+						<div id="deptWidget" class="ipt_box"></div>
+						<div class="ipt_box"><input type="button" id="queryBtn" class="ipt_submit" value="查询"></div>
+					</div>
+				</div>
+				<!-- 搜索区域结束-->
+			</div>
+			<div class="city-main"><!-- city-table-search-active -->
+				<div id="tableWidget" class="city-table-main">
+				</div>
+			</div>
+		</div>
+		<!-- 底部 开始 -->
+		<!--#include file="/layout/footer.html"-->
+		<!-- 底部 结束 -->
+	</div>
+	<script type="text/javascript" src="/js/carrier/stats/settleStats.js"></script>
+</body>
+</html>

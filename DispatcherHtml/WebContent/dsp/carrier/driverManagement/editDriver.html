@@ -1,0 +1,55 @@
+<!doctype html>
+<html lang="en">
+<head>
+<!--#include file="/layout/libs.html"-->
+<title>城市配送管理平台</title>
+</head>
+<body>
+	<div class="city-wrapper">
+		<!-- 公共header 开始 -->
+		<!--#include file="/layout/carrierHeader.html"-->
+		<!-- 公共header 结束 -->
+		
+		<div class="city-title-layout">
+			<div class="city-title">修改司机</div>
+			<div class="city-logo"><a href="javascript:;" title="城市配送管理平台"><img src="/images/logo.png" alt=""></a></div>
+		</div>
+		<div class="city-main-scroll">
+			<div class="city-main">
+				<ul class="city-form">
+					<li class="city-form-item clearfix">
+						<div class="city-form-tip">司机姓名：</div>	
+						<input id="driverName" type="text" class="city-ipt-text w250" placeholder="请输入司机姓名">
+					</li>
+					<li class="city-form-item clearfix">
+						<div class="city-form-tip">部门：</div>
+						<div id="deptWidget" ></div>
+					</li>
+					<li class="city-form-item clearfix">
+						<div class="city-form-tip">关联车辆：</div>
+						<div id="vehicleWidget"></div>
+					</li>
+					<li class="city-form-item clearfix">
+						<div class="city-form-tip">手机号：</div>
+						<input id="phoneNo" type="text" class="city-ipt-text w250" placeholder="请输入手机号">
+					</li>
+					<li class="city-form-item clearfix">
+						<div class="city-form-tip">入职时间：</div>
+						<div id="timeWidget"></div>
+					</li>
+					<li class="city-form-item clearfix">
+						<div class="city-form-tip">&nbsp;</div>
+						<a id="saveBtn" href="javascript:void(0);" class="city-btn active">保存</a>
+						<a href="/dsp/carrier/driverManagement/driverList.html" class="city-btn">取消</a>
+					</li>
+				</ul>
+			</div>
+		</div>
+		
+		<!-- 底部 开始 -->
+		<!--#include file="/layout/footer.html"-->
+		<!-- 底部 结束 -->
+	</div>
+<script type="text/javascript" src="/js/carrier/driverManagement/editDriver.js"></script>
+</body>
+</html>

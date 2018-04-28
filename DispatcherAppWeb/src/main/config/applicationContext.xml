@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:task="http://www.springframework.org/schema/task"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:context="http://www.springframework.org/schema/context"
+    xmlns:p="http://www.springframework.org/schema/p" 
+    xmlns:aop="http://www.springframework.org/schema/aop"
+    xmlns:tx="http://www.springframework.org/schema/tx"
+    xmlns:mvc="http://www.springframework.org/schema/mvc"
+    xmlns:hdp="http://www.springframework.org/schema/hadoop"
+    xmlns:util="http://www.springframework.org/schema/util"
+    xmlns:dubbo="http://code.alibabatech.com/schema/dubbo"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans
+    http://www.springframework.org/schema/beans/spring-beans-4.0.xsd
+    http://www.springframework.org/schema/context 
+    http://www.springframework.org/schema/context/spring-context-4.0.xsd 
+    http://www.springframework.org/schema/aop 
+    http://www.springframework.org/schema/aop/spring-aop-4.0.xsd 
+    http://www.springframework.org/schema/tx 
+    http://www.springframework.org/schema/tx/spring-tx-4.0.xsd
+    http://www.springframework.org/schema/mvc
+    http://www.springframework.org/schema/mvc/spring-mvc-4.0.xsd
+    http://www.springframework.org/schema/task
+   	http://www.springframework.org/schema/task/spring-task-4.0.xsd
+   	http://www.springframework.org/schema/hadoop 
+	http://www.springframework.org/schema/hadoop/spring-hadoop-2.0.xsd
+	http://www.springframework.org/schema/util
+	http://www.springframework.org/schema/util/spring-util-4.0.xsd
+	http://code.alibabatech.com/schema/dubbo
+    http://code.alibabatech.com/schema/dubbo/dubbo.xsd">
+    
+    <bean id="propertyConfig" class="com.chainway.dispatcherappweb.common.DecodePropertyPlaceholderConfigurer">
+		<property name="locations">
+			<list>
+				<value>classpath:configure.properties</value>
+			</list>
+		</property>
+	</bean>
+	
+    <dubbo:application name="dispatcherAppCustomer" />  
+    <dubbo:registry address="${dubbo.registry}" />  
+    
+    <!-- 使用dubbo注解方式 -->
+	<dubbo:annotation package="com.chainway.dispatcherappweb" />
+    <!-- 加入spring注解扫描 -->
+    <context:component-scan base-package="com.chainway.dispatcherappweb" />
+	
+	<!-- 国际化支持 开始 -->
+	<!--注册资源Bean,其Bean名称只能为messageSource -->  
+	<bean id="messageSource" class="org.springframework.context.support.ResourceBundleMessageSource">  
+  		<property name="basenames">
+     		<list>  
+       			<value>com/chainway/dispatcherappweb/common/i18n/resource</value>
+     		</list>  
+  		</property>  
+	</bean>
+	<!-- 通过注解方式 -->
+	<!-- 国际化支持 结束 -->
+	
+	<!-- 登陆时验证码的配置 -->
+	<bean id="captchaProducer" class="com.google.code.kaptcha.impl.DefaultKaptcha">
+		<property name="config">
+			<bean class="com.google.code.kaptcha.util.Config">
+				<constructor-arg type="java.util.Properties">
+					<props>
+						<prop key="kaptcha.image.width">135</prop>
+						<prop key="kaptcha.image.height">44</prop>
+						<prop key="kaptcha.textproducer.char.string">0123456789</prop>
+						<prop key="kaptcha.textproducer.char.length">4</prop>
+						<prop key="kaptcha.border">no</prop>
+						<prop key="kaptcha.textproducer.font.color">76,176,101</prop>
+						<prop key="kaptcha.textproducer.font.size">32</prop>
+						<prop key="kaptcha.textproducer.font.names">Arial, Courier</prop>
+						<prop key="kaptcha.background.clear.from">white</prop>
+						<prop key="kaptcha.background.clear.to">white</prop>
+						<prop key="kaptcha.obscurificator.impl">com.google.code.kaptcha.impl.WaterRipple</prop>
+						<prop key="kaptcha.noise.impl">com.google.code.kaptcha.impl.NoNoise</prop>
+						<prop key="kaptcha.noise.color">76,176,101</prop>
+						<prop key="kaptcha.textproducer.char.space">8</prop>
+					</props>
+				</constructor-arg>
+			</bean>
+		</property>
+	</bean>
+	
+	<!-- 权限配置 -->
+	<import resource="classpath:security.xml"/>
+</beans>

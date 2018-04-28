@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!-- namespace命名规则: 表对应java类的名称-->
+<mapper namespace="com.chainway.dispatcherservice.biz.dao.AreaDao">
+
+	<select id="getAreaByParentId" parameterType="java.lang.String" resultType="java.util.Map">
+		SELECT id,name,parent,i18n_key,level FROM t_area 
+		<if test="_parameter==null or _parameter==''">
+			WHERE parent is NULL
+		</if>
+		<if test="_parameter!=null and _parameter!=''">
+			WHERE parent=#{_parameter}
+		</if>
+	</select>
+	<select id="getAreaById" parameterType="java.lang.String" resultType="java.util.Map">
+		SELECT id,name,parent,i18n_key,level FROM t_area 
+		WHERE id=#{_parameter}
+	</select>
+</mapper>

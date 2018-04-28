@@ -1,0 +1,166 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!-- namespace命名规则: 表对应java类的名称-->
+<mapper namespace="com.chainway.dispatcherservice.biz.dao.SettleOrderDao">
+	<!-- 收款 -->
+	<update id="receipt" parameterType="java.lang.String">
+		UPDATE t_order
+		SET 
+			pay_status=${@com.chainway.dispatchercore.common.PayStatus@PAID}
+		WHERE order_no=#{orderNo} 
+		AND pay_status=${@com.chainway.dispatchercore.common.PayStatus@UNPAID} 
+	</update>
+	
+	<!-- 结算 -->
+	<update id="settle" parameterType="java.lang.String">
+		UPDATE t_order
+		SET 
+			pay_status=${@com.chainway.dispatchercore.common.PayStatus@SETTLED}
+		WHERE order_no=#{orderNo} 
+		AND pay_status=${@com.chainway.dispatchercore.common.PayStatus@PAID} 
+		AND order_status=${@com.chainway.dispatchercore.common.OrderStatus@FINISHED}
+	</update>
+	
+	<sql id="getListConditions">
+		WHERE tod.`status`=1
+		<if test="startTime!=null and startTime!='' and endTime!=null and endTime!=''">
+			AND tod.create_time <![CDATA[ >= ]]> #{startTime}
+			AND tod.create_time <![CDATA[ <= ]]> #{endTime}
+		</if>
+		<if test="orderNo!=null and orderNo!=''">
+			and tod.order_no=#{orderNo}
+		</if>
+		<if test="goodsTypeId!=null and goodsTypeId!=''">
+			and tod.goods_type=#{goodsTypeId}
+		</if>
+		<if test="orderStatus!=null and orderStatus!=''">
+			and tod.order_status=#{orderStatus}
+		</if>
+		<if test="payStatus!=null and payStatus!=''">
+			and tod.pay_status=#{payStatus}
+		</if>
+	</sql>
+	
+	<select id="getList" parameterType="java.util.Map" resultType="com.chainway.dispatcherservice.dto.Order">
+		SELECT
+			tod.order_no id ,
+			tod.order_no orderNo ,
+			tod.consignor_dept consignorDept ,
+			td1.`name` consignorDeptName ,
+			tod.carrier_dept carrierDept ,
+			td2.`name` carrierDeptName ,
+			tod.start_site_id startSiteId ,
+			ts1.`name` startSiteName ,
+			tod.end_site_id endSiteId ,
+			ts2.`name` endSiteName ,
+			tod.goods_type goodsType ,
+			tod.weight,
+			tod.volume,
+			tod.package_num packageNum,
+			tgt.`name` goodsTypeName ,
+			tod.create_time createTime ,
+			tod.fee fee ,
+			tod.order_status orderStatus ,
+			tod.pay_status payStatus
+		FROM
+			t_order tod
+		LEFT JOIN t_dept td1 ON tod.consignor_dept = td1.id
+		LEFT JOIN t_dept td2 ON tod.carrier_dept = td2.id
+		LEFT JOIN t_site ts1 ON tod.start_site_id = ts1.id
+		LEFT JOIN t_site ts2 ON tod.end_site_id = ts2.id
+		LEFT JOIN t_goods_type_dict tgt ON tod.goods_type = tgt.id
+		<include refid="getListConditions"></include>
+		ORDER BY tod.create_time DESC
+		<if test="pageSize!=null and offset!=null">
+			limit #{offset},#{pageSize}
+		</if>
+	</select>
+	<select id="getListCount" parameterType="java.util.Map" resultType="int">
+		SELECT
+			count(1) AS n
+		FROM
+			t_order tod
+		LEFT JOIN t_dept td1 ON tod.consignor_dept = td1.id
+		LEFT JOIN t_dept td2 ON tod.carrier_dept = td2.id
+		LEFT JOIN t_site ts1 ON tod.start_site_id = ts1.id
+		LEFT JOIN t_site ts2 ON tod.end_site_id = ts2.id
+		LEFT JOIN t_goods_type_dict tgt ON tod.goods_type = tgt.id
+		<include refid="getListConditions"></include>
+	</select>
+	
+	<resultMap id="orderInfoResultMap" type="java.util.Map"> 
+  		<id column="orderNo" property="orderNo" /> 
+  		<result column="payStatus" property="payStatus" />
+  		<result column="orderStatus" property="orderStatus" />
+  		<result column="fee" property="fee" />
+  		<result column="goodsTypeId" property="goodsTypeId" />
+  		<result column="goodsTypeName" property="goodsTypeName" />
+  		<result column="vehicleTypeId" property="vehicleTypeId" />
+  		<result column="vehicleTypeName" property="vehicleTypeName" />
+  		<result column="pickupTime" property="pickupTime" />
+  		<result column="finishTime" property="finishTime" />
+  		<result column="remark" property="remark" />
+  		<result column="carrierDeptId" property="carrierDeptId" />
+  		<result column="carrierDeptName" property="carrierDeptName" />
+  		<result column="vehicleNo" property="vehicleNo" />
+  		<result column="driverName" property="driverName" />
+  		<result column="driverPhone" property="driverPhone" />
+  		<result column="createTime" property="createTime" />
+  		<result column="vehicleOtherId" property="vehicleOtherId" />
+  		<collection property="sites" javaType="ArrayList" ofType="java.util.Map">
+  			<id column="siteId" property="siteId" /> 
+	  		<result column="siteName" property="siteName" />
+	  		<result column="address" property="address" />
+	  		<result column="linkMan" property="linkMan" />
+	  		<result column="linkPhone" property="linkPhone" />
+	  		<result column="unloadPackageMum" property="unloadPackageMum" />
+	  		<result column="unloadWeight" property="unloadWeight" />
+	  		<result column="unloadVolume" property="unloadVolume" />
+	  		<result column="idxNo" property="idxNo" />
+  		</collection>
+ 	</resultMap>
+	
+	<select id="getOrderInfo" parameterType="java.lang.String" resultMap="orderInfoResultMap">
+		SELECT
+			tod.order_no orderNo,
+			tod.pay_status payStatus,
+			tod.order_status orderStatus,
+			tod.fee fee,
+			tod.goods_type goodsTypeId,
+			tgt.`name` goodsTypeName,
+			tod.vehicle_type vehicleTypeId,
+			tvt.`name` vehicleTypeName,
+			tos.site_id siteId,
+			tos.site_name siteName,
+			tos.address ,
+			tos.link_man linkMan,
+			tos.link_phone linkPhone,
+			tos.unload_package_num unloadPackageMum,
+			tos.unload_weight unloadWeight,
+			tos.unload_volume unloadVolume,
+			tos.idx_no idxNo,
+			tod.pickup_time pickupTime,
+			tod.finish_time finishTime,
+			tod.remark,
+			tod.carrier_dept carrierDeptId,
+			td.`name` carrierDeptName,
+			tov.vehicle_no vehicleNo,
+			tov.driver_name driverName,
+			tov.driver_phone driverPhone,
+			tod.create_time createTime,
+			tov.vehicle_other_id vehicleOtherId
+		
+		FROM
+			t_order tod
+		LEFT JOIN t_order_site tos ON tod.order_no = tos.order_no
+		LEFT JOIN t_goods_type_dict tgt ON tod.goods_type = tgt.id
+		LEFT JOIN t_vehicle_type_dict tvt ON tod.vehicle_type = tvt.id
+		LEFT JOIN t_order_vehicle_rel tov on tod.order_no=tov.order_no
+		LEFT JOIN t_vehicle tv on tov.vehicle_id=tv.vehicle_id
+		LEFT JOIN t_dept td on tod.carrier_dept=td.id
+		WHERE tod.order_no=#{orderNo}
+		ORDER BY tos.idx_no
+	</select>
+</mapper>

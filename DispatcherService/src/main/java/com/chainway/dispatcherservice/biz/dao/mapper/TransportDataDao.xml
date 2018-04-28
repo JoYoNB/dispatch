@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!-- namespace命名规则: 表对应java类的名称-->
+<mapper namespace="com.chainway.dispatcherservice.biz.dao.TransportDataDao">
+	<sql id="getListConditions">
+		WHERE 1=1
+		<if test="name!=null and name!=''">
+			AND td.name LIKE CONCAT('%',#{name},'%') 
+		</if>
+		<if test="startTime!=null and startTime!='' and endTime!=null and endTime!=''">
+			AND tod2.create_time <![CDATA[ >= ]]> #{startTime}
+			AND tod2.create_time <![CDATA[ <= ]]> #{endTime}
+		</if>
+	</sql>
+	<select id="getList" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT
+			td.id id,
+			td.name name ,
+			count(distinct tod1.order_no) orderTotle,
+			count(distinct tv.vehicle_id) vehicleTotle,
+			count(distinct tod2.order_no) orderGrowth,
+			td.create_time createTime
+		FROM
+			(SELECT id ,name,dna,create_time FROM t_dept WHERE status=1 and (role = 2 OR role = 3 OR role = 4) ) td
+		LEFT JOIN t_order tod1 ON td.id = tod1.carrier_dept
+		LEFT JOIN (SELECT o.order_no,o.carrier_dept,oc.create_time from t_order o inner join t_order_carrier_rel oc on o.order_no=oc.order_no where oc.status=1) tod2 on td.id=tod2.carrier_dept
+		LEFT JOIN (SELECT v.vehicle_id,d.dna from t_vehicle v inner join t_dept d on v.dept_id=d.id) tv on tv.dna like CONCAT(td.dna,'%')
+		<include refid="getListConditions"></include>
+		GROUP BY td.id
+		ORDER BY td.create_time DESC
+		<if test="pageSize!=null and offset!=null">
+			limit #{offset},#{pageSize}
+		</if>
+	</select>
+	<select id="getListCount" parameterType="java.util.Map" resultType='int'>
+		SELECT
+			count(distinct td.id) n
+		FROM
+			(SELECT id ,name,dna,create_time FROM t_dept WHERE status=1 and (role = 2 OR role = 3 OR role = 4) ) td
+		LEFT JOIN t_order tod1 ON td.id = tod1.carrier_dept
+		LEFT JOIN (SELECT o.order_no,o.carrier_dept,oc.create_time from t_order o inner join t_order_carrier_rel oc on o.order_no=oc.order_no where oc.status=1) tod2 on td.id=tod2.carrier_dept
+		LEFT JOIN (SELECT v.vehicle_id,d.dna from t_vehicle v inner join t_dept d on v.dept_id=d.id) tv on tv.dna like CONCAT(td.dna,'%')
+		<include refid="getListConditions"></include>
+	</select>
+</mapper>

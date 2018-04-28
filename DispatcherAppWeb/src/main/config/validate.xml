@@ -1,0 +1,177 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE document [
+<!ELEMENT resource (version,validate*,form*)>
+<!ELEMENT validate (type*)>
+<!ATTLIST type name ID #REQUIRED>
+<!ATTLIST type class CDATA #REQUIRED>
+<!ATTLIST type format CDATA "">
+<!ATTLIST type regex CDATA "">
+<!ELEMENT form (field*)>
+<!ATTLIST form name ID #REQUIRED>
+<!ATTLIST field  name CDATA #REQUIRED>
+<!ATTLIST field  required (false|true) "false">
+<!ATTLIST field  validate CDATA #REQUIRED>
+<!ATTLIST field  min CDATA #IMPLIED>
+<!ATTLIST field  max CDATA #IMPLIED>
+<!ATTLIST field  minlength CDATA #IMPLIED>
+<!ATTLIST field  maxlength CDATA #IMPLIED>
+<!ATTLIST field  char (1|2|3) "2">
+]>
+<resource>
+	<version>1.1</version>
+	<validate><!--name和属性中设置的validate一致,class用于后台验证,format用于格式化,regex用于正则表达式-->
+		<!--通用字符-->
+		<type name="string" class="chainway.frame.validate.field.StringField"/>		
+		<!--电子邮箱-->
+		<type name="email" class="chainway.frame.validate.field.StringField" regex="^\w+([-+.]\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*$"/>
+		<!-- 网站 -->
+		<type name="url" class="chainway.frame.validate.field.StringField" regex="^[a-zA-z]+://[^\s]*$"/>
+		<!--手机号码-->
+		<type name="phone" class="chainway.frame.validate.field.StringField" regex="^(13[0-9]|15[0-9]|18[0-9]|17[0-9]|14[57])\d{8}$"/>
+		<!--只包含大小写字母和数字-->
+		<type name="letternumber" class="chainway.frame.validate.field.StringField" regex="^[a-zA-Z0-9]+$"/>
+		<!--只包含大小写字母-->
+		<type name="letter" class="chainway.frame.validate.field.StringField" regex="^[a-zA-Z]+$"/>
+		<!-- 密码复杂度 -->
+		<type name="passwordregex" class="chainway.frame.validate.field.StringField" regex="^(?![A-Z]+$)(?![a-z]+$)(?!\d+$)(?![\W_]+$)\S+$"/>
+		<!--正负浮点数,可包含符号位-->
+		<type name="doubler" class="chainway.frame.validate.field.NumberField" regex="^[+-]?\d*\.?\d+$"/>
+		<!--正浮点数,可包含符号位-->
+		<type name="doublerplus" class="chainway.frame.validate.field.NumberField" regex="^[+]?\d*\.?\d+$"/>
+		<!--负浮点数,可包含符号位-->
+		<type name="doublerneg" class="chainway.frame.validate.field.NumberField" regex="^-\d*\.?\d+$"/>
+		<!--正负长整数,可包含符号位-->
+		<type name="long" class="chainway.frame.validate.field.NumberField" regex="^[+-]?\d+$"/>
+		<!--正长整数,可包含符号位-->
+		<type name="longplus" class="chainway.frame.validate.field.NumberField" regex="^[+]?\d+$"/>
+		<!--负长整数,可包含符号位-->
+		<type name="longneg" class="chainway.frame.validate.field.NumberField" regex="^-\d+$"/>
+		<!--正长整数,不包含符号位-->
+		<type name="longunsigned" class="chainway.frame.validate.field.NumberField" regex="^\d+$"/>
+		<!--日期时间-->
+		<type name="datetime" class="chainway.frame.validate.field.DateTimeField" format="yyyy-MM-dd HH:mm:ss" regex="^((\d{2}(([02468][048])|([13579][26]))\-((((0[13578])|(1[02]))\-(([0-2][0-9])|(3[01])))|(((0[469])|(11))\-(([0-2][0-9])|(30)))|(02\-([0-2][0-9]))))|(\d{2}(([02468][1235679])|([13579][01345789]))\-((((0[13578])|(1[02]))\-(([0-2][0-9])|(3[01])))|(((0[469])|(11))\-(([0-2][0-9])|(30)))|(02\-(([0-1][0-9])|(2[0-8]))))))(\s(([0-1][0-9])|2[0-3])\:([0-5][0-9])\:([0-5][0-9]))$"/>
+		<!--日期-->
+		<type name="date" class="chainway.frame.validate.field.DateTimeField" format="yyyy-MM-dd" regex="^((\d{2}(([02468][048])|([13579][26]))\-((((0[13578])|(1[02]))\-(([0-2][0-9])|(3[01])))|(((0[469])|(11))\-(([0-2][0-9])|(30)))|(02\-([0-2][0-9]))))|(\d{2}(([02468][1235679])|([13579][01345789]))\-((((0[13578])|(1[02]))\-(([0-2][0-9])|(3[01])))|(((0[469])|(11))\-(([0-2][0-9])|(30)))|(02\-(([0-1][0-9])|(2[0-8]))))))$"/>
+		<!--时间-->
+		<type name="time" class="chainway.frame.validate.field.DateTimeField" format="HH:MM:SS" regex="^(\s(([0-1][0-9])|2[0-3])\:([0-5][0-9])\:([0-5][0-9]))$"/>
+	</validate>
+	<form name="demo"><!--name和语言定义中的name一致,required用于是否不能为空,validate用于正则和范围验证,min和max用于区间范围验证,minlength和maxlength用于长度范围验证-->
+		<field name="user" validate="string" required="true" minlength="6" maxlength="30"/>
+		<field name="email" validate="email" min="3" max="55"/>
+		<field name="sex" validate="longunsigned" required="true" min="1" max="2"/>
+		<field name="birth" validate="date" min="2014-08-01" max="2015-03-01"/>
+		<field name="login" validate="datetime" min="2014-08-01 11:00:01" max="2015-03-01 12:10:01"/>
+		<field name="hour" validate="time" min="11:00:01" max="12:10:01"/>
+	</form>
+	<form name="monitorfench"><!--name和语言定义中的name一致,required用于是否不能为空,validate用于正则和范围验证,min和max用于区间范围验证,minlength和maxlength用于长度范围验证-->
+		<field name="escname" validate="string" required="true" minlength="1" maxlength="50"/>
+		<field name="carids" validate="string" required="true" minlength="1" maxlength="8000"/>		
+	</form>
+
+	<form name="siteorganization"><!--name和语言定义中的name一致,required用于是否不能为空,validate用于正则和范围验证,min和max用于区间范围验证,minlength和maxlength用于长度范围验证-->
+		<field name="deptname" validate="string" required="true" minlength="1" maxlength="30"/>
+		<field name="personinphone" validate="longunsigned"  minlength="1" maxlength="20" />
+		<field name="personincharge" validate="string"  minlength="1" maxlength="20"/>		
+	</form>
+
+	<form name="changepassword"><!--name和语言定义中的name一致,required用于是否不能为空,validate用于正则和范围验证,min和max用于区间范围验证,minlength和maxlength用于长度范围验证-->
+		<field name="password" validate="string" required="true" minlength="6" maxlength="10"/>
+		<field name="carids" validate="string" required="true" minlength="1" maxlength="8000"/>		
+	</form>
+	<!-- 登录 -->
+	<form name="login"><!--name和语言定义中的name一致,required用于是否不能为空,validate用于正则和范围验证,min和max用于区间范围验证,minlength和maxlength用于长度范围验证-->
+		<field name="password" validate="string" required="true" minlength="8" maxlength="10"/>
+		<field name="account" validate="string" required="true" minlength="1" maxlength="30"/>
+		<field name="failtime" validate="string" required="true" max="30"/>	<!-- failtime(分钟)内登录失败多少次则锁定账号 -->
+		<field name="failcount" validate="longunsigned" required="true" max="3"/><!-- 失败5次锁定账号 -->
+		<field name="locktime" validate="longunsigned" required="true" max="5"/><!-- 锁定账号时长 -->	
+		<field name="modifypwdperiod" validate="longunsigned" required="true" max="30"/><!-- 30天修改一次密码 -->
+	</form>
+	<!-- 用户 -->
+	<form name="useradd"><!--name和语言定义中的name一致,required用于是否不能为空,validate用于正则和范围验证,min和max用于区间范围验证,minlength和maxlength用于长度范围验证-->
+		<field name="account" validate="string" required="true" minlength="1" maxlength="20"/>
+		<field name="password" validate="string" required="true" minlength="8" maxlength="10"/>	
+		<field name="username" validate="string" required="true" minlength="1" maxlength="20"/>
+		<field name="timezone" validate="string" required="true" minlength="6" maxlength="20"/>
+		<field name="deptid" validate="string" required="true" minlength="6" maxlength="20"/>	
+		<field name="phone" validate="longunsigned" required="true" minlength="1" maxlength="20"/>	
+		<field name="email" validate="email" required="true" minlength="1" maxlength="30"/>	
+		<field name="rolename" validate="longunsigned" required="true" minlength="6" maxlength="30"/>
+		<field name="passwordregex" validate="passwordregex" required="true" minlength="8" maxlength="10"/>	<!-- password复杂度 -->	
+	</form>
+	<!-- 司机 -->
+	<form name="driver"><!--name和语言定义中的name一致,required用于是否不能为空,validate用于正则和范围验证,min和max用于区间范围验证,minlength和maxlength用于长度范围验证-->
+		<field name="drivername" validate="string" required="true" minlength="1" maxlength="20"/>
+		<field name="birth" validate="date" required="false" min="1900-01-01" max="2100-03-01" />	
+		<field name="sex" validate="string" required="false" max="20" min="0"/>
+		<field name="address" validate="string" required="false" minlength="1" maxlength="50"/>
+		<field name="employeddate" validate="date" required="false" min="1900-01-01" max="2100-01-01"/>	
+		<field name="dept" validate="string" required="true" />
+		<field name="phone" validate="phone" required="true" minlength="1" maxlength="20"/>		
+		<field name="email" validate="email" required="false" minlength="6" maxlength="30"/>	
+		<field name="plateno" validate="string" required="false" minlength="1" maxlength="20"/>	
+		<field name="drivinglience" validate="string" required="false" minlength="6" maxlength="18"/>	
+		<field name="licensegrade" validate="string" required="false" minlength="1" maxlength="5"/>
+		<field name="drivingage" validate="longunsigned" required="false" min="1" max="100"/>
+		<field name="label" validate="string" required="false" minlength="1" maxlength="100"/>
+		<field name="emergencycontact" validate="string" required="false" minlength="1" maxlength="20"/>
+		<field name="emergencycontactphone" validate="longunsigned" required="false" minlength="1" maxlength="20"/>		
+	</form>
+
+	<form name="sitecharacter"><!--name和语言定义中的name一致,required用于是否不能为空,validate用于正则和范围验证,min和max用于区间范围验证,minlength和maxlength用于长度范围验证-->
+		<field name="rolename" validate="string" required="true" minlength="1" maxlength="30"/>
+		<field name="rolenote" validate="string"  minlength="1" maxlength="100"/>	
+	</form>
+   <form name="sitevechicleadd"><!--name和语言定义中的name一致,required用于是否不能为空,validate用于正则和范围验证,min和max用于区间范围验证,minlength和maxlength用于长度范围验证-->
+		<field name="plateno" validate="string" required="true" minlength="1" maxlength="20"/>
+		<field name="carcolor" validate="string"  minlength="1" maxlength="10"/>
+		<field name="carvim" validate="string" required="true" minlength="1" maxlength="20"/>
+		<field name="vichcletype" validate="string" required="true" minlength="1" maxlength="10"/>
+		<field name="engineno" validate="string" required="true" minlength="1" maxlength="20"/>
+		<field name="models" validate="string" required="true" minlength="1" maxlength="20"/>
+		<field name="brand" validate="string"  minlength="1" maxlength="20"/>	
+		<field name="oilpermile" validate="doublerplus" min="0" max="99999.99"/>
+		<field name="enginedisplacement" validate="string"  minlength="1" maxlength="10"/>
+		<field name="fuegrade" validate="string"  minlength="1" maxlength="20"/>
+		<field name="totalmass" validate="doublerplus" min="0" max="99999.99"/>
+		<field name="drawmass" validate="doublerplus" min="0" max="99999.99"/>
+		<field name="approvemass" validate="doublerplus" min="0" max="99999.99"/>
+		<field name="wheelbase" validate="longunsigned" minlength="1" maxlength="6"/>
+		<field name="containersize" validate="string" minlength="1" maxlength="50"/>
+	    <field name="verandasize" validate="string" minlength="1" maxlength="50"/>
+	    <field name="tyresize" validate="string" minlength="1" maxlength="8"/>
+	    <field name="tyrenum" validate="longunsigned" minlength="1" maxlength="8"/>
+	    <field name="buytime" validate="date"/>
+	    <field name="price" validate="doublerplus" min="0" max="999999999999.99"/>
+	    <field name="insurancecompany" validate="string" minlength="1" maxlength="30"/>
+	    <field name="insuranceperiod" validate="doublerplus" minlength="1" maxlength="6"/>
+	    <field name="insuranceno" validate="string" minlength="1" maxlength="19"/>
+	    <field name="insuranceexpense" validate="doublerplus" minlength="1" maxlength="9"/>
+	    <field name="insuranceeffecttime" validate="date"/>
+	    <field name="nextinsurancedate" validate="date"/>
+	    <field name="insurancephone" validate="string" minlength="1" maxlength="20"/>
+	    <field name="inspectionperriod" validate="string" minlength="1" maxlength="3"/>
+	    <field name="nextinspectiondate" validate="date"/>
+	    <field name="simno" validate="string" minlength="1" maxlength="20"/>
+	</form>
+	 <form name="sitevechicle"><!--name和语言定义中的name一致,required用于是否不能为空,validate用于正则和范围验证,min和max用于区间范围验证,minlength和maxlength用于长度范围验证-->
+		<field name="paramvalue" validate="longunsigned" required="true" minlength="1" maxlength="20"/>
+		<field name="metermileage" validate="longunsigned" required="true" minlength="1" maxlength="10"/>
+		 <field name="pn" validate="string" minlength="1" maxlength="50"/>
+    </form>
+
+
+	<form name="demo22"><!--name和语言定义中的name一致,required用于是否不能为空,validate用于正则和范围验证,min和max用于区间范围验证,minlength和maxlength用于长度范围验证-->
+		<field name="user" validate="string" required="true" minlength="6" maxlength="30"/>
+		<field name="hour" validate="time" min="11:00:01" max="12:10:01"/>
+	</form>
+	
+	<!-- 数据库表字段 -->
+	<form name="database"><!--name和语言定义中的name一致,required用于是否不能为空,validate用于正则和范围验证,min和max用于区间范围验证,minlength和maxlength用于长度范围验证-->
+		<field name="EQUIPMENT_PN" validate="string" required="true" minlength="1" maxlength="50"/>
+		<field name="EQUIPMENT_SN" validate="string" required="true" minlength="1" maxlength="20"/>
+		<field name="version_type" validate="string" required="true" minlength="1" maxlength="10"/>
+		<field name="url" validate="url" required="true" minlength="1" maxlength="100"/>
+		<field name="bz" validate="string" required="true" minlength="1" maxlength="50"/>
+	</form>
+</resource>

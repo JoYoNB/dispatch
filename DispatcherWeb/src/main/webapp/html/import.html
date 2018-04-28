@@ -1,0 +1,113 @@
+<html>
+<head>
+<title>导入</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<script type="text/javascript" src="jquery-1.8.3.min.js"></script>
+<script type="text/javascript" src="jquery.form.min.js"></script>
+
+<script type="text/javascript">
+function uploadFile(param){
+	var _param=param||{};
+	
+	var _url=param.url;
+	if(!_url||_url==""){
+		return;
+	}
+	var uuid=(new Date()).getTime()+""+Math.random();
+	uuid=uuid.replace(".","");
+	//新生成一个form表单
+	var _formId='_form_'+uuid;
+	var _form=$('<form id="'+_formId+'" method="post" enctype="multipart/form-data"></form>').appendTo($("body"));
+	//如果有其他参数，则加进去
+	var _data=_param.data||{};
+	
+	for(var k in _data){
+		$('<input name="'+k+'" type="hidden" value="'+_data[k]+'">').appendTo(_form);
+	}
+	
+	//如果有文件files:[{id:fileElId,name:fileName}]
+	var _files=_param.files||[];
+	for(var i=0,len=_files.length;i<len;i++){
+		var file=_files[i];
+		//克隆原始对象
+		var cloneEl=$("#"+file.id).clone();
+		//改变克隆对象的Id和name
+		var _id=Math.random()+"";
+		_id=_id.replace(".","");
+		$(cloneEl).attr('id', _id);
+		$(cloneEl).attr('name', file.name);
+		//克隆对象添加到form表单
+		$(cloneEl).appendTo(_form);
+		//$('<input name="'+file.name+'" type="file" value="'+file.value+'" />').appendTo(_form);
+	}
+	
+	var _cache=_param.cache||false;
+	var _dataType=_param.dataType||"json";
+	
+	var _success=_param.success;//成功的执行函数
+	var _error=_param.error;//失败的执行函数
+	
+	$('#'+_formId).ajaxSubmit({
+		url:_url,
+	    cache:_cache,
+	    dataType:_dataType,
+	    success: function(result) {
+	    	if(typeof _success==='function'){
+				_success(result);
+			}
+	    	//执行完后，删除form表单
+	    	$("#"+_formId).remove();
+	    },
+	    error:function(XMLHttpRequest, textStatus, errorThrown){
+	    	if(typeof _error === 'function'){
+				_error(XMLHttpRequest);
+			}
+	    	//执行完后，删除form表单
+	    	$("#"+_formId).remove();
+	    }
+	});
+}
+
+</script>
+</head>
+
+<body>
+	<table>
+		<tr>
+			<td>参数1:</td>
+			<td><input id="param1" name="param1" type="text"></td>
+		</tr>
+		<tr>
+			<td>文件:</td>
+			<td><input id="file" name="file" type="file"></td>
+		</tr>
+	</table>
+	<div><a id="uploadBtn" href="javascript:void(0);">提交</a></div>
+</body>
+<script type="text/javascript">
+(function(){
+	$("#uploadBtn").click(function(){
+		
+		var files=[];
+		var file=$("#file").val();
+		if(file&&file!=""){
+			files.push({id:"file",name:"file",value:file});
+		}
+		
+		uploadFile({
+			url:"/ivccontroller/statistics/mileageoil/import.json",
+			data:{param1:"1"},
+			files:files,
+			success:function(result){
+				if(result.code==0){
+					alert("成功");
+				}
+			},
+			error:function(error){
+				alert("失败");
+			}
+		});
+	});
+})();
+</script>
+</html>

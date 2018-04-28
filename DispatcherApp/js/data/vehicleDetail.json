@@ -1,0 +1,17 @@
+{
+	"data":{
+		"id":1,
+		"imag":"cp_app/images/v_details_img.png",
+		"plateNo":"粤1241445",
+		"pn":"325553233213",
+		"maxWeight":21,
+		"totalLength":21,
+		"length":4,
+		"width":6,
+		"height":6,
+		"payload":"1.2",
+		"payloadRatio":4,
+		"minR":20,
+		"powerDensity":32
+	}
+}

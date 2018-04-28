@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black">
+<title>卡友帮配送</title>
+<link rel="stylesheet" href="css/mui.min.css">
+<link rel="stylesheet" href="css/app.css">
+<style>
+	html,body {
+		height: 100%;
+		overflow: hidden;
+	}
+</style>
+</head>
+
+<body>
+<div class="welcome_img"><img id="weclomeId"></div>
+<script src="js/zepto.min.js"></script>
+<script src="js/mui.min.js"></script>
+<script src="js/comUtils.js"></script>
+<script>
+	mui.init();
+	mui.back = function() {};
+	mui.plusReady(function() {
+		//设置当前签注 和当前软件的版本
+//		localStorage.setItem("version", version);
+		var showGuide = localStorage.getItem(comDataIdent + "lauchFlag");
+		setTimeout(function() {
+			if (showGuide) {
+				//加载广告
+				var token = localStorage.getItem(comDataIdent + "token");
+				if (token) {
+					utils.ajaxFn({
+						url:httpServer + '/getPicture',
+						data:{
+							token: token
+						},
+						success:function(data){
+							if (data.code == 0) {
+								// 渲染广告
+							}
+						},
+						error:function(error){
+							//异常处理；
+							console.log(error);
+						}
+					});
+				}
+				initShow();
+			} else {
+				console.log(new Date().getTime() + "|welcome:首次启动");
+				mui.preload({
+					"id": 'userLogin.html',
+					"url": 'userLogin.html'
+				});
+				//显示启动导航
+				mui.openWindow({
+					id: 'setAboutGuide.html',
+					url: 'setAboutGuide.html',
+					show: {
+						aniShow: 'none'
+					},
+					waiting: {
+						autoShow: false
+					}
+				});
+			}
+		}, 2000)
+	});
+	
+	function initShow() {
+		console.log(new Date().getTime() + "|welcome:不是首次启动")
+		setTimeout(function() {
+			mui.openWindow({
+				id: 'userLogin.html',
+				url: 'userLogin.html',
+				show: {
+					autoShow: false,
+					aniShow: 'none'
+				},
+				waiting: {
+					autoShow: false
+				}
+			});
+		}, 1000)
+	}
+	
+</script>
+</body>
+</html>

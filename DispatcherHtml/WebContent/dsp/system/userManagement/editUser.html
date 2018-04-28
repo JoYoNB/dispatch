@@ -1,0 +1,63 @@
+<!doctype html>
+<html lang="en">
+<head>
+<!--#include file="/layout/libs.html"-->
+<title>城市配送管理平台</title>
+</head>
+<body>
+	<div class="city-wrapper">
+		<!-- 公共header 开始 -->
+		<!--#include file="/layout/header.html"-->
+		<!-- 公共header 结束 -->
+		
+		<div class="city-title-layout">
+			<div class="city-title">修改用户</div>
+			<div class="city-logo"><a href="javascript:;" title="城市配送管理平台"><img src="/images/logo.png" alt=""></a></div>
+		</div>
+		<div class="city-main-scroll">
+			<div class="city-main">
+				<ul class="city-form">
+					<li class="city-form-item clearfix">
+						<div class="city-form-tip"><i class="must-icon">*</i>用户账号：</div>
+						<input id="account" type="text" class="city-ipt-text edit-ipt-len" disabled="disabled" placeholder="请输入用户账号">
+					</li>
+					<li class="city-form-item clearfix">
+						<div class="city-form-tip">姓名：</div>
+						<input id="name" type="text" class="city-ipt-text edit-ipt-len" placeholder="请输入用户名">
+					</li>
+					<li class="city-form-item clearfix">
+						<div class="city-form-tip">部门：</div>
+						<div id="deptWidget"></div>
+					</li>
+					<li class="city-form-item clearfix">
+						<div class="city-form-tip">角色：</div>
+						<div id="roleWidget"></div>
+					</li>
+					<li class="city-form-item clearfix">
+						<div class="city-form-tip">手机号：</div>
+						<input id="phone" type="text" class="city-ipt-text edit-ipt-len" placeholder="请输入手机号">
+					</li>
+					<li class="city-form-item clearfix">
+						<div class="city-form-tip">邮箱：</div>
+						<input id="email" type="text" class="city-ipt-text edit-ipt-len" placeholder="请输入邮箱">
+					</li>
+					<li class="city-form-item clearfix">
+						<div class="city-form-tip">时区：</div>
+						<div id="gmtZoneWidget"></div>
+					</li>
+					<li class="city-form-item clearfix">
+						<div class="city-form-tip">&nbsp;</div>
+						<a id="saveBtn" href="javascript:void(0);" class="city-btn active">保存</a>
+						<a href="/dsp/system/userManagement/userList.html" class="city-btn">取消</a>
+					</li>
+				</ul>
+			</div>
+		</div>
+		<!-- 底部 开始 -->
+		<!--#include file="/layout/footer.html"-->
+		<!-- 底部 结束 -->
+	</div>
+
+<script type="text/javascript" src="/js/system/userManagement/editUser.js"></script>
+</body>
+</html>

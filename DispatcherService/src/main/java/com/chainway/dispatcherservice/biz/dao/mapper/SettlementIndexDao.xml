@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!-- namespace命名规则: 表对应java类的名称-->
+<mapper namespace="com.chainway.dispatcherservice.biz.dao.SettlementIndexDao">
+
+	<select id="orderSum" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT SUM(t.cumulativeCount) cumulativeCount,SUM(t.newCount) newCount,SUM(t.cumulativeAmount) cumulativeAmount,SUM(newAmount) newAmount 
+		FROM 
+			(
+				SELECT count(1) cumulativeCount,0 newCount,0 cumulativeAmount,0 newAmount FROM t_order WHERE pay_status=30 UNION ALL
+				SELECT 0 cumulativeCount,count(1) newCount,0 cumulativeAmount,0 newAmount FROM t_order 
+					WHERE pay_status=30 AND settle_time <![CDATA[ >= ]]> #{startTime} AND settle_time <![CDATA[ <= ]]> #{endTime} UNION ALL
+				SELECT 0 cumulativeCount,0 newCount,sum(fee) cumulativeAmount,0 newAmount FROM t_order WHERE pay_status=30  UNION ALL
+				SELECT 0 cumulativeCount,0 newCount,0 cumulativeAmount,sum(fee) newAmount FROM t_order 
+					WHERE pay_status=30 AND settle_time <![CDATA[ >= ]]> #{startTime} AND settle_time <![CDATA[ <= ]]> #{endTime}
+			) t
+	</select>
+	<select id="orderRank" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT t.*,td.name 
+		FROM 
+			(
+				SELECT carrier_dept,count(1) counts,sum(fee) amount 
+				FROM 
+					t_order 
+				WHERE settle_time <![CDATA[ >= ]]> #{startTime} AND settle_time <![CDATA[ <= ]]> #{endTime}
+				GROUP BY carrier_dept 
+				ORDER BY amount DESC 
+				LIMIT 10
+			) t 
+		INNER JOIN 
+			t_dept td 
+		ON t.carrier_dept=td.id;
+	</select>
+	<select id="orderBar" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT 
+			DATE_FORMAT(convert_tz(settle_time,'+00:00',#{gmtZone}),'%Y-%m-%d') settleTime,
+			count(1) counts,
+			sum(fee) amount
+		FROM 
+			t_order 
+		WHERE 
+			pay_status=30 
+			AND settle_time <![CDATA[ >= ]]> #{startTime} 
+			AND settle_time <![CDATA[ <= ]]> #{endTime} 
+			GROUP BY settleTime
+			ORDER BY settleTime 
+	</select>
+</mapper>

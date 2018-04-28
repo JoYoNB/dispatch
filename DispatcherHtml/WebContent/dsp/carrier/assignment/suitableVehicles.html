@@ -1,0 +1,37 @@
+<div class="pop-module">
+	<div class="pop-header clearfix">
+		<ul class="city-tap fl clearfix">
+			<li class="tap-item active"><a href="javascript:;">司机</a></li>
+			<li class="tap-item" style="display:none"><a href="javascript:;">车队</a></li>
+		</ul>
+		<span class="pop-close fr"><i class="pop-close-icon">x</i></span>
+	</div>
+	<div class="pop-search clearfix vehicleSearchBox">
+		<div class="ipt_box">
+			<div id="carryTypeWidget"></div>
+		</div>
+		<div class="ipt_box">
+			<div id="vehicleTypeWidget"></div>
+		</div>
+		<div class="ipt_box">
+			<input type="text" id="content" class="ipt_text" placeholder="请输入车牌号/驾驶员/手机号">
+		</div>
+		<div class="ipt_box">
+			<input type="button" class="pop-search-btn pop-btn01" value="查询">
+		</div>
+	</div>
+	<div class="pop-main clearfix">
+		<div id="vehicleWidget"></div>
+	</div>
+	<div class="pop-footer">
+		<div class="footer-btn">
+			<input type="button" class="pop-btn01 pop-sure assginBtn" value="分配">
+			<input type="button" class="pop-btn02 pop-cancel cancelBtn" value="取消">
+		</div>
+	</div>
+</div>
+<script type="text/javascript">
+	$(function(){
+		Assignment.initVehiclePage();
+	});
+</script>

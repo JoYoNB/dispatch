@@ -1,0 +1,82 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<link rel="stylesheet" href="../css/index.css">
+	<title>城市配送管理平台</title>
+</head>
+<body>
+	<div class="city-wrapper">
+		<div class="city-header clearfix">
+			<ul class="city-menu clearfix">
+				<li class="city-menu-item"><a href="javascript:;" class="city-menu-a" title="首页">首页</a></li>
+				<li class="city-menu-item"><a href="javascript:;" class="city-menu-a" title="配送监控">配送监控</a></li>
+				<li class="city-menu-item"><a href="javascript:;" class="city-menu-a" title="订单列表">订单列表</a></li>
+				<li class="city-menu-item active"><a href="javascript:;" class="city-menu-a" title="站点管理">站点管理</a></li>
+			</ul>
+			<ul class="city-submenu clearfix">
+				<li class="city-submenu-item">
+					<a href="javascript:;" class="city-person"><i class="iconfont iconfont-person"></i>用户名<i class="iconfont iconfont-arrow-b"></i></a>
+					<ul class="city-submenu-group hidden">
+						<li class="city-submenu-group-item"><a href="javascript:;">个人中心</a></li>
+						<li class="city-submenu-group-item"><a href="javascript:;">修改密码</a></li>
+					</ul>
+				</li>
+				<li class="city-submenu-item"><a href="javascript:;" title="全屏"><i class="iconfont iconfont-fullscreen"></i></a></li>
+				<li class="city-submenu-item"><a href="javascript:;" title="退出"><i class="iconfont iconfont-logout"></i></a></li>
+			</ul>
+		</div>
+		<div class="city-main-scroll city-main-scroll2">
+			<div class="city-control-wrapper">
+				<div class="city-control clearfix">
+					<div class="city-control-item city-addAddress-main">
+						<div class="city-addAddress-search">
+							<div class="ipt_tip">名称</div>
+							<div class="ipt_box clearfix"><input type="text" class="city-ipt-text" placeholder="请输入名称"></div>
+							<div class="ipt_tip">部门</div>
+							<div class="ipt_box clearfix"><input type="text" class="city-ipt-text" readonly="true" placeholder="请输入部门"></div>
+							<div class="ipt_tip">联系人</div>
+							<div class="ipt_box clearfix"><input type="text" class="city-ipt-text" readonly="true" placeholder="请选择联系人"></div>
+							<div class="ipt_tip">位置</div>
+							<div class="ipt_box clearfix">
+								<input type="text" class="city-ipt-text" placeholder="请输入地址，或拖动地图上的红点获取位置">
+								<div class="ipt_text_focus">
+									<ul>
+										<li>清华信息港</li>
+										<li>清华信息港一期</li>
+										<li>清华信息港-公交车站</li>
+										<li>清华信息港研发楼-a座</li>
+										<li>清华信息港综合楼</li>
+										<li>清华信息港-停车场</li>
+										<li>清华信息港-北门</li>
+										<li>清华信息港b座</li>
+										<li>清华信息港一期</li>
+										<li>清华信息港-公交车站</li>
+									</ul>
+								</div>
+							</div>
+							<div class="ipt_box clearfix">
+								<a href="javascript:;" class="city-btn active fl">保存</a>
+								<a href="javascript:;" class="city-btn fl">取消</a>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="city-map-wrap">
+					<div class="city-map" id="myMap"><img src="../images/_pic3.jpg" style="width: 100%;height: 100%;" alt=""></div>
+				</div>
+			</div>
+		</div>
+		<div class="city-footer clearfix">
+			<div class="fl clearfix">
+				<a href="javascript:;" class="active"><i class="iconfont iconfont-home"></i>首页</a>
+				<a href="javascript:;">订单列表</a>
+				<a href="javascript:;">新建订单</a>
+			</div>
+			<div class="fr">
+				<div class=""><a href="javascript:;">深圳市卡友帮智能物流服务有限公司</a> &nbsp;&nbsp;&nbsp; 版本号: <span class="version">1.0.0</span></div>
+			</div>
+		</div>
+	</div>
+</body>
+</html>

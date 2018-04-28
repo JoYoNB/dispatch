@@ -1,0 +1,70 @@
+<!doctype html>
+<html lang="en">
+<head>
+<!--#include file="/layout/libs.html"-->
+<title>城市配送管理平台</title>
+</head>
+<body>
+	<div class="city-wrapper">
+		<!-- 公共header 开始 -->
+		<!--#include file="/layout/header.html"-->
+		<!-- 公共header 结束 -->
+		<div class="city-title-layout">
+			<div class="city-title">结算首页</div>
+			<div class="city-logo"><a href="javascript:;" title="城市配送管理平台"><img src="/images/logo.png" alt=""></a></div>
+		</div>
+		<div class="city-main-scroll" style="background: #f7f7f7;">
+			<div>
+				<!-- 累计 -->
+				<div class="city-home-total-box">
+					<ul class="sum-data-list clearfix">
+						<li>
+							<div class="tip"><span class="sun-data-desc">累计完成订单</span><span class="sun-data-num" id="cumulativeCount">0</span></div>
+						</li>
+						<li>
+							<div class="tip"><span class="sun-data-desc">新增订单</span><span class="sun-data-num" id="newCount">0</span></div>
+						</li>
+						<li>
+							<div class="tip"><span class="sun-data-desc">累计结算金额</span><span class="sun-data-num" id="cumulativeAmount">元</span></div>
+						</li>
+						<li>
+							<div class="tip"><span class="sun-data-desc">新增结算金额</span><span class="sun-data-num" id="newAmount">元</span></div>
+						</li>
+					</ul>
+				</div>
+				<!-- 统计 -->
+				<div class="city-home-statis">
+					<div class="city-home-statis-title clearfix">
+						<div class="fl clearfix">
+							<ul class="city-tap fl clearfix">
+								<li class="tap-item active"><a href="javascript:;">新增订单统计</a></li>
+							</ul>
+						</div>
+						<div class="fr">
+							<div class="btn-box clearfix">
+								<button class="city-btn fl current" value="0" id="thisWeek">本周</button>
+								<button class="city-btn fl" value="1" id="lastWeek">上周</button>
+								<button class="city-btn fl" value="2" id="thisMonth">本月</button>
+								<button class="city-btn fl" value="3" id="lastMonth">上月</button>
+							</div>
+						</div>
+					</div>
+					<div class="city-home-chart-box clearfix">
+						<div class="city-home-chart" style=“min-width:500px;”>
+							 <div class="city-home-chart" id="dualYWidget"></div>
+						</div>
+						<div class="city-home-table">
+							<div class="title">客户订单排行</div>
+							<div id="tableWidget" class="city-table-main"></div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<!-- 底部 开始 -->
+		<!--#include file="/layout/footer.html"-->
+		<!-- 底部 结束 -->
+	</div>
+	<script type="text/javascript" src="/js/settlement/index.js"></script>
+</body>
+</html>

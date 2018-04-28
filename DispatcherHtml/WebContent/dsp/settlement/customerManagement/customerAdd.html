@@ -1,0 +1,130 @@
+<!doctype html>
+<html lang="en">
+<head>
+<!--#include file="/layout/libs.html"-->
+<title>城市配送管理平台</title>
+</head>
+<body>
+	<div class="city-wrapper">
+		<!-- 公共header 开始 -->
+		<!--#include file="/layout/header.html"-->
+		<!-- 公共header 结束 -->
+		
+		<div class="city-title-layout">
+			<div class="city-title">新增客户</div>
+			<div class="city-logo"><a href="javascript:;" title="城市配送管理平台"><img src="/images/logo.png" alt=""></a></div>
+		</div>
+		<div class="city-main-scroll">
+			<div class="city-main">
+				<ul class="city-tap clearfix">
+					<li class="tap-item active"><a href="javascript:;">基本资料</a></li>
+				</ul>
+				<ul class="city-form car-form">
+					<li class="city-form-item clearfix">
+						<div class="city-form-tip"><i class="must-icon">*</i>客户名称：</div>
+						<input type="text" class="city-ipt-text w250" id="name" placeholder="请输入客户名称">
+					</li>
+					<li class="city-form-item clearfix">
+						<div class="city-form-tip">公司logo：</div>
+						<!-- 上传图片 -->
+						<div class="upload-box clearfix">
+							<div id="logoWidget"></div>
+						</div>
+					</li>
+					<li class="city-form-item clearfix">
+						<div class="city-form-tip"><i class="must-icon">*</i>管理账号：</div>
+						<input type="text" class="city-ipt-text w250" id="account" placeholder="请输入管理账号">
+					</li>
+					<li class="city-form-item clearfix">
+						<div class="city-form-tip"><i class="must-icon">*</i>角色：</div>
+						<label class="city-ipt-label"><input type="radio" name="role" value="2" checked="checked"><span class="city-ipt-radio"></span>货主</label>
+						<label class="city-ipt-label"><input type="radio" name="role" value="3"><span class="city-ipt-radio"></span>承运商</label>
+						<label class="city-ipt-label"><input type="radio" name="role" value="4"><span class="city-ipt-radio"></span>货主&承运商</label>
+					</li>
+					<li class="city-form-item clearfix"  id="settleTypeRdo">
+						<div class="city-form-tip"><i class="must-icon">*</i>结算类型：</div>
+						<label class="city-ipt-label"><input type="radio" name="settleType" value="1" checked="checked"><span class="city-ipt-radio"></span>单结</label>
+						<label class="city-ipt-label"><input type="radio" name="settleType" value="2"><span class="city-ipt-radio"></span>月结</label>
+					</li>
+					<li class="city-form-item clearfix">
+						<div class="city-form-tip"><i class="must-icon">*</i>货物属性：</div>
+						<div class="ipt_box ipt-box-len" id="goodsTypeWidget"></div>
+					</li>
+					<li class="city-form-item clearfix">
+						<div class="city-form-tip"><i class="must-icon">*</i>联系人：</div>
+						<input type="text" class="city-ipt-text w250" id="contacter" placeholder="请输入联系人">
+					</li>
+					<li class="city-form-item clearfix">
+						<div class="city-form-tip"><i class="must-icon">*</i>手机号：</div>
+						<input type="text" class="city-ipt-text w250" id="phone" placeholder="请输入手机号">
+					</li>
+					<li class="city-form-item clearfix">
+						<div class="city-form-tip">邮箱：</div>
+						<input type="text" class="city-ipt-text w250" id="email" placeholder="请输入邮箱">
+					</li>
+					<li class="city-form-item clearfix">
+						<div class="city-form-tip"><i class="must-icon">*</i>时区：</div>
+						<div id="gmtZoneWidget"></div>
+					</li>
+					<li class="city-form-item clearfix">
+						<div class="city-form-tip">简介：</div>
+						<textarea class="city-textarea" id="remark" placeholder="请输入简介"></textarea>
+					</li>
+				</ul>
+				<ul class="city-tap clearfix">
+					<li class="tap-item active"><a href="javascript:;">认证资料</a></li>
+				</ul>
+				<ul class="city-form car-form">
+					<li class="city-form-item clearfix">
+						<div class="city-form-tip">注册资金：</div>
+						<input type="text" class="city-ipt-text w250" id="registeredCapital" placeholder="请输入注册资金">
+					</li>
+					<li class="city-form-item clearfix">
+						<div class="city-form-tip">社会信用代码：</div>
+						<input type="text" class="city-ipt-text w250" id="scc" placeholder="请输入社会信用代码">
+					</li>
+					<li class="city-form-item clearfix">
+						<div class="city-form-tip">营业执照：</div>
+						<!-- 上传图片 -->
+						<div class="upload-box clearfix">
+							<div id="fileWidget"></div>
+						</div>
+					</li>
+				</ul>
+				<ul class="city-tap clearfix">
+					<li class="tap-item active"><a href="javascript:;">订单匹配设置</a></li>
+				</ul>
+				<ul class="city-form car-form">
+					<li class="city-form-item clearfix">
+						<div class="city-form-tip"><i class="must-icon">*</i>地区范围：</div>
+						<div id="area">
+							<div id="areaItme_0" style="margin-bottom:5px;">
+								<div id="provinceWidget_0" style="display:inline-block;margin-right: 20px;float:left;"></div>
+								<div id="cityWidget_0" style="display:inline-block;margin-right: 20px;float:left;"></div>
+								<div id="districtWidget_0" style="display:inline-block;margin-right: 20px;float:left;"></div>
+								<a href="javascript:;" class="address-btn"><i class="iconfont iconfont-add"></i></a>
+							</div>
+						</div>
+					</li>
+					<li class="city-form-item clearfix">
+						<div class="city-form-tip"><i class="must-icon">*</i>运输里程范围：</div>
+						<span class="length-limit">最大值<input type="text" class="city-ipt-text" id="mileageMax">KM</span>
+						<span class="length-limit">最小值<input type="text" class="city-ipt-text" id="mileageMin">KM</span>
+					</li>
+					<li class="city-form-item clearfix">
+						<div class="city-form-tip">&nbsp;</div>
+						<a href="javascript:;" class="city-btn active" id="saveBtn">保存</a>
+						<a href="/dsp/settlement/customerManagement/customerList.html" class="city-btn">取消</a>
+					</li>
+				</ul>
+			</div>
+		</div>
+		<!-- 底部 开始 -->
+		<!--#include file="/layout/footer.html"-->
+		<!-- 底部 结束 -->
+	</div>
+
+<script type="text/javascript" src="/js/settlement/customerManagement/customerAdd.js"></script>
+<script src="/js/ui/FileWidget.js" type="text/javascript"></script>
+</body>
+</html>

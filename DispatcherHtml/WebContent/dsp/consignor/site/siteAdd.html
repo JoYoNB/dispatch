@@ -1,0 +1,66 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<!--#include file="/layout/libs.html"-->
+	<!-- 加载地图资源 -->
+	<!--#include file="/layout/maplibs.html" -->
+	<title>城市配送管理平台</title>
+</head>
+<body>
+	<div class="city-wrapper">
+		<!-- 公共header 开始 -->
+		<!--#include file="/layout/header.html"-->
+		<!-- 公共header 结束 -->
+		<div class="city-main-scroll city-main-scroll2">
+			<div class="city-control-wrapper">
+				<div class="city-control clearfix">
+					<div class="city-control-item city-addAddress-main">
+						<div class="city-addAddress-search">
+							<input type="hidden" id="linkId">
+							<div class="ipt_tip"><i class="must-icon">*</i>名称</div>
+							<div class="ipt_box clearfix"><input id="siteName" type="text" class="city-ipt-text" placeholder="请输入名称"></div>
+							<div class="ipt_tip"><i class="must-icon">*</i>部门</div>
+							<div class="ipt_box clearfix" id="deptWidget"></div>
+							<div class="ipt_tip"><i class="must-icon">*</i>联系人</div>
+							<div class="ipt_box clearfix"><input id="linkMan" type="text" class="city-ipt-text"  placeholder="请输入联系人姓名"></div>
+							<div class="ipt_tip"><i class="must-icon">*</i>电话</div>
+							<div class="ipt_box clearfix"><input id="linkPhone" type="text" class="city-ipt-text edit-ipt-len"  placeholder="请输入联系人电话"></div>
+							<div class="ipt_tip"><i class="must-icon">*</i>位置</div>
+							<div class="ipt_box clearfix" style="position: relative;">
+								<input id="address" type="text" class="city-ipt-text" placeholder="请输入地址，或拖动地图上的红点获取位置">
+								<div class="ipt_text_focus" style="position: absolute;top: 100%;left:0;display:none">
+									 <ul id="search_result">
+									 <!--
+										<li>清华信息港</li>
+										<li>清华信息港一期</li>
+										<li>清华信息港-公交车站</li>
+										<li>清华信息港研发楼-a座</li>
+										<li>清华信息港综合楼</li>
+										<li>清华信息港-停车场</li>
+										<li>清华信息港-北门</li>
+										<li>清华信息港b座</li>
+										<li>清华信息港一期</li>
+										<li>清华信息港-公交车站</li> -->
+									</ul>
+								</div>
+							</div>
+							<div class="ipt_box clearfix">
+								<a id="saveSite" class="city-btn active fl">保存</a>
+								<a href="/dsp/consignor/site/siteList.html" class="city-btn fl">取消</a>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="city-map-wrap">
+					<div class="city-map" id="allmap"></div>
+				</div>
+			</div>
+		</div>
+		<!-- 底部 开始 -->
+		<!--#include file="/layout/footer.html"-->
+		<!-- 底部 结束 -->
+	</div>
+	<script type="text/javascript" src="/js/consignor/site/siteAdd.js"></script>
+</body>
+</html>

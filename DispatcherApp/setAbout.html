@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black">
+<title>卡友帮配送</title>
+<link rel="stylesheet" href="css/mui.min.css">
+<link rel="stylesheet" href="css/app.css">
+<style>
+.mui-table-view-cell span.mui-pull-right{ width: 46%;}
+</style>
+</head>
+
+<body class="aboutBody">
+<header class="mui-bar mui-bar-nav">
+	<a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"></a>
+	<h1 class="mui-title main-title">关于软件</h1>
+</header>
+
+<div class="mui-content about-content">
+	<div class="mui-scroll-wrapper">
+		<div class="mui-scroll">
+			<div class="about_logo clearfix">
+				<p class="logo" id="logo_img"></p>
+				<p><span id="logo_txt"></span> <label id="version">V1.0.0</label></p>
+			</div>
+			<ul class="mui-table-view">
+				<li class="mui-table-view-cell">
+					<a id="guide" class="mui-navigate-right"><span class="mui-pull-right c_select2"></span>功能引导<span id="guide_label"></span></a>
+				</li>
+				<li class="mui-table-view-cell">
+					<a id="versionInfo" class="mui-navigate-right"><span class="mui-pull-right c_select2"></span>版本介绍</a>
+				</li>
+				<li class="mui-table-view-cell">
+					<a id="versionInfo" class="mui-navigate-right"><span class="mui-pull-right c_select2"></span>检测更新</a>
+				</li>
+				<li class="mui-table-view-cell">
+					<a id="versionInfo" class="mui-navigate-right"><span class="mui-pull-right c_select2"></span>关于卡友帮</a>
+				</li>
+			</ul>
+			<div class="logout-box">
+				<button  class="mui-btn mui-btn-block mui-btn-success logout" style="">退出登录</button>	
+			</div>
+			<div class="about_copyright">
+				<!-- <a id="pactBtn" class="btn_pact"></a><br> -->
+				<span id="copy_right_1">--</span><span id="copy_right_2">--</span><span>版权所有</span>
+				<br><span id="copy_right_3">--</span>
+			</div>
+		</div>
+	</div>
+</div>
+
+<script src="js/zepto.min.js"></script>
+<script src="js/mui.min.js"></script>
+<script src="js/comUtils.js"></script>
+<script src="js/setAbout.js"></script>
+</body>
+</html>

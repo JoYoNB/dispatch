@@ -1,0 +1,191 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!-- namespace命名规则: 表对应java类的名称-->
+<mapper namespace="com.chainway.dispatcherservice.biz.dao.RoleDao">
+	
+	<!-- 查找部门管辖的角色Id -->
+	<select id="getRoleIdList" parameterType="com.chainway.dispatchercore.dto.Dept" resultType="java.lang.String">
+		select tr.id from t_role tr
+		inner join t_dept td on td.id=tr.dept_id
+		where tr.`status`!=2
+		and td.`status`=1
+		<if test="dna!=null and dna!='' and id==null">
+			and td.dna like CONCAT(#{dna},'%')
+		</if>
+		<if test="id!=null and dna==null">
+			and td.dna like CONCAT((select dna from t_dept where id=#{id}),'%')
+		</if>
+	</select>
+	
+	<insert id="addRole" parameterType="com.chainway.dispatchercore.dto.Role">
+		<selectKey resultType="int" keyProperty="id">
+			SELECT
+			LAST_INSERT_ID()
+		</selectKey>
+		insert into t_role(
+		code,
+		name,
+		status,
+		type,
+		dept_id,
+		remark,
+		updater,
+		creater,
+		create_time,
+		update_time
+		)
+		select CONCAT(#{code},MAX(id)) ,
+		#{name},
+		1,
+		#{type},
+		#{deptId},
+		#{remark},
+		#{creater},
+		#{creater},
+		UTC_TIMESTAMP(),
+		UTC_TIMESTAMP()
+		from t_role
+	</insert>
+	<update id="deleteRole" parameterType="com.chainway.dispatchercore.dto.Role">
+		update t_role set status=2,update_time=UTC_TIMESTAMP(),updater=#{updater}
+		where id=#{id}
+	</update>
+	<update id="updateRole" parameterType="com.chainway.dispatchercore.dto.Role">
+		update t_role 
+		set update_time=UTC_TIMESTAMP(),updater=#{updater}
+		<if test="name!=null and name!=''">
+		,name=#{name}
+		</if>
+		<if test="remark!=null">
+		,remark=#{remark}
+		</if>
+		<if test="deptId!=null">
+		,dept_id=#{deptId}
+		</if>
+		where id=#{id}
+	</update>
+	<select id="getRole" parameterType="com.chainway.dispatchercore.dto.Role" resultType="com.chainway.dispatchercore.dto.Role">
+		select 
+		tr.id,
+		tr.code,
+		tr.name,
+		tr.status,
+		tr.type,
+		tr.dept_id as deptId,
+		tr.remark,
+		
+		td.name as deptName
+		
+		from t_role tr
+		left join t_dept td on td.id=tr.dept_id
+		where tr.id=#{id}
+	</select>
+	<sql id="getRoleListConditions">
+		<if test="likeName!=null and likeName!=''">
+			and tr.name like concat('%',#{likeName},'%')
+		</if>
+		<if test="name!=null and name!=''">
+			and tr.name=#{name}
+		</if>
+		<if test="type!=null and type!=''">
+			and tr.type=#{type}
+		</if>
+		<if test="filterCustom!=null">
+			and tr.type!='custom'
+		</if>
+		<if test="filterSystem!=null">
+			and tr.type!='system'
+		</if>
+		<if test="deptId!=null">
+			and tr.dept_id=#{deptId}
+		</if>
+		<if test="deptDNA!=null and deptDNA!=''">
+			and td.dna like concat(#{deptDNA},'%')
+		</if>
+	</sql>
+	<select id="getRoleList" parameterType="java.util.Map" resultType="com.chainway.dispatchercore.dto.Role">
+		select 
+		tr.id,
+		tr.code,
+		tr.name,
+		tr.status,
+		tr.type,
+		tr.dept_id as deptId,
+		tr.remark,
+		
+		td.name as deptName
+		
+		from t_role tr
+		left join t_dept td on td.id=tr.dept_id
+		where tr.status=1
+		<include refid="getRoleListConditions"></include>
+		order by tr.type desc,tr.code,tr.update_time desc
+		<if test="pageSize!=null and offset!=null">
+		limit #{offset},#{pageSize}
+		</if>
+	</select>
+	<select id="getRoleListCount" parameterType="java.util.Map" resultType="int">
+		select count(1) as n
+		
+		from t_role tr
+		left join t_dept td on td.id=tr.dept_id
+		where tr.status=1
+		<include refid="getRoleListConditions"></include>
+	</select>
+	
+	<!-- 插入角色权限关系表 -->
+	<insert id="addRoleAuthRef" parameterType="java.util.Map">
+		insert into t_role_auth_ref(
+		role_id,
+		auth_id,
+		create_time,
+		update_time
+		)
+		select 
+		#{roleId},
+		id,
+		UTC_TIMESTAMP(),
+		UTC_TIMESTAMP()
+		
+		from t_auth
+		where code in 
+		<foreach item="item" collection="authList" separator="," open="(" close=")" index="index">    
+      	#{item.code}    
+    	</foreach>  
+	</insert>
+	
+	<delete id="deleteAllRoleAuthRef" parameterType="com.chainway.dispatchercore.dto.Role">
+		delete from t_role_auth_ref
+		where role_id=#{id}
+	</delete>
+	
+	<!-- 查普通用户的 -->
+	<select id="getUserRoleAuthList" parameterType="com.chainway.dispatchercore.dto.Role" resultType="java.util.Map">
+		select 
+		ta.id,
+		ta.`name`,
+		ta.parent_id as parentId,
+		ta.`code`
+		
+		from t_role_auth_ref trar
+		inner join t_auth ta on ta.id=trar.auth_id
+		where trar.role_id=#{id}
+		
+		order by ta.parent_id
+	</select>
+	<!-- 查admin用户的 -->
+	<select id="getAdminUserRoleAuthList" parameterType="com.chainway.dispatchercore.dto.Role" resultType="java.util.Map">
+		select 
+		ta.id,
+		ta.`name`,
+		ta.parent_id as parentId,
+		ta.`code`
+		
+		from t_auth ta
+		
+		order by ta.parent_id
+	</select>
+	
+</mapper>

@@ -1,0 +1,36 @@
+<!-- <div class="city-popup"> -->
+		<!-- <div class="city-popup-content"> -->
+		 <div class="city-add-address" style="margin-left: -44px;">
+				<div class="city-add-address-left fl">
+				<input type="hidden" id="linkId">
+					<div class="item clearfix">
+						<div class="tip"><i class="must-icon">*</i>站点名称</div>
+						<input id="siteName" type="text" class="city-ipt-text" placeholder="请输入站点名称">
+					</div>
+					<div class="item clearfix" style="position: relative;">
+						<div class="tip"><i class="must-icon">*</i>选择地址</div>
+						<input id="address" type="text" class="city-ipt-text"  placeholder="拖动地图位置图标选择">
+							<div class="ipt_text_focus" style="position: absolute;top: 100%;left:0;display:none;">
+									 <ul id="search_result">
+									</ul>
+							</div>
+					</div>
+					<div class="item clearfix">
+						<div class="tip"><i class="must-icon">*</i>发货人</div>
+						<input id="linkMan" type="text" class="city-ipt-text" placeholder="请输入收货人姓名">
+					</div>
+					<div class="item clearfix">
+						<div class="tip"><i class="must-icon">*</i>手机号码</div>
+						<input id="linkPhone" type="text" class="city-ipt-text" placeholder="请输入收货人姓名">
+					</div>
+					<div class="item clearfix">
+						<a id="saveSite" class="city-btn active fl">保存并选择</a> 
+						<a id="cancel" class="city-btn fr">取消</a>
+					</div>
+				</div>
+				<div class="city-add-address-right fr">
+					<div id="allmap" class="map-wrapper">
+					</div>
+				</div>
+			</div>
+<script type="text/javascript" src="/js/consignor/order/orderSiteAdd.js"></script>

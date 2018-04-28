@@ -1,0 +1,90 @@
+<!doctype html>
+<html lang="en">
+<head>
+<!--#include file="/layout/libs.html"-->
+<title>城市配送管理平台</title>
+</head>
+<body>
+	<div class="city-wrapper">
+		<!-- 公共header 开始 -->
+		<!--#include file="/layout/header.html"-->
+		<!-- 公共header 结束 -->
+		<div class="city-title-layout">
+			<div class="city-title">货主首页</div>
+			<div class="city-logo"><a href="javascript:;" title="城市配送管理平台"><img src="../../images/logo.png" alt=""></a></div>
+		</div>
+		<div class="city-main-scroll" style="background: #f7f7f7;">
+			<div>
+				<!-- 累计 -->
+				<div class="city-home-total-box">
+					<div class="city-home-total">
+						<div class="total-order">
+							<p class="tip">累计完成订单</p>
+							<p class="total clearfix"><span class="num" id="totalOrder">--</span></p>
+						</div>
+						<div class="total-goods">
+							<p class="tip">累计送达货物</p>
+							<p class="total clearfix">
+								<span class="num" id="totalNum">--<b class="unit">件</b></span>
+								<span class="num" id="totalVolume">--<b class="unit">方</b></span>
+								<span class="num" id="totalWeight">--<b class="unit">吨</b></span>
+							</p>
+						</div>
+					</div>
+				</div>
+				<!-- 统计 -->
+				<div class="city-home-statis">
+					<div class="city-home-statis-title clearfix">
+						<div class="fl clearfix">
+							<ul class="city-tap fl clearfix">
+								<li class="tap-item active"><a id="orderStatistics">订单统计</a></li>
+								<li class="tap-item"><a id="cargoStatistics">货物统计</a></li>
+							</ul>
+							<div class="fl hide" >
+								<select class="city-ipt-select" id="unitSelect">
+									<option value="0">件</option>
+									<option value="1">方</option>
+									<option value="2">吨</option>
+								</select>
+							</div>
+						</div>
+						<div class="fr">
+							<div class="btn-box clearfix" id="timeButton">
+								<button class="city-btn fl current" value="0">本周</button>
+								<button class="city-btn fl" value="1">上周</button>
+								<button class="city-btn fl" value="2">本月</button>
+								<button class="city-btn fl" value="3">上月</button>
+							</div>
+						</div>
+					</div>
+					<div class="city-home-chart-box clearfix" id="orderGroup" style="min-height: 400px;">
+						<div class="city-home-chart" id="orderChartWidget">
+						</div>
+						<div class="city-home-table">
+							<div class="title">订单数量(单)排行</div>
+							<div id="orderRankWidget"></div>
+						</div>
+					</div>
+					<div class="city-home-chart-box clearfix hide" id="cargoGroup" style="min-height: 400px;">
+						<div class="city-home-chart cargo-chart" id="cargoChartWidget_piece">
+						</div>
+						<div class="city-home-chart hide cargo-chart" id="cargoChartWidget_side">
+						</div>
+						<div class="city-home-chart hide cargo-chart" id="cargoChartWidget_ton">
+						</div>
+						<div class="city-home-table">
+							<div class="title">送达货物排行</div>
+							<div id="cargoRankWidget"></div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<!-- 底部 开始 -->
+		<!--#include file="/layout/footer.html"-->
+		<!-- 底部 结束 -->
+	</div>
+<script src="/js/login.js"></script>
+<script type="text/javascript" src="/js/consignor/main/mainPage.js"></script>
+</body>
+</html>

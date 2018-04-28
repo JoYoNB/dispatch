@@ -1,0 +1,232 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!-- namespace命名规则: 表对应java类的名称--> 
+<mapper namespace="com.chainway.dispatcherservice.biz.dao.CarrierMonitorDao">
+	<select id="listVehicles" parameterType="string" resultType="java.util.Map">
+		SELECT
+			t.vehicle_id vehicleId,
+			t.vehicle_id_other tVehicleIdOhter,
+			t.plate_no plateNo,
+			t.load_rate loadRate,
+			t2.id deptId,
+			t2.name deptName,
+			t3.`name` vehicleTypeName,
+			t1.driver_name driverName,
+			t1.phone_no driverPhone,
+			t1.online_status onlineStatus,
+			t5.order_no orderNo,
+			t5.sender_name senderName,
+			t5.sender_phone senderPhone,
+			t5.pickup_time pickupTime,
+			t5.pre_finish_time preFinishTime,
+			t5.start_site_name startSiteName,
+			t5.start_address startAddress,
+			t5.end_site_name endSiteName,
+			t5.end_address endAddress,
+			t5.`name` goodsTypeName,
+			t5.weight,
+			t5.volume,
+			t5.distance,
+			t5.fee,
+			t5.packageNum,
+			t1.online_status driverOnlineStatus
+		FROM
+			t_vehicle t
+		LEFT JOIN t_driver t1 ON t.vehicle_id = t1.vehicle_id
+		LEFT JOIN t_dept t2 ON t1.dept_id = t2.id
+		LEFT JOIN t_vehicle_type_dict t3 ON t3.id = t.vehicle_type_id
+		LEFT JOIN (
+			SELECT
+				o.order_no,
+				o.sender_name,
+				o.sender_phone,
+				o.pickup_time,
+				o.pre_finish_time,
+				o.weight,
+				o.volume,
+				o.package_num packageNum,
+				o.package_num,
+				o.distance,
+				o.fee,
+				s1.site_name start_site_name,
+				s1.address start_address,
+				s2.site_name end_site_name,
+				s2.address end_address,
+				d.`name`,
+				r.vehicle_id
+			FROM
+				t_order o
+			LEFT JOIN t_order_site s1 ON (o.start_site_id = s1.site_id and o.order_no = s1.order_no)
+			LEFT JOIN t_order_site s2 ON (o.end_site_id = s2.site_id and o.order_no = s2.order_no)
+			LEFT JOIN t_goods_type_dict d ON o.goods_type = d.id
+			LEFT JOIN t_order_vehicle_rel r ON o.order_no = r.order_no
+			WHERE
+				order_status = ${@com.chainway.dispatchercore.common.OrderStatus@IN_TRANSIT} 
+			AND carrier_dept = #{carrierDept}
+		) t5 ON t.vehicle_id = t5.vehicle_id
+		WHERE
+			t2.dna LIKE CONCAT(#{deptDNA},'%')
+			<if test="orderNo != null">
+				AND t2. LIKE CONCAT('%',#{orderNo},'%')
+			</if>
+			<if test="plateNo != null">
+				AND t.plate_no LIKE CONCAT('%',#{plateNo},'%'))
+			</if>
+			<if test="driverName!=null">
+				AND t1.driver_name = LIKE CONCAT('%', #{driverName},'%')
+			</if>
+			<if test="queryDeptId!=null">
+				AND t2.dna LIKE (SELECT dna FROM t_dept WHERE id = #{queryDeptId})
+			</if>
+			<if test="loadRate!=null and loadRate==0">
+			    AND t.load_rate =0
+			</if>
+			<if test="loadRate!=null and loadRate==100">
+			    AND t.load_rate =100
+			</if>
+			<if test="loadRate!=null and loadRate !=0 and loadRate !=100" >
+			    AND t.load_rate !=0  AND t.load_rate !=100
+			</if>
+			<if test="loadRate!=null and loadRate==0">
+			    AND t.load_rate =0
+			</if>
+			<if test="loadRate!=null and loadRate==100">
+			    AND t.load_rate =100
+			</if>
+			<if test="loadRate!=null and loadRate !=0 and loadRate !=100" >
+			    AND t.load_rate !=0  AND t.load_rate !=100
+			</if>
+		ORDER BY
+			t.plate_no
+		limit #{maxVehicleNum}
+	</select>
+	
+	<select id="listOrders" parameterType="java.util.Map" resultType="java.util.Map">
+   		SELECT
+			o.order_no orderNo,
+			o.sender_name senderName,
+			o.sender_phone senderPhone,
+			o.pickup_time pickupTime,
+			o.pre_finish_time preFinishTime,
+			o.weight,
+			o.volume,
+			o.package_num packageNum,
+			s1.site_name startSiteName,
+			s1.address startAddress,
+			s1.coordinate startCoordinate,
+			s2.site_name endSiteName,
+			s2.address endAddress,
+			d.`name` goodsTypeName
+		FROM
+			t_order o
+		LEFT JOIN t_order_site s1 ON (o.start_site_id = s1.site_id and s1.order_no = o.order_no)
+		LEFT JOIN t_order_site s2 ON (o.end_site_id = s2.site_id and s2.order_no = o.order_no)
+		LEFT JOIN t_goods_type_dict d ON o.goods_type = d.id
+		WHERE
+			o.order_status = ${@com.chainway.dispatchercore.common.OrderStatus@ACCEPTED}
+		AND o.carrier_dept = #{carrierDept}
+	</select>
+	
+	<select id="getVehicleCount" parameterType="java.util.Map" resultType="int">
+		SELECT
+			count(*) num
+		FROM
+			t_vehicle t
+		  LEFT JOIN t_driver t1 ON t.vehicle_id = t1.vehicle_id
+		  LEFT JOIN t_dept t2 ON t1.dept_id = t2.id
+		  LEFT JOIN (
+			SELECT
+				o.order_no,
+				r.vehicle_id
+			FROM
+				t_order o
+			LEFT JOIN t_order_vehicle_rel r ON o.order_no = r.order_no
+			WHERE
+				order_status = ${@com.chainway.dispatchercore.common.OrderStatus@IN_TRANSIT} 
+			AND carrier_dept = #{carrierDept}
+		) t5 ON t.vehicle_id = t5.vehicle_id
+		WHERE
+			t2.dna LIKE CONCAT(#{deptDNA},'%')
+			<if test="orderNo != null">
+				AND t5.order_no LIKE CONCAT('%',#{orderNo},'%')
+			</if>
+			<if test="plateNo != null">
+				AND t.plate_no LIKE CONCAT('%',#{plateNo},'%')
+			</if>
+			<if test="driverName!=null">
+				AND t1.driver_name LIKE CONCAT('%', #{driverName},'%')
+			</if>
+			<if test="loadStatus == 'noLoad'">
+				AND t.load_rate = 0
+			</if>
+			<if test="loadStatus == 'halfLoad'">
+				AND t.load_rate between 1 and 90
+			</if>
+			<if test="loadStatus == 'fullLoad'">
+				AND t.load_rate > 90
+			</if>
+	</select>
+	<select id="getTraceQueryInfo" parameterType="string" resultType="java.util.Map">
+		SELECT
+			t.pickup_time pickupTime,
+			t.finish_time finishTime,
+			r.vehicle_other_id vehicleOtherId
+		FROM
+			t_order t
+		LEFT JOIN t_order_vehicle_rel r ON t.order_no = r.order_no
+		WHERE
+			t.order_no = #{orderNo}
+	</select>
+	
+	
+	<select id="getOffLineDriverCount" parameterType="string" resultType="int">
+		SELECT
+			count(*) num
+		FROM
+			t_vehicle t
+		  LEFT JOIN t_driver t1 ON t.vehicle_id = t1.vehicle_id
+		  LEFT JOIN t_dept t2 ON t1.dept_id = t2.id
+		  LEFT JOIN (
+			SELECT
+				o.order_no,
+				r.vehicle_id
+			FROM
+				t_order o
+			LEFT JOIN t_order_vehicle_rel r ON o.order_no = r.order_no
+			WHERE
+				order_status = ${@com.chainway.dispatchercore.common.OrderStatus@IN_TRANSIT} 
+			AND carrier_dept = #{carrierDept}
+		) t5 ON t.vehicle_id = t5.vehicle_id
+		WHERE
+			t2.dna LIKE CONCAT(#{deptDNA},'%')
+			AND t1.online_status = 0
+			<if test="orderNo != null">
+				AND t5.order_no LIKE CONCAT('%',#{orderNo},'%')
+			</if>
+			<if test="plateNo != null">
+				AND t.plate_no LIKE CONCAT('%',#{plateNo},'%')
+			</if>
+			<if test="driverName!=null">
+				AND t1.driver_name  LIKE CONCAT('%', #{driverName},'%')
+			</if>
+	</select>
+	
+	<select id="listSites" parameterType="java.util.Map" resultType="java.util.Map">
+   		SELECT
+			t.`name` siteName,
+			t.address,
+			t.coordinate,
+			t3.`name` linkName,
+			t3.phone linkPhone
+		FROM
+			t_site t
+		LEFT JOIN t_order t1 ON t.id = t1.start_site_id
+		LEFT JOIN t_dept t2 ON t1.carrier_dept = t2.id
+		LEFT JOIN t_linkman t3 ON t.linkman_id = t3.id
+		WHERE
+			t1.order_status = ${@com.chainway.dispatchercore.common.OrderStatus@ACCEPTED}
+		AND t1.carrier_dept = #{carrierDept}
+	</select>
+</mapper>

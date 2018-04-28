@@ -1,0 +1,258 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!-- namespace命名规则: 表对应java类的名称-->
+<mapper namespace="com.chainway.dispatcherservice.biz.dao.DeptDao">
+	
+	<!-- 查找用户管辖的部门Id -->
+	<select id="getDeptIdList" parameterType="com.chainway.dispatchercore.dto.Dept" resultType="java.lang.String">
+		select id from t_dept
+		where status=1
+		<if test="dna!=null and dna!='' and id==null">
+			and dna like CONCAT(#{dna},'%')
+		</if>
+		<if test="id!=null and dna==null">
+			and dna like CONCAT((select dna from t_dept where id=#{id}),'%')
+		</if>
+		order by dna
+	</select>
+	
+	<insert id="addDept" parameterType="com.chainway.dispatchercore.dto.Dept">
+		<selectKey resultType="int" keyProperty="id">
+			SELECT
+			LAST_INSERT_ID()
+		</selectKey>
+		insert into t_dept(
+		name,
+		parent_id,
+		status,
+		dna,
+		contacter,
+		phone,
+		email,
+		third_party_dept,
+		level,
+		role,
+		updater,
+		creater,
+		update_time,
+		create_time
+		)value(
+		#{name},
+		#{parentId},
+		1,
+		#{dna},
+		#{contacter},
+		#{phone},
+		#{email},
+		#{thirdPartyDept},
+		#{level},
+		#{role},
+		#{creater},
+		#{creater},
+		UTC_TIMESTAMP(),
+		UTC_TIMESTAMP()
+		)
+	</insert>
+	
+	<update id="updateDept" parameterType="com.chainway.dispatchercore.dto.Dept">
+		update t_dept
+		set update_time=UTC_TIMESTAMP(),updater=#{updater}
+		<if test="name!=null and name!=''">
+		,name=#{name}
+		</if>
+		<if test="contacter!=null and contacter!=''">
+		,contacter=#{contacter}
+		</if>
+		<if test="phone!=null and phone!=''">
+		,phone=#{phone}
+		</if>
+		<if test="email!=null and email!=''">
+		,email=#{email}
+		</if>
+		<if test="role!=null and role!=''">
+		,role=#{role}
+		</if>
+		
+		where id=#{id}
+	</update>
+	
+	<update id="setDeptDNA" parameterType="com.chainway.dispatchercore.dto.Dept">
+		update t_dept set dna=#{dna} where id=#{id}
+	</update>
+	
+	<update id="deleteDept" parameterType="com.chainway.dispatchercore.dto.Dept">
+		update t_dept
+		set status=2, update_time=UTC_TIMESTAMP(),updater=#{updater}
+		where id=#{id}
+	</update>
+	
+	<select id="getDept" parameterType="com.chainway.dispatchercore.dto.Dept" resultType="com.chainway.dispatchercore.dto.Dept">
+		select 
+		td.id,
+		td.name,
+		td.parent_id as parentId,
+		td.status,
+		td.dna,
+		td.contacter,
+		td.phone,
+		td.email,
+		td.updater,
+		td.creater,
+		td.third_party_dept as thirdPartyDept,
+		td.level,
+		td.role,
+		td.update_time as updateTime,
+		td.create_time as createTime,
+
+		(select name from t_dept where id=td.parent_id) as parentName
+		
+		from t_dept td
+		where id=#{id}
+	</select>
+	
+	<sql id="getDeptListConditions">
+		<if test="likeName!=null and likeName!=''">
+			and td.name like concat('%',#{likeName},'%')
+		</if>
+		<if test="name!=null and name!=''">
+			and td.name=#{name}
+		</if>
+		<if test="dna!=null and dna!=''">
+			and td.dna like concat(#{dna},'%')
+		</if>
+		<if test="contacter!=null and contacter!=''">
+			and td.contacter=#{contacter}
+		</if>
+		<if test="phone!=null and phone!=''">
+			and td.phone=#{phone}
+		</if>
+		<if test="email!=null and email!=''">
+			and td.email=#{email}
+		</if>
+		<if test="parentId!=null">
+			and td.parent_id=#{parentId}
+		</if>
+		<if test="filterCarrierConsignor!=null">
+			and td.third_party_dept is not null
+		</if>
+		<if test="level!=null">
+			and td.level=#{level}
+		</if>
+		<if test="role!=null">
+			and td.role=#{role}
+		</if>
+	</sql>
+	<select id="getDeptList" parameterType="java.util.Map" resultType="com.chainway.dispatchercore.dto.Dept">
+		select 
+		td.id,
+		td.name,
+		td.parent_id as parentId,
+		td.status,
+		td.dna,
+		td.contacter,
+		td.phone,
+		td.email,
+		td.third_party_dept as thirdPartyDept,
+		td.level,
+		
+		(select name from t_dept where id=td.parent_id) as parentName
+		
+		from t_dept td
+		where td.status=1
+		<include refid="getDeptListConditions"></include>
+		order by td.dna,td.update_time desc
+		<if test="pageSize!=null and offset!=null">
+		limit #{offset},#{pageSize}
+		</if>
+	</select>
+	<select id="getDeptListCount" parameterType="java.util.Map" resultType="int">
+		select count(1) as n
+		
+		from t_dept td
+		where td.status=1
+		<include refid="getDeptListConditions"></include>
+	</select>
+	
+	<!-- 校验部门是否是用户管辖的 -->
+	<select id="checkDeptDataAuth" parameterType="java.util.Map" resultType="com.chainway.dispatchercore.dto.Dept">
+		select
+		id,
+		dna,
+		parent_id as parentId,
+		name,
+		status,
+		role
+		
+		from t_dept
+		where dna like concat(#{userDeptDNA},'%')
+		and id=#{deptId}
+	</select>
+	<!-- 校验角色是否是用户管辖的 -->
+	<select id="checkRoleDataAuth" parameterType="java.util.Map" resultType="int">
+		select count(1) as n
+
+		from t_role tr 
+		inner join t_dept td on td.id=tr.dept_id
+		where tr.id=#{roleId}
+		and td.dna like CONCAT(#{userDeptDNA},'%')
+	</select>
+	<!-- 校验用户是否是用户管辖的 -->
+	<select id="checkUserDataAuth" parameterType="java.util.Map" resultType="int">
+		select count(1) as n
+
+		from t_user tu 
+		inner join t_dept td on td.id=tu.dept_id
+		where tu.id=#{userId}
+		and td.dna like CONCAT(#{userDeptDNA},'%')
+	</select>
+	
+	<!-- 根据部门Id查询关联的角色 -->
+	<select id="getRoleCountRefDept" parameterType="com.chainway.dispatchercore.dto.Dept" resultType="int">
+		select 
+		count(1)as n
+		
+		from t_role tr 
+		inner join t_dept td on td.id=tr.dept_id
+		where tr.`status`!=2
+		and td.id=#{id}
+	</select>
+	
+	<!-- 根据部门Id查询关联的用户 -->
+	<select id="getUserCountRefDept" parameterType="com.chainway.dispatchercore.dto.Dept" resultType="int">
+		select 
+		count(1)as n
+		
+		from t_user tu 
+		inner join t_dept td on td.id=tu.dept_id
+		where tu.`status`!=2
+		and td.id=#{id}
+	</select>
+	
+	<!-- 根据部门Id查询关联的车辆 -->
+	<select id="getVehicleCountRefDept" parameterType="com.chainway.dispatchercore.dto.Dept" resultType="int">
+		select 
+		count(1) as n
+		
+		from t_vehicle tv 
+		inner join t_dept td on td.id=tv.dept_id
+		where tv.`status`!=2
+		and td.id=#{id}
+	</select>
+	
+	<!-- 根据部门Id查询关联的司机-->
+	<select id="getDriverCountRefDept" parameterType="com.chainway.dispatchercore.dto.Dept" resultType="int">
+		select 
+		count(1) as n
+		
+		from t_driver tdr
+		inner join t_dept td on td.id=tdr.dept_id
+		where tdr.`status`!=2
+		and td.id=#{id}
+	</select>
+	
+	
+	
+	
+</mapper>

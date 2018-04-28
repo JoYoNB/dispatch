@@ -1,0 +1,73 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+	<meta name="apple-mobile-web-app-capable" content="yes">
+	<meta name="apple-mobile-web-app-status-bar-style" content="black">
+	<title>货主APP</title>
+	<link rel="stylesheet" href="css/mui.min.css">
+	<link rel="stylesheet" href="css/index.css">
+</head>
+<body>
+	<div class="mui-content ct-content ct-create-order">
+		<div class="ct-inner-wrap">
+			<div class="ct-map-wrapper">
+				<div class="ct-map-full" id="myMap"></div>
+				<a href="javascript:;" class="map-center" id="J_mapCenter"><i class="ifont ifont-dingwei"></i></a>
+				<a href="javascript:;" class="curPosition"><i class="icon icon-mapCurPosit"></i></a>
+			</div>
+			<div class="ct-position-wrap" id="J_positionWrap">
+				<div class="ct-posi-item">
+					<div class="address-name" id="J_curPositionBox">
+						<i class="icon icon-order-start" id="J_icon"></i>
+						<i class="ifont ifont-jiantou"></i>
+						<input type="text" readonly="true" class="name" name="title" placeholder="" id="J_curPositionTitle">
+					</div>
+				</div>
+				<div class="ct-posi-item">
+					<div class="ct-input-label">详细地址 <span class="red">*</span></div>
+					<div class="ct-input-control"><input type="text" name="address" placeholder="请输入详细地址" id="J_curPosition"></div>
+				</div>
+				<div class="ct-posi-item">
+					<div class="mui-row">
+						<div class="mui-col-xs-5 contact">
+							<div class="ct-input-label">联系人 <span class="red">*</span></div>
+							<div class="ct-input-control"><input type="text" name="name" placeholder="请输入姓名" id="J_name"></div>
+						</div>
+						<div class="mui-col-xs-7 phono">
+							<div class="ct-input-label">手机 <span class="red">*</span></div>
+							<div class="ct-input-control"><input type="tel" name="phone" placeholder="请输入手机" id="J_phone" maxlength="11"></div>
+							<a href="javascript:;" class="phonoA" id="J_phoneContact"><i class="ifont ifont-contact"></i></a>
+						</div>
+					</div>
+				</div>
+				<div class="ct-posi-item">
+					<div class="ct-input-label">货物总量</div>
+					<div class="mui-row">
+						<div class="mui-col-xs-4 number">
+							<div class="ct-input-control"><input type="number" name="ton" placeholder="请输入" id="J_ton"><span class="state">吨</span></div>
+						</div>
+						<div class="mui-col-xs-4 number">
+							<div class="ct-input-control"><input type="number" name="piece" placeholder="请输入" id="J_piece"><span class="state">方</span></div>
+						</div>
+						<div class="mui-col-xs-4 number">
+							<div class="ct-input-control"><input type="number" name="cube" placeholder="请输入" id="J_cube"><span class="state">件</span></div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="ct-content-bottom">
+		<div class="content">
+			<label class="ct-ipt-label"><input type="checkbox" id="J_savePosition"><i class="ct-ipt-checkbox"></i><span>保存为站点</span></label>
+		</div>
+		<div class="btn" id="J_goback">确定</div>
+	</div>
+	<script src="js/mui.min.js"></script>
+	<script src="js/common/common.js"></script>
+	<script src="js/map/BMap.js"></script>
+	<script src="js/positionInfo.js"></script>
+</body>
+</html>

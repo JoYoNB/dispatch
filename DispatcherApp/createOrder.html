@@ -1,0 +1,121 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+	<meta name="apple-mobile-web-app-capable" content="yes">
+	<meta name="apple-mobile-web-app-status-bar-style" content="black">
+	<title>货主APP</title>
+	<link rel="stylesheet" href="css/mui.min.css">
+	<link rel="stylesheet" href="css/mui.picker.min.css">
+	<link rel="stylesheet" href="css/index.css">
+</head>
+<body>
+	<div class="mui-content ct-content ct-create-order">
+		<div class="ct-inner-wrap">
+			<div class="mui-scroll-wrapper">
+				<div class="mui-scroll">
+					<ul class="ct-create-box ct-create-address">
+						<li id="J_getStartPosition">
+							<a href="javascript:;" data-type="1" class="J_getPosition">
+								<i class="icon icon-order-start"></i>
+								<div class="ct-input-control"><input type="text" readonly="true" placeholder="请输入起点位置"></div>
+								<div class="hidden addressBox">
+									<div class="address"></div>
+									<div class="tip"></div>
+								</div>
+							</a>
+						</li>
+						<li id="J_getEndPosition">
+							<a href="javascript:;" data-type="2" class="J_getPosition">
+								<i class="icon icon-order-end"></i>
+								<div class="ct-input-control"><input type="text" readonly="true" placeholder="请输入终点位置"></div>
+								<div class="hidden addressBox">
+									<div class="address"></div>
+									<div class="tip"></div>
+								</div>
+							</a>
+							<a href="javascript:;" class="tianjiaBtn" id="J_addSite"><i class="ifont ifont-tianjia"></i></a>
+						</li>
+					</ul>
+					<div class="mui-content ct-create-box ct-create-cars">
+						<div class="mui-slider">
+							<div class="mui-slider-group">
+								<div class="mui-slider-item mui-control-content" id="J_selectCar0">
+									<div class="car-pic"><img src="images/_pic2-1.png" alt=""></div>
+									<div class="clearfix car-info">
+										<div class="car-tip"><p class="big">4.5方</p><p class="tip">载重体积</p></div>
+										<div class="car-tip"><p class="big">2.7*1.4*1.2米</p><p class="tip">长*宽*高</p></div>
+										<div class="car-tip"><p class="big">1吨</p><p class="tip">载重</p></div>
+									</div>
+								</div>
+								<div class="mui-slider-item mui-control-content" id="J_selectCar1">
+									<div class="car-pic"><img src="images/_pic2-2.png" alt=""></div>
+									<div class="clearfix car-info">
+										<div class="car-tip"><p class="big">4.5方</p><p class="tip">载重体积</p></div>
+										<div class="car-tip"><p class="big">2.7*1.4*1.2米</p><p class="tip">长*宽*高</p></div>
+										<div class="car-tip"><p class="big">1吨</p><p class="tip">载重</p></div>
+									</div>
+								</div>
+								<div class="mui-slider-item mui-control-content" id="J_selectCar2">
+									<div class="car-pic"><img src="images/_pic2-3.png" alt=""></div>
+									<div class="clearfix car-info">
+										<div class="car-tip"><p class="big">4.5方</p><p class="tip">载重体积</p></div>
+										<div class="car-tip"><p class="big">2.7*1.4*1.2米</p><p class="tip">长*宽*高</p></div>
+										<div class="car-tip"><p class="big">1吨</p><p class="tip">载重</p></div>
+									</div>
+								</div>
+								<div class="mui-slider-item mui-control-content" id="J_selectCar3">
+									<div class="car-pic"><img src="images/_pic2-4.png" alt=""></div>
+									<div class="clearfix car-info">
+										<div class="car-tip"><p class="big">4.5方</p><p class="tip">载重体积</p></div>
+										<div class="car-tip"><p class="big">2.7*1.4*1.2米</p><p class="tip">长*宽*高</p></div>
+										<div class="car-tip"><p class="big">1吨</p><p class="tip">载重</p></div>
+									</div>
+								</div>
+								<div class="mui-slider-item mui-control-content hide"></div>
+							</div>
+						</div>
+						<div class="mui-scroll-wrapper mui-slider-indicator mui-segmented-control mui-segmented-control-inverted ct-cars-tabs">
+						    <div class="mui-scroll">
+						        <a  href="#J_selectCar0" class="mui-control-item mui-active">小面包车</a>
+						        <a  href="#J_selectCar1" class="mui-control-item">中型面包车</a>
+						        <a  href="#J_selectCar2" class="mui-control-item">小型厢货</a>
+						        <a  href="#J_selectCar3" class="mui-control-item">小型平板</a>
+						    </div>
+						</div>
+					</div>
+					<div class="ct-create-box ct-create-cars">
+			            <div class="ct-list-item">
+			            	<div class="ct-input-label">货物类型</div>
+			            	<div class="ct-input-control"><input type="text" readonly="true" id="J_goodsType" placeholder="请选择货物类型" value=""><i class="icon icon-jiantou"></i></div>
+			            </div>
+			            <div class="ct-list-item">
+			            	<div class="ct-input-label">提货时间</div>
+			            	<div class="ct-input-control"><input type="text" readonly="true" id="J_pickUpTime" placeholder="请选择提货时间" value=""><i class="icon icon-time"></i></div>
+			            </div>
+			            <div class="ct-list-item">
+			            	<div class="ct-input-label">送达时间</div>
+			            	<div class="ct-input-control"><input type="text" readonly="true" id="J_deliverTime" placeholder="请选择送达时间" value=""><div class="icon icon-time"></div></div>
+			            </div>
+					</div>
+					<div class="ct-create-box ct-create-cars">
+			            <div class="ct-list-item">
+			            	<div class="ct-input-label">备注</div>
+			            	<div class="ct-input-control"><textarea placeholder="输入备注内容"></textarea></div>
+			            </div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="ct-content-bottom">
+		<div class="content">运单总价<span class="price">￥999</span></div>
+		<div class="btn" id="J_pay">支付</div>
+	</div>
+	<script src="js/mui.min.js"></script>
+	<script src="js/mui.picker.min.js"></script>
+	<script src="js/common/common.js"></script>
+	<script src="js/createOrder.js"></script>
+</body>
+</html>

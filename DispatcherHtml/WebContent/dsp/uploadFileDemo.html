@@ -1,0 +1,185 @@
+<!doctype html>
+<html lang="en">
+<head>
+<!--#include file="/layout/libs.html"-->
+<!-- 文件上传控件 -->
+<script src="/js/ui/FileWidget.js" type="text/javascript"></script>
+<title>城市配送管理平台</title>
+</head>
+<body>
+	<div class="city-wrapper">
+		<!-- 公共header 开始 -->
+		<!--#include file="/layout/header.html"-->
+		<!-- 公共header 结束 -->
+		<div class="city-title-layout">
+			<div class="city-title">承运商首页</div>
+			<div class="city-logo"><a href="javascript:;" title="城市配送管理平台"><img src="/images/logo.png" alt=""></a></div>
+		</div>
+		<div class="city-main-scroll" style="background: #f7f7f7;">
+			<p>===============上传图片=================</p>
+			<!-- <p><input type="file" id="uploadFile" class="form-control" placeholder="上传文件"></p> -->
+			<div id="fileWidget"></div>
+			
+			
+			<p><a id="uploadBtn" href="javascript:void(0);">上传文件</a></p>
+			<p><img id="img" class="hide" src=""></p>
+			
+			<p>===============导入====================</p>
+			<p><input type="file" id="importExcel" class="form-control" placeholder="上传文件"></p>
+			<p><a id="importBtn" href="javascript:void(0);">导入</a></p>
+			
+			
+			<p>===============新版文件上传====================</p>
+			<p><input type="file" id="newfile" class="form-control" placeholder="上传文件"></p>
+			<p><a id="uploadFileBtn" href="javascript:void(0);">导入</a></p>
+		</div>
+		<!-- 底部 开始 -->
+		<!--#include file="/layout/footer.html"-->
+		<!-- 底部 结束 -->
+	</div>
+	
+<script type="text/javascript">
+$(function(){
+	var fileWidget=$("#fileWidget").FileWidget({
+		onDeleted:function(url){
+			alert(url);
+		}
+	});
+	
+	setTimeout(function(){
+		var list=["http://www.sinocars.com/uploadfile/2012/0228/20120228094757883.jpg",
+		          "http://img3.xcarimg.com/bbs/1364/20130625154753704919.jpg",
+		          "http://m3.biz.itc.cn/pic/new/n/26/31/Img6993126_n.jpg"];
+		fileWidget.setValue(list);
+	},500);
+	
+	
+	$("#uploadBtn").click(function(){
+		var files=[];
+		var fileNames=[];
+		/* var uploadFile=$("#uploadFile").val();
+		if(uploadFile&&uploadFile!=""){
+			files.push({id:"uploadFile",name:"uploadFile",value:uploadFile});
+		} */
+		
+		var fileList=fileWidget.getValue();
+		if(fileList.length>0){
+			for(var i=0,len=fileList.length;i<len;i++){
+				var fel=fileList[i];
+				var fv=$(fel).val();
+				if(fv&&fv!=""){
+					var _fname="file"+i;
+					fileNames.push(_fname);
+					files.push({id:$(fel).attr("id"),name:_fname,value:fv});
+				}
+			}
+		}
+		
+		CommonUtils.uploadFile({
+			url:"/DispatcherWeb/test/uploadFile.json",
+			data:{files:fileNames.join(",")},
+			files:files,
+			success:function(result){
+				if(result.code==0){
+					MessageUtil.info("成功");
+				}else{
+					MessageUtil.alert("失败");
+				}
+			},
+			error:function(result){
+				MessageUtil.alert("失败");
+			}
+		});
+	});
+	
+	//导入
+	$("#importBtn").click(function(){
+		var files=[];
+		var importExcel=$("#importExcel").val();
+		if(importExcel&&importExcel!=""){
+			files.push({id:"importExcel",name:"importExcel",value:importExcel});
+		}
+		
+		CommonUtils.uploadFile({
+			url:"/DispatcherWeb/test/importFile.json",
+			data:{param1:1,param2:"2",param3:true},
+			files:files,
+			success:function(result){
+				if(result.code==0){
+					MessageUtil.info("成功");
+				}else{
+					MessageUtil.alert("失败");
+				}
+			},
+			error:function(result){
+				MessageUtil.alert("失败");
+			}
+		});
+	});
+	
+	
+	//新版上传文件
+	$("#uploadFileBtn").click(function(){
+		/* var formData=new FormData();
+		var _fileList=fileWidget.getValue();
+		if(_fileList.length<1){
+			return;
+		}
+		var _filesName=[];
+		for(var i=0,len=_fileList.length;i<len;i++){
+			var _fileElId=_fileList[i];
+			var _fnmae="file"+i;
+			_filesName.push(_fnmae);
+			var fileObj=document.getElementById(_fileElId).files[0]; // js 获取文件对象
+			formData.append(_fnmae,fileObj);
+		}
+		formData.append("files",_filesName.join(","));//放文件名
+		
+		//formData.append("files","file0");
+		//var fileObj=document.getElementById("newfile").files[0]; // js 获取文件对象
+		//formData.append("file0",fileObj); 
+		var _token=TokenUtil.getToken();
+		$.ajax({
+			type:"POST",
+			url:"/DispatcherWeb/test/uploadFile.json?token="+_token,
+			processData:false,
+			contentType:false,
+			data:formData,
+			success:function(result){
+				//alert(result);
+			}
+		}); */
+		
+		
+		
+		var _fileList=fileWidget.getValue();
+		if(_fileList.length<1){
+			return;
+		}
+		var _filesName=[];
+		var files=[];
+		for(var i=0,len=_fileList.length;i<len;i++){
+			var _fileElId=_fileList[i];
+			var _fname="file"+i;
+			_filesName.push(_fname);
+			
+			var _file={id:_fileElId,name:_fname};
+			files.push(_file);
+		}
+		var param={a:1,b:"2",c:true,files:_filesName.join(",")};
+		
+		CommonUtils.uploadFile({
+			url:"/DispatcherWeb/test/uploadFile.json",
+			data:param,
+			files:files,
+			success:function(result){
+				
+			}
+		});
+		
+	});
+	
+});
+</script>
+</body>
+</html>

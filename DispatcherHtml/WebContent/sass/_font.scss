@@ -1,0 +1,63 @@
+@charset "utf-8";
+
+@font-face {
+    font-family: 'iconfont';
+    src: url('../fonts/iconfont.eot'); /* IE9+ */
+    src: url('../fonts/iconfont.eot?#iefix') format('embedded-opentype'), /* IE6-IE8 */
+         url('../fonts/iconfont.woff') format('woff'), /* chrome、firefox */
+         url('../fonts/iconfont.ttf') format('truetype'), /* chrome、firefox、opera、Safari, Android, iOS 4.2+*/
+         url('../fonts/iconfont.svg#fontname') format('svg'); /* iOS 4.1- */
+}
+
+.iconfont{font-family:"iconfont" !important;font-size:16px;font-style:normal;-webkit-font-smoothing: antialiased;-moz-osx-font-smoothing: grayscale;}
+.iconfont-person:before{content: "\e607";}
+.iconfont-arrow-b:before{content: '\e600';}
+.iconfont-arrow-t:before{content: '\e625';}
+.iconfont-fullscreen:before{content: '\e66a';}
+.iconfont-logout:before{content: '\e673';}
+.iconfont-home:before{content: '\e667';}
+.iconfont-suo:before{content: '\e644';}
+.iconfont-tap:before{content: '\e608';}
+.iconfont-prev:before{content: '\e63a';}
+.iconfont-next:before{content: '\e63b';}
+.iconfont-add:before{content: '\e6d2';}
+.iconfont-remove:before{content: '\e64c';}
+.iconfont-order:before{content: '\e634';}
+.iconfont-center:before{content: '\e611';}
+.iconfont-zoomIn:before{content: '\e608';}
+.iconfont-zoomOut:before{content: '\e729';}
+.iconfont-msgSuccess:before{content: '\e618';}
+.iconfont-msgError:before{content: '\e62d';}
+.iconfont-msgAlarm:before{content: '\e61e';}
+.iconfont-close:before{content: '\e623';}
+.icon-tubiao111:before {content: "\e632";}
+.icon-cheliangziliao:before { content: "\e605"; }
+
+.icon{display: inline-block;width: 16px;height: 16px;background-image: url(../images/icon.png);background-repeat: no-repeat;}
+.icon-add{background-position: -96px 0;width: 32px;height: 32px;}
+.icon-success{background-position: -32px -32px;width: 84px;height: 84px;}
+.icon-failure{background-position: -116px -32px;width: 84px;height: 84px;}
+.icon-help{background-position: -32px -116px;width: 40px;height: 40px;}
+
+
+// 部门层级icon
+.icon_dept01{background-position: -189px -178px;width: 10px;height:18px;}
+.icon_dept02{background-position: -184px -178px;width: 15px;height:18px;}
+.icon_dept03{background-position: -179px -178px;width: 20px;height:18px;}
+.icon_dept04{background-position: -174px -178px;width: 25px;height:18px;}
+.icon_dept05{background-position: -169px -178px;width: 30px;height:18px;}
+.icon_dept06{background-position: -164px -178px;width: 35px;height:18px;}
+.icon_dept07{background-position: -159px -178px;width: 40px;height:18px;}
+.icon_dept08{background-position: -154px -178px;width: 45px;height:18px;}
+.icon_dept09{background-position: -149px -178px;width: 50px;height:18px;}
+.icon_dept10{background-position: -144px -178px;width: 55px;height:18px;}
+.icon_dept11{background-position: -139px -178px;width: 60px;height:18px;}
+.icon_dept12{background-position: -134px -178px;width: 65px;height:18px;}
+.icon_dept13{background-position: -129px -178px;width: 70px;height:18px;}
+.icon_dept14{background-position: -124px -178px;width: 75px;height:18px;}
+.icon_dept15{background-position: -119px -178px;width: 80px;height:18px;}
+
+.icon-arrDown-fill{ width: 10px;height: 6px;background-position: -185px -4px;}
+.icon-arrLeft-fill{ width: 6px;height: 10px;background-position: -189px -19px;}
+.icon-upload{width: 16px;height: 16px;background-position: -139px -7px;}
+.icon-msg{display: inline-block;width: 15px;height: 16px;background: url(../images/msg_icon.png);background-image: 100% 100%;margin: 8px;}

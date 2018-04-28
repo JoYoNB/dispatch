@@ -1,0 +1,53 @@
+<!doctype html>
+<html lang="en">
+<head>
+<!--#include file="/layout/libs.html"-->
+<title>城市配送管理平台</title>
+</head>
+<body>
+	<div class="city-wrapper">
+		<!-- 公共header 开始 -->
+		<!--#include file="/layout/header.html"-->
+		<!-- 公共header 结束 -->
+		
+		<div class="city-title-layout">
+			<div class="city-title">订单详情</div>
+			<div class="city-logo"><a href="javascript:;" title="城市配送管理平台"><img src="/images/logo.png" alt=""></a></div>
+		</div>
+		<div class="city-main-scroll">
+			<div class="city-main">
+				<ul class="city-tap clearfix">
+					<li class="tap-item active" id="orderDetailsBtn"><a href="javascript:;">订单统计</a></li>
+					<li class="tap-item"  id="transportDetailsBtn"><a href="javascript:;">货物统计</a></li>
+				</ul>
+				<div class="city-goods-details" id="orderDetailsDiv">
+					<p class="list"><span class="tip">订单编号：</span><span id="orderNo">...</span></p>
+					<p class="list"><span class="tip">货物类型：</span><span id="goodsTypeName">...</span></p>
+					<p class="list"><span class="tip">车辆类型：</span><span id="vehicleTypeName">...</span></p>
+					<br>
+					<div id="sitesDiv">
+					</div>
+					<p class="list"><span class="tip">提货时间：</span><span id="pickupTime">...</span></p>
+					<p class="list"><span class="tip">结束时间：</span><span id="finishTime">...</span></p>
+					<p class="list"><span class="tip">备注：</span><span id="remark">...</span></p>
+					<br>
+					<p class="list"><span class="tip">配送企业：</span><span id="carrierDeptName">...</span></p>
+					<p class="list"><span class="tip">车牌号：</span><span id="vehicleNo">...</span></p>
+					<p class="list"><span class="tip">驾驶员：</span><span id="driverName">...</span></p>
+					<br>
+					<p class="list"><span class="tip">创建时间：</span><span id="createTime">...</span></p>
+					<p class="list"><span class="tip">当前位置：</span><span id="position">...</span></p>
+					<br>
+				</div>
+				<ul class="city-transport-details hide" id="transportDetailsDiv">
+				</ul>
+			</div>
+		</div>
+		<!-- 底部 开始 -->
+		<!--#include file="/layout/footer.html"-->
+		<!-- 底部 结束 -->
+	</div>
+
+<script type="text/javascript" src="/js/settlement/settleOrder/OrderInfo.js"></script>
+</body>
+</html>

@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:task="http://www.springframework.org/schema/task"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:context="http://www.springframework.org/schema/context"
+    xmlns:p="http://www.springframework.org/schema/p" 
+    xmlns:aop="http://www.springframework.org/schema/aop"
+    xmlns:tx="http://www.springframework.org/schema/tx"
+    xmlns:mvc="http://www.springframework.org/schema/mvc"
+    xmlns:hdp="http://www.springframework.org/schema/hadoop"
+    xmlns:util="http://www.springframework.org/schema/util"
+    xmlns:dubbo="http://code.alibabatech.com/schema/dubbo"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans
+    http://www.springframework.org/schema/beans/spring-beans-4.0.xsd
+    http://www.springframework.org/schema/context 
+    http://www.springframework.org/schema/context/spring-context-4.0.xsd 
+    http://www.springframework.org/schema/aop 
+    http://www.springframework.org/schema/aop/spring-aop-4.0.xsd 
+    http://www.springframework.org/schema/tx 
+    http://www.springframework.org/schema/tx/spring-tx-4.0.xsd
+    http://www.springframework.org/schema/mvc
+    http://www.springframework.org/schema/mvc/spring-mvc-4.0.xsd
+    http://www.springframework.org/schema/task
+   	http://www.springframework.org/schema/task/spring-task-4.0.xsd
+   	http://www.springframework.org/schema/hadoop 
+	http://www.springframework.org/schema/hadoop/spring-hadoop-2.0.xsd
+	http://www.springframework.org/schema/util
+	http://www.springframework.org/schema/util/spring-util-4.0.xsd
+	http://code.alibabatech.com/schema/dubbo
+    http://code.alibabatech.com/schema/dubbo/dubbo.xsd">
+    
+    <bean id="propertyConfig" class="com.chainway.logservice.common.DecodePropertyPlaceholderConfigurer">
+		<property name="locations">
+			<list>
+				<value>classpath:configure.properties</value>
+			</list>
+		</property>
+	</bean>
+	
+	<!--开启扫面注解生成Bean-->
+    <context:annotation-config></context:annotation-config>
+	
+	<!-- 通过注解方式 -->
+	<!-- 使用注解方式暴露接口   -->
+    <dubbo:annotation package="com.chainway.logservice.service" />  
+    
+    <dubbo:application name="log_service_provider" />  
+    <dubbo:registry address="${dubbo.registry}" />  
+    <dubbo:protocol name="${dubbo.protocol.name}" port="${dubbo.protocol.port}" />
+    
+    <!-- 加入spring注解扫描 -->
+    <context:component-scan base-package="com.chainway.logservice" />
+	<!-- 配置AOP -->
+	<aop:aspectj-autoproxy/>
+	
+	<!-- 配置数据库 -->
+	<!-- 写数据源 -->
+	<bean id="dataSourceRW" class="com.mchange.v2.c3p0.ComboPooledDataSource" destroy-method="close">
+		<property name="driverClass" value="com.mysql.jdbc.Driver" />
+		<property name="jdbcUrl" value="${datasource.rw.url}?useUnicode=true&amp;characterEncoding=utf-8&amp;allowMultiQueries=true&amp;autoReconnect=true" />
+		<property name="user" value="${datasource.rw.user}" />
+		<property name="password" value="${datasource.rw.password}" />
+		<property name="idleConnectionTestPeriod" value="3600" />
+		<property name="maxPoolSize" value="15" />
+		<property name="initialPoolSize" value="3" />
+		<property name="maxIdleTime" value="0" />
+	</bean>
+	<!-- 读数据源 -->
+	<bean id="dataSourceR" class="com.mchange.v2.c3p0.ComboPooledDataSource" destroy-method="close">
+		<property name="driverClass" value="com.mysql.jdbc.Driver" />
+		<property name="jdbcUrl" value="${datasource.r.url}?useUnicode=true&amp;characterEncoding=utf-8&amp;allowMultiQueries=true&amp;autoReconnect=true" />
+		<property name="user" value="${datasource.r.user}" />
+		<property name="password" value="${datasource.r.password}" />
+		<property name="idleConnectionTestPeriod" value="3600" />
+		<property name="maxPoolSize" value="15" />
+		<property name="initialPoolSize" value="3" />
+		<property name="maxIdleTime" value="0" />
+	</bean>
+	
+	<!-- 动态数据源 -->
+	<bean id="dynamicDataSource" class="com.chainway.logservice.biz.datasource.DynamicDataSource">
+		<!-- 通过key-value关联数据源 -->
+		<property name="targetDataSources">
+			<map>
+				<entry value-ref="dataSourceRW" key="dataSourceKeyRW"></entry>
+				<entry value-ref="dataSourceR" key="dataSourceKeyR"></entry>
+			</map>
+		</property>
+		<property name="defaultTargetDataSource" ref="dataSourceRW" />
+	</bean>
+	
+	
+	<!-- spring和MyBatis完美整合，不需要mybatis的配置映射文件 -->  
+    <bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">  
+        <property name="dataSource" ref="dynamicDataSource" />  
+        <!-- 自动扫描mapping.xml文件 -->  
+        <property name="mapperLocations" value="classpath:com/chainway/logservice/biz/dao/mapper/*.xml"></property>  
+    </bean>
+  
+    <!-- DAO接口所在包名，Spring会自动查找其下的类 -->  
+    <bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">  
+        <property name="basePackage" value="com.chainway.logservice.biz.dao" />  
+        <property name="sqlSessionFactoryBeanName" value="sqlSessionFactory"></property>  
+    </bean>
+    
+    <!-- 配置事务 -->
+	<bean id="txManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+		<property name="dataSource" ref="dynamicDataSource"></property>
+	</bean>
+	
+</beans>

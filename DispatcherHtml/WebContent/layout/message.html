@@ -1,0 +1,100 @@
+<!-- 做个定时器，例如2s后将 .city-message 去掉  -->
+<div id="MessageUtil" class="hide"><!-- city-message -->
+	<span>
+		<div class="city-msg-notice">
+			<div id="MessageUtilType" class="city-msg-notice-content"><!-- success  error  alarm -->
+				<div class="city-message-custom-content">
+					<i class="iconfont iconfont-msgNotice"></i>
+					<span id="MessageUtilContent">这是一条成功的提示</span>
+				</div>
+			</div>
+		</div>
+	</span>
+</div>
+
+<!-- 确认框 -->
+<div id="MessageUtilConfirm" class="city-modal-box hide">
+	<div class="city-modal-mask"></div>
+	<div class="city-modal-wrap">
+		<div class="city-modal">
+			<div class="city-modal-content">
+				<div class="city-modal-body">
+					<div class="clearfix">
+						<div class="city-confirm-body success"><!-- success: 成功  error: 错误  alarm: 告警 -->
+							<i class="iconfont iconfont-msgNotice"></i>
+							<span id="MessageUtilConfirmContent" class="city-confirm-title">您是否确认要删除这项内容</span>
+							<!-- div class="city-confirm-content">一些解释</div -->
+						</div>
+						<div class="city-confirm-btns">
+							<a id="MessageUtilConfirmNo" href="javascript:void(0);" class="city-btn">取 消</a>
+							<a id="MessageUtilConfirmYes" href="javascript:void(0);" class="city-btn active">确 定</a>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+	
+<script>
+var MessageUtil={
+	_defaultDelay:5,//单位秒
+	
+	_show:function(){
+		$("#MessageUtil").removeClass("hide").addClass("city-message");
+	},
+	_hide:function(){
+		$("#MessageUtil").addClass("hide").removeClass("city-message");
+	},
+	_renderMsg:function(msg){
+		$("#MessageUtilContent").html(msg);
+	},
+	info:function(msg,delay,callback){
+		var self=this;
+		$("#MessageUtilType").removeClass("error").removeClass("alarm").addClass("success");//success  error  alarm
+		self._renderMsg(msg);
+		self._show();
+		var _d=delay||self._defaultDelay;
+		setTimeout(function(){
+			self._hide();
+			if(typeof callback === 'function'){
+				callback();
+			}
+		},_d*1000);
+	},
+	alert:function(msg,delay,callback){
+		var self=this;
+		$("#MessageUtilType").removeClass("error").removeClass("success").addClass("alarm");//success  error  alarm
+		self._renderMsg(msg);
+		self._show();
+		var _d=delay||self._defaultDelay;
+		setTimeout(function(){
+			self._hide();
+			if(typeof callback === 'function'){
+				callback();
+			}
+		},_d*1000);
+	},
+	confirm:function(msg,yesFn,noFn){
+		var self=this;
+		$("#MessageUtilConfirmYes").unbind("click");
+		$("#MessageUtilConfirmNo").unbind("click").click(function(){
+			//取消显示
+			$("#MessageUtilConfirm").addClass("hide");
+			//实现自己的业务逻辑
+			if(typeof noFn === 'function'){
+				noFn();
+			}
+		});
+		
+		if(typeof yesFn === 'function'){
+			$("#MessageUtilConfirmYes").click(function(){
+				//实现自己的业务逻辑
+				yesFn();
+			});
+		}
+		$("#MessageUtilConfirmContent").html(msg);
+		$("#MessageUtilConfirm").removeClass("hide");
+	}
+}
+</script>

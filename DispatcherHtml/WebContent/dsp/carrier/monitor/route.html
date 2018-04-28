@@ -1,0 +1,36 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<!--#include file="/layout/libs.html"-->
+	<!-- 加载地图资源 -->
+	<!--#include file="/layout/maplibs.html" -->
+	<style type="text/css">
+		 #routemap {width: 75%;height: 100%;overflow: hidden;margin:0;font-family:"微软雅黑";float:right}
+	</style>
+	<title>城市配送管理平台</title>
+</head>
+<body>
+	<div class="city-wrapper">
+		<!-- 公共header 开始 -->
+		<!--#include file="/layout/header.html"-->
+		<!-- 公共header 结束 -->
+		<div class="city-order-detail city-order-detail-container">
+			<div class="city-order-detailTop">
+				<p>订单编号：<span id="orderNo"></span></p>
+				<p>总里程: <span id="distance"></span>km</p>
+				<p>预计总耗时: 1小时50分</p>
+			</div>
+			<div class="city-order-detailBot">
+				<ul class="city-transport-details">
+				</ul>
+			</div>
+		</div>
+		<div class="city-map" id="routemap"></div>
+		<!-- 底部 开始 -->
+		<!--#include file="/layout/footer.html"-->
+		<!-- 底部 结束 -->
+	</div>
+	<script type="text/javascript" src="/js/carrier/monitor/route.js"></script>
+</body>
+</html>

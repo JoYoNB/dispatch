@@ -1,0 +1,67 @@
+<project name="DriverAppWeb" default="war" xmlns:ivy="antlib:org.apache.ivy.ant">
+	<property file="build.properties"/>
+	<property name="dir.classes" value="target/classes" />
+	<property name="dir.src" value="src/main/java" />
+	<property name="dir.lib" value="src/web/WEB-INF/lib" />
+	<property name="dir.web.classes" value="src/main/webapp/WEB-INF/classes" />
+	<property name="dir.app.config" value="src/main/config" />
+	<property name="project.name" value="${project.name}" />
+	
+	<path id="project.class.path">
+		<fileset dir="${dir.lib}">
+			<include name="**/*.jar" />
+			<include name="*.jar" />
+		</fileset>
+		<fileset dir="${tomcat.home}/lib">
+			<include name="*.jar" />
+		</fileset>
+	</path>
+	
+	<target name="init">
+		<!-- 生成打包目录 -->
+		<mkdir dir="${war.deploy.dir}"/>
+	</target>
+	<target name="compile" depends="init">
+		<javac debug="true" deprecation="true" destdir="${dir.classes}" nowarn="false" source="1.8" target="1.8" includeantruntime="false">
+			<src path="${dir.src}" />
+			<classpath refid="project.class.path" />
+		</javac>
+		<copy todir="${dir.classes}">
+			<fileset dir="${dir.src}">
+				<exclude name="**/*.java"/>
+			</fileset>
+		</copy>
+	</target>
+	<!-- 本身工程的jar -->
+	<target name="jar" depends="compile">
+		<jar destfile="${project.lib.dir}/${project.name}.jar">
+			<fileset dir="${dir.classes}">
+			    <include name="/com/**"/>
+			</fileset>
+		</jar>
+	</target>
+	
+	<!-- 少一个war包-->
+	<target name="war" depends="jar">
+		<!-- 删除文件 -->
+		<delete dir="${war.deploy.dir}/**"/>
+		<!-- 拷贝文件 -->
+		<copy todir="${war.deploy.dir}">
+			<fileset dir="${war.source.dir}">
+				<exclude name="${war.deploy.dir}/WEB-INF/classes/com/**"/>
+			</fileset>
+		</copy>
+		<!-- 删除文件class文件 -->
+		<delete dir="${war.deploy.dir}/WEB-INF/classes/com"/>
+		<!-- 复制工程的jar包 -->
+		<copy todir="${war.deploy.dir}/WEB-INF/lib" file="${project.lib.dir}${project.name}.jar"></copy>
+		
+		<war basedir="${war.deploy.dir}" destfile="${war.dest.dir}${war.name}.war">
+			<manifest>
+				<attribute name="Built-By" value="${user.name}"/>
+				<attribute name="Built-Date" value="${dstamp}"/>
+				<attribute name="Specification-Vendor" value="inc"/>
+			</manifest>
+		</war>	
+	</target>
+</project>

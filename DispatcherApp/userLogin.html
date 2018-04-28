@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black">
+<title>卡友帮配送</title>
+<link rel="stylesheet" href="css/mui.min.css">
+<link rel="stylesheet" href="css/app.css">
+</head>
+
+<body class="loginBody" >
+<div class="mui-content mui-tab-content">
+	<div class="mui-scroll-wrapper">
+		<div class="mui-scroll">
+			<div class="login_top">
+				<h1 class="title"><span class="ico_logo"></span><span class="txt"></span></h1>
+			</div>
+			<ul class="ul_list">
+				<li>
+					<span class="login-icon-box"><i class="account-icon"></i></span>
+					<div class="ipt-box">
+						<label>用户名</label>
+						<input class="c_in_text" type="text" placeholder="请输入用户名/绑定手机号" id="account" maxlength="20">
+					</div>
+				</li>
+				<li>
+					<span class="login-icon-box"><i class="password-icon"></i></span>
+					<div class="ipt-box">
+						<label>密码</label>
+						<input class="c_in_text" type="password" placeholder="请输入密码" id="password"  maxlength="20">
+					</div>
+				</li>
+			</ul>
+			<div class="edit_btn">
+				<div class="link_area clearfix">
+					<label class="checkbox_list mui-pull-left" id="autoLogin">
+						<input id="checkbox" name="checkbox" type="checkbox">
+						<span>记住我</span>
+					</label>
+				</div>
+				<div class="submit-box clearfix">
+					<button class="mui-btn mui-btn-block mui-btn-success right" id="login-btn">登 录</button>
+				</div>
+			</div>
+			<div class="mui-content-padded oauth-area">
+			</div>
+		</div>
+		<div class="login-footer" id="login-footer">
+			<img src="images/kayoub_icon.png" alt=""><i>|</i><span>客服热线400-800-1234</span>
+		</div>
+	</div>
+</div>
+
+<script src="js/zepto.min.js"></script>
+<script src="js/mui.min.js"></script>
+<script src="js/comUtils.js"></script>
+<script src="js/sha256.js"></script>
+<script src="js/userLogin.js"></script>
+</body>
+</html>

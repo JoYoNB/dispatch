@@ -1,0 +1,65 @@
+<html>
+<head>
+<title>首页</title>
+<!--#include file="/layout/libs.html"-->
+<script>
+function addDept(){
+	var dept={
+		name:"部门1",
+		parentId:1,
+		contacter:"Jasion",
+		phone:"18888888888",
+		email:"jaison@chainwaytsp.com",
+		startTime:"2018-03-13 08:00:00"
+	};
+	CommonUtils.async({
+		url:"/DispatcherWeb/user/addDept.json",
+		data:dept,
+		success:function(result){
+			
+		}
+	});
+}
+
+function updateDept(){
+	var dept={
+		id:1,
+		name:"部门1",
+		parentId:1,
+		contacter:"Jasion",
+		phone:"18888888888",
+		email:"jaison@chainwaytsp.com",
+		createTime:"2018-03-13 08:00:00"
+	};
+	CommonUtils.async({
+		url:"/DispatcherWeb/user/updateDept.json",
+		data:dept,
+		success:function(result){
+			
+		}
+	});
+}
+
+function getDept(){
+	var dept={
+		id:1,
+		startTime:"2018-03-13 08:00:00"
+	};
+	CommonUtils.async({
+		url:"/DispatcherWeb/user/getDept.json",
+		data:dept,
+		success:function(result){
+			
+		}
+	});
+}
+</script>
+</head>
+<body>
+Hello World
+<p><a href="javascript:logout();">退出登录</a></p>
+<p><a href="javascript:addDept();">测试新增部门接口</a></p>
+<p><a href="javascript:updateDept();">测试修改部门接口</a></p>
+<p><a href="javascript:getDept();">测试获取部门接口</a></p>
+</body>
+</html>

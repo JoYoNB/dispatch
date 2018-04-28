@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!-- namespace命名规则: 表对应java类的名称-->
+<mapper namespace="com.chainway.dispatcherservice.biz.dao.GoodsTypeDao">
+
+	<select id="getGoodsTypeList" resultType="java.util.Map">
+		SELECT id,name,i18n_key FROM t_goods_type_dict
+	</select>
+</mapper>

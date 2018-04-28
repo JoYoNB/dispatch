@@ -1,0 +1,77 @@
+<!doctype html>
+<html lang="en">
+<head>
+<!--#include file="/layout/libs.html"-->
+<title>城市配送管理平台</title>
+</head>
+<body>
+	<div class="city-wrapper">
+		<!-- 公共header 开始 -->
+		<!--#include file="/layout/header.html"-->
+		<!-- 公共header 结束 -->
+		
+		<div class="city-title-layout">
+			<div class="city-title">订单列表</div>
+			<div class="city-logo"><a href="javascript:;" title="城市配送管理平台"><img src="/images/logo.png" alt=""></a></div>
+		</div>
+		<div class="city-main-scroll">
+
+			<div class="mian-head clearfix">
+				<div class="city-search-title">
+					<ul class="city-tap clearfix">
+					<!-- 支付状态（10未付款、20已付款、30已结算、40待退款、50已退款） -->
+						<li class="tap-item active">全部</li>
+						<li class="tap-item" value="10">未付款</li>
+						<li class="tap-item" value="20">已付款</li>
+						<li class="tap-item" value="30">已结算</li>
+						<li class="tap-item" value="40">待退款</li>
+						<li class="tap-item" value="50">已退款</li>
+					</ul>
+					<div class="btns-box">
+						<a href="javascript:;" class="city-btn" id="exp">导出</a>
+						<a href="javascript:;" class="city-btn active hide" id="batchReceipt">收款</a>
+						<a href="javascript:;" class="city-btn hide" id="batchSettle">结算</a>
+					</div>
+					<div id="tableWidget" class="city-table-main"></div>
+				</div>
+				<!-- 搜索区域 -->
+				<div class="select-box">
+				  	<span class="toggle-select clearfix">条件筛选 <i class="iconfont iconfont-arrow-b fr"></i></span>
+					<span class="change-status"><i class="iconfont iconfont-suo"></i></span>
+					<div class="search-area">
+						<div class="ipt_box">
+							<select class="city-ipt-select" id="timeSelect">
+								<option value="-1">请选择</option>
+								<option value="0">今天</option>
+								<option value="1">昨天</option>
+								<option value="2">本周</option>
+								<option value="3">上周</option>
+								<option value="4">本月</option>
+								<option value="5">上月</option>
+							</select>
+						</div>
+						<div class="ipt_box">
+							<div id="startTimeWidget"></div>
+						</div>
+						<div class="ipt_box">
+							<div id="endTimeWidget"></div>
+						</div>
+						<div class="ipt_box">
+							<div id="goodsTypeWidget"></div>
+						</div>
+						<div class="ipt_box">
+							<input id="orderNo" type="text" class="ipt_text" placeholder="请选择订单号">
+						</div>
+						<div class="ipt_box"><input type="submit" id="queryBtn" class="ipt_submit" value="查询"></div>
+					</div>
+				</div>
+				<!-- 搜索区域结束-->
+			</div>
+		</div>
+		<!-- 底部 开始 -->
+		<!--#include file="/layout/footer.html"-->
+		<!-- 底部 结束 -->
+	</div>
+<script type="text/javascript" src="/js/settlement/settleOrder/settleOrderList.js"></script>
+</body>
+</html>

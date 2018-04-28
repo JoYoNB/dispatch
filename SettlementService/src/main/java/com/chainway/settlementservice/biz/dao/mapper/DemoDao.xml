@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!-- namespace命名规则: 表对应java类的名称-->
+<mapper namespace="com.chainway.settlementservice.biz.dao.DemoDao">
+	
+	<select id="test" parameterType="java.util.Map" resultType="java.util.Map">
+		select 'jasion' as name from DUAL
+	</select>
+	
+</mapper>

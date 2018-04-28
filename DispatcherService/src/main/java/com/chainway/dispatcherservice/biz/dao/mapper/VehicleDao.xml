@@ -1,0 +1,224 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.chainway.dispatcherservice.biz.dao.VehicleDao">
+    <sql id="Base_Column_List">
+	    t1.vehicle_id  vehicleId, vehicle_id_other vehicleIdOther, plate_no plateNo, vehicle_type_id vehicleTypeId, 
+	    equipment_pn equipmentPn, t1.dept_id deptId, t1.status , load_rate loadRate, weigth_use_factor weigthUseFactor,
+	    swerve_radius_min swerveRadiusMin, power_rate powerRate, vehicle_inside_length vehicleInsideLength,
+	    vehicle_inside_width vehicleInsideWidth, vehicle_inside_height  vehicleInsideHeight, vehicle_weight_max vehicleWeightMax,
+	    carry_weigth_max carryWeigthMax,vehicle_length vehicleLength,t1.creater,t1.create_time createTime,t1.updater,
+	    t1.update_time updateTime,t1.remark
+  	</sql>
+  	<resultMap type="java.util.Map" id="vehicleResult">
+  	    <result column="vehicleId" property="vehicleId"/>
+  	    <result column="vehicleIdOther" property="vehicleIdOther"/>
+  	    <result column="plateNo" property="plateNo"/>
+  	    <result column="vehicleTypeId" property="vehicleTypeId"/>
+  	    <result column="equipmentPn" property="equipmentPn"/>
+  	    <result column="deptId" property="deptId"/>
+  	    <result column="status" property="status"/>
+  	    <result column="loadRate" property="loadRate"/>
+  	    <result column="weigthUseFactor" property="weigthUseFactor"/>
+  	    <result column="swerveRadiusMin" property="swerveRadiusMin"/>
+  	    <result column="powerRate" property="powerRate"/>
+  	    <result column="vehicleInsideLength" property="vehicleInsideLength"/>
+  	    <result column="vehicleInsideWidth" property="vehicleInsideWidth"/>
+  	    <result column="vehicleInsideHeight" property="vehicleInsideHeight"/>
+  	    <result column="vehicleWeightMax" property="vehicleWeightMax"/>
+  	    <result column="carryWeigthMax" property="carryWeigthMax"/>
+  	    <result column="vehicleLength" property="vehicleLength"/>
+  	    <result column="creater" property="creater"/>
+  	    <result column="createTime" property="createTime"/>
+  	    <result column="updater" property="updater"/>
+  	    <result column="updateTime" property="updateTime"/>
+  	    <result column="remark" property="remark"/>
+  	    <result column="vehicleTypeName" property="vehicleTypeName"/>
+  	    <result column="driverId" property="driverId"/>
+  	    <collection property="carryTypes" javaType="java.util.List" ofType="java.util.Map" >
+  	        <result column="carryTypeId" property="carryTypeId"/>
+  	        <result column="carryTypeName" property="carryTypeName"/>
+  	    </collection>
+  	</resultMap>
+    
+    <!--新增-->
+    <insert id="add" parameterType="com.chainway.dispatchercore.dto.Vehicle" useGeneratedKeys="true"  keyProperty="vehicleId" >
+        INSERT INTO t_vehicle (
+			vehicle_id_other,
+			plate_no,
+			vehicle_type_id,
+			equipment_pn,
+			dept_id,
+			STATUS,
+			load_rate,
+			weigth_use_factor,
+			swerve_radius_min,
+			power_rate,
+			vehicle_inside_length,
+			vehicle_inside_width,
+			vehicle_inside_height,
+			vehicle_weight_max,
+			carry_weigth_max,
+			vehicle_length,
+			create_time,
+			creater,
+			update_time,
+			updater,
+			remark
+		)
+		VALUES
+			(#{vehicleIdOther},#{plateNo},#{vehicleTypeId},#{equipmentPn},#{deptId},#{status},#{loadRate},
+			#{weigthUseFactor},#{swerveRadiusMin},#{powerRate},#{vehicleInsideLength},#{vehicleInsideWidth},#{vehicleInsideHeight},
+			#{vehicleWeightMax},#{carryWeigthMax},#{vehicleLength},UTC_TIMESTAMP(),#{creater},UTC_TIMESTAMP(),#{updater},#{remark});
+    </insert>
+    
+    <!--新增车辆与载货类型关系  -->
+    <insert id="addVehicleCarryTypeRel" parameterType="java.util.Map"  >
+        INSERT INTO t_vehicle_carry_type_dict_rel(
+			vehicle_id,
+			carry_type_id,
+			create_time,
+			update_time 
+		)
+		VALUES
+		<foreach collection="carryTypeIds" item="carryTypeId" index="index" separator="," >  
+			(#{vehicleId},#{carryTypeId},UTC_TIMESTAMP(),UTC_TIMESTAMP())  
+		</foreach> 
+    </insert>
+    
+    <!--删除车辆与载货类型关系  -->
+    <delete id="deleteVehicleCarryTypeRel" parameterType="java.lang.Integer">
+       delete from t_vehicle_carry_type_dict_rel where vehicle_id=#{vehicleId}
+    </delete>
+    
+    <!--查询单个车辆  -->
+    <select id="getVehicle" parameterType="java.util.Map" resultMap="vehicleResult" >
+        SELECT
+			<include refid="Base_Column_List"/>,
+			t3.carry_type_id carryTypeId,
+			t4.carry_type_name carryTypeName,
+			t5.name vehicleTypeName,
+			t6.driver_id driverId
+		FROM
+			t_vehicle t1
+		LEFT JOIN t_dept t2 ON t1.dept_id = t2.id
+		LEFT JOIN t_vehicle_carry_type_dict_rel t3 ON t1.vehicle_id = t3.vehicle_id 
+		LEFT JOIN t_vehicle_carry_type_dict t4 ON t3.carry_type_id=t4.carry_type_id
+		LEFT JOIN t_vehicle_type_dict t5 on t1.vehicle_type_id=t5.id
+		LEFT JOIN t_driver t6 on t1.vehicle_id=t6.vehicle_id
+		WHERE
+			t1.status = 1
+		<if test="deptDNA!=null and deptDNA!=''">
+		    AND t2.dna LIKE CONCAT(#{deptDNA},'%') 
+		</if>
+		AND t1.vehicle_id = #{vehicleId}
+    </select>
+    
+    <!--查询车辆列表 -->
+    <select id="getVehicleList" parameterType="java.util.Map" resultMap="vehicleResult">
+        SELECT
+			<include refid="Base_Column_List"/>,
+			t3.carry_type_id carryTypeId,
+			t4.carry_type_name carryTypeName,
+			t5.name vehicleTypeName
+		FROM
+			t_vehicle t1
+		LEFT JOIN t_dept t2 ON t1.dept_id = t2.id
+		LEFT JOIN t_vehicle_carry_type_dict_rel t3 ON t1.vehicle_id = t3.vehicle_id 
+		LEFT JOIN t_vehicle_carry_type_dict t4 ON t3.carry_type_id=t4.carry_type_id
+		LEFT JOIN t_vehicle_type_dict t5 on t1.vehicle_type_id=t5.id
+		WHERE
+		 t1.status = 1
+		AND t2.dna LIKE CONCAT(#{deptDNA},'%')
+		<if test="null!=vehicleId and vehicleId !=''">
+		    AND t1.vehicle_id = #{vehicleId}
+		</if>
+		<if test="null!=vehicleTypeId and vehicleTypeId !=''">
+		    AND t1.vehicle_type_id = #{vehicleTypeId}
+		</if>
+		<if test="null!=equipmentPn and equipmentPn !=''">
+		    AND t1.equipment_pn like CONCAT('%',#{equipmentPn},'%') 
+		</if>
+		<if test="null!=plateNo and plateNo!=''">
+		    AND t1.plate_no like CONCAT('%',#{plateNo},'%')  
+		</if>
+    </select>
+    
+    <!--查询车辆列表总数  -->
+    <select id="getVehicleListCount" parameterType="java.util.Map" resultType="java.lang.Integer">
+		SELECT
+			count(1)
+		FROM
+			(
+				 SELECT
+					count(1)
+				FROM
+					t_vehicle t1
+				LEFT JOIN t_dept t2 ON t1.dept_id = t2.id
+				LEFT JOIN t_vehicle_carry_type_dict_rel t3 ON t1.vehicle_id = t3.vehicle_id 
+				LEFT JOIN t_vehicle_carry_type_dict t4 ON t3.carry_type_id=t4.carry_type_id
+				LEFT JOIN t_vehicle_type_dict t5 on t1.vehicle_type_id=t5.id
+				WHERE
+				 t1.status = 1
+				 AND t2.dna LIKE CONCAT(#{deptDNA},'%')
+				<if test="null!=vehicleId and vehicleId !=''">
+				    AND t1.vehicle_id = #{vehicleId}
+				</if>
+				<if test="null!=vehicleTypeId and vehicleTypeId !=''">
+				    AND t1.vehicle_type_id = #{vehicleTypeId}
+				</if>
+				<if test="null!=equipmentPn and equipmentPn !=''">
+				    AND t1.equipment_pn like CONCAT('%',#{equipmentPn},'%') 
+				</if>
+				<if test="null!=plateNo and plateNo!=''">
+				    AND t1.plate_no like CONCAT('%',#{plateNo},'%')  
+				</if>
+				 GROUP BY t1.vehicle_id
+			) temp1
+    </select>
+        
+    
+    <!--修改  -->
+    <update id="update" parameterType="com.chainway.dispatchercore.dto.Vehicle">
+         update t_vehicle  
+        <set>  
+            <if test="plateNo!=null and plateNo!=''" >plate_no=#{plateNo},</if>  
+            <if test="equipmentPn!=null and equipmentPn!=''">equipment_pn=#{equipmentPn},</if>     
+            <if test="vehicleTypeId!=null and vehicleTypeId!=''">vehicle_type_id=#{vehicleTypeId},</if>  
+            <if test="vehicleWeightMax!=null and vehicleWeightMax!=''">vehicle_weight_max=#{vehicleWeightMax},</if>  
+            <if test="vehicleLength!=null and vehicleLength!=''">vehicle_length=#{vehicleLength},</if>  
+            <if test="vehicleInsideLength!=null and vehicleInsideLength!=''">vehicle_inside_length=#{vehicleInsideLength},</if>  
+            <if test="vehicleInsideWidth!=null and vehicleInsideWidth!=''">vehicle_inside_width=#{vehicleInsideWidth},</if>  
+            <if test="vehicleInsideHeight!=null and vehicleInsideHeight!=''">vehicle_inside_height=#{vehicleInsideHeight},</if>  
+            <if test="carryWeigthMax!=null and carryWeigthMax!=''">carry_weigth_max=#{carryWeigthMax},</if>  
+            <if test="weigthUseFactor!=null and weigthUseFactor!=''">weigth_use_factor=#{weigthUseFactor},</if>  
+            <if test="swerveRadiusMin!=null and swerveRadiusMin!=''">swerve_radius_min=#{swerveRadiusMin},</if>  
+            <if test="powerRate!=null and powerRate!=''">power_rate=#{powerRate},</if>
+            <if test="updater!=null and updater!=''">updater=#{updater},</if>  
+            <if test="remark!=null and remark!=''">remark=#{remark},</if>  
+            <if test="imageUrl!=null and imageUrl!=''">image_url=#{imageUrl},</if>  
+            update_time=UTC_TIMESTAMP()
+        </set>  
+        where vehicle_id=#{vehicleId} 
+    </update>
+    
+    <!--删除 -->
+    <update id="delete" parameterType="java.lang.Integer">
+        UPDATE  t_vehicle set `status` =2 WHERE vehicle_id=#{vehicleId}
+    </update>
+    
+    <select id="getCommonVehicles" parameterType="java.util.Map" resultType="java.util.Map">
+        SELECT
+			 t1.vehicle_id  vehicleId,  t1.plate_no plateNo, 
+			 t1.vehicle_type_id vehicleTypeId, t3.name vehicleTypeName,
+	         t1.equipment_pn equipmentPn,
+	         (select driver_id from t_driver t where t.vehicle_id =t1.vehicle_id) as selectDriverId 
+		FROM
+			t_vehicle t1
+		LEFT JOIN t_dept t2 ON t1.dept_id = t2.id
+		LEFT JOIN t_vehicle_type_dict t3 on t1.vehicle_type_id=t3.id
+		WHERE
+		 t1.status = 1
+		AND t2.dna LIKE CONCAT(#{deptDNA},'%')
+    </select>
+</mapper>

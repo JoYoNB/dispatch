@@ -1,0 +1,63 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+	<meta name="apple-mobile-web-app-capable" content="yes">
+	<meta name="apple-mobile-web-app-status-bar-style" content="black">
+	<title></title>
+	<link rel="stylesheet" href="css/mui.min.css">
+	<link rel="stylesheet" href="css/index.css">
+</head>
+<body>
+	<header class="mui-bar mui-bar-nav ct-bar">
+		<a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"></a>
+		<h1 class="mui-title ct-title">新建站点</h1>
+	</header>
+	<div class="mui-content ct-content ct-create-order">
+		<div class="ct-inner-wrap">
+			<div class="ct-map-wrapper">
+				<div class="ct-map-full" id="myMap"></div>
+				<a href="javascript:;" class="map-center" id="J_mapCenter"><i class="ifont ifont-dingwei"></i></a>
+			</div>
+			<div class="ct-position-wrap" id="J_positionWrap">
+				<div class="ct-posi-item">
+					<div class="ct-input-label">站点名称 <span class="red">*</span></div>
+					<div class="ct-input-control"><input type="text" name="address" placeholder="请输入站点名称" id="J_siteName"></div>
+				</div>
+				<div class="ct-posi-item">
+					<div class="address-name" id="J_curPositionBox">
+						<i class="icon icon-order-start"></i>
+						<i class="ifont ifont-jiantou"></i>
+						<div class="name" id="J_curPositionTitle"></div>
+					</div>
+				</div>
+				<div class="ct-posi-item">
+					<div class="ct-input-label">详细地址 <span class="red">*</span></div>
+					<div class="ct-input-control"><input type="text" name="address" placeholder="请输入详细地址" id="J_curPosition"></div>
+				</div>
+				<div class="ct-posi-item">
+					<div class="mui-row">
+						<div class="mui-col-xs-5 contact">
+							<div class="ct-input-label">联系人 <span class="red">*</span></div>
+							<div class="ct-input-control"><input type="text" name="name" placeholder="请输入姓名" id="J_name"></div>
+						</div>
+						<div class="mui-col-xs-7 phono">
+							<div class="ct-input-label">手机 <span class="red">*</span></div>
+							<div class="ct-input-control"><input type="text" name="phone" placeholder="请输入手机" id="J_phone" maxlength="11"></div>
+							<a href="javascript:;" class="phonoA hide" id="J_phoneContact"><i class="ifont ifont-contact"></i></a>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="ct-content-bottom">
+		<div class="btn_0" id="J_save">保存</div>
+	</div>
+	<script src="js/mui.min.js"></script>
+	<script src="js/common/common.js"></script>
+	<script src="js/map/BMap.js"></script>
+	<script src="js/siteAdd.js"></script>
+</body>
+</html>

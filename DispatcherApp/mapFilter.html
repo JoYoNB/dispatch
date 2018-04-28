@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black">
+<title>卡友帮配送</title>
+<link rel="stylesheet" href="css/mui.min.css">
+<link rel="stylesheet" href="css/app.css">
+</head>
+<body>
+<header class="mui-bar mui-bar-nav">
+	<span class="right-act status-reset left"><a>重置</a></span>
+	<h1 class="mui-title main-title filter-header-title">过滤</h1>
+	<span class="right-act status-sure right"><a>确定</a></span>
+</header>
+<div class="mui-content filter-content">
+	<div class="filter-title">状态过滤</div>
+	<ul>
+	    <li class="filter-item">
+	       <label class="checkbox_list">
+				<input name="checkbox" class="empty" type="checkbox" data-type="empty">
+				<span><i class="filter-icon filter-empty-icon"></i>空载 (在线)</span>
+			</label>
+	    </li>
+	    <li class="filter-item">
+	       <label class="checkbox_list">
+				<input name="checkbox" class="half" type="checkbox" data-type="half"> 
+				<span><i class="filter-icon filter-half-icon"></i>半载 (在线)</span>
+			</label>
+	    </li>
+	    <li class="filter-item">
+	       <label class="checkbox_list">
+				<input name="checkbox" class="full" type="checkbox" data-type="full">
+				<span><i class="filter-icon filter-full-icon"></i>满载 (在线)</span>
+			</label>
+	    </li>
+	    <li class="filter-item">
+	       <label class="checkbox_list">
+				<input name="checkbox" class="offline" type="checkbox" data-type="offline">
+				<span><i class="filter-icon filter-offline-icon"></i>空载/半载/满载 (离线)</span>
+			</label>
+	    </li>
+	    <li class="filter-item">
+	       <label class="checkbox_list">
+				<input name="checkbox" class="get_goods" type="checkbox" data-type="get_goods">
+				<span><i class="filter-icon filter-getGoods-icon"></i>订单提货点</span>
+			</label>
+	    </li>
+	</ul>
+</div>
+<script src="js/zepto.min.js"></script>
+<script src="js/mui.min.js"></script>
+<script src="js/comUtils.js"></script>
+<script src="js/dispMapControl/mapFilter.js"></script>
+</body>
+</html>

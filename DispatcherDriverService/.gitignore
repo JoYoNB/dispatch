@@ -1,0 +1,7 @@
+/target/
+/.settings/
+/.classpath
+/.project
+/build.properties
+/deploy/
+/bin/

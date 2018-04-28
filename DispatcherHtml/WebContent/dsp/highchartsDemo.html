@@ -1,0 +1,89 @@
+<!doctype html>
+<html lang="en">
+<head>
+<!--#include file="/layout/libs.html"-->
+
+<title>城市配送管理平台</title>
+</head>
+<body>
+	<div class="city-wrapper">
+		<!-- 公共header 开始 -->
+		<!--#include file="/layout/header.html"-->
+		<!-- 公共header 结束 -->
+		<div class="city-title-layout">
+			<div class="city-title">承运商首页</div>
+			<div class="city-logo"><a href="javascript:;" title="城市配送管理平台"><img src="/images/logo.png" alt=""></a></div>
+		</div>
+		<div class="city-main-scroll" style="background: #f7f7f7;">
+            <!-- 饼图 -->
+            <div id="pieWidget"></div>
+            <!-- 柱状图 -->
+            <div id="columnWidget"></div>
+            <!-- 双Y轴 -->
+            <div id="dualYWidget"></div>
+            
+		</div>
+		<!-- 底部 开始 -->
+		<!--#include file="/layout/footer.html"-->
+		<!-- 底部 结束 -->
+	</div>
+	
+<script type="text/javascript">
+$(function(){
+	var data=[{name:'IE',value:70},{name:'IE1',value:30}];
+	var pieWidget=$("#pieWidget").PieChartWidget({
+		//data:data,
+		title:"标题",
+		url:"/js/ui/pie.json",
+		type:"GET"
+	});
+	
+	var xData=['1','2','3','4','5','6','7','8','9','10','11','12'];
+	var yData=[
+		{
+			name:"柱状",
+			type:"column",
+			data:{"1":10,"2":20,"3":30,"7":70,"8":80}
+		},{
+			name:"折线",
+			type:"spline",
+			data:{"1":10,"2":20,"3":30,"7":70,"8":80}
+		}
+	];
+	var columnWidget=$("#columnWidget").ColumnChartWidget({
+		title:"标题",
+		//xData:xData,
+		//yData:yData
+		url:"/js/ui/charts.json",
+		type:"GET",
+		yInterval:1000
+	});
+	
+	var xData1=['1','2','3','4','5','6','7','8','9','10','11','12'];
+	var yData1=[{
+			name:"温度",
+			type:"spline",
+			data:{"1":7.0, "2":6.9, "3":9.5, "4":14.5, "5":18.2,  "7":25.2, "8":26.5, "9":23.3, "10":18.3, "11":13.9, "12":9.6}
+		},{
+			name:"降雨量",
+			type:"column",
+			data:{"1":49.9, "2":71.5, "3":106.4, "4":129.2, "5":144.0, "6":176.0,  "8":148.5, "9":216.4, "10":194.1, "11":95.6, "12":54.4}
+	}];
+	var dualYWidget=$("#dualYWidget").DualYAxisChartWidget({
+		/*多个Y轴的配置*/
+		yAxis:[{
+			unit:"￥",
+			name:"工资"
+		},{
+			unit:"天",
+			name:"上班天数"
+		}],
+		//xData:xData1,
+		//yData:yData1
+		url:"/js/ui/dualCharts.json",
+		type:"GET",
+	});
+});
+</script>
+</body>
+</html>

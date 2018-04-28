@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!-- namespace命名规则: 表对应java类的名称-->
+<mapper namespace="com.chainway.dispatcherservice.biz.dao.FeedbackDao">
+
+	<insert id="add" parameterType="java.util.Map">
+		INSERT INTO `t_feedback`(
+			feedback,
+			phone,
+			email,
+			creater,
+			create_time
+		)
+		VALUES
+			(
+				#{feedback},
+				#{phone},
+				#{email},
+				#{creater},
+				UTC_TIMESTAMP()
+			);
+	</insert>
+</mapper>

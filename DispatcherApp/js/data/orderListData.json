@@ -1,0 +1,38 @@
+{
+	"code":0,
+	"data":[
+		{
+			"orderId": "1",
+            "startAddress":"startAddress1",
+            "endAddress":"endAddress1",
+            "distance":"20",
+            "goodsTypeName":"goodsTypeName1",
+            "goodsNum":"goodsNum1",
+            "vehicleTypeName":"vehicleTypeName1",
+            "cost":"20",
+            "loadData":"20"
+		},
+		{
+			"orderId": "2",
+            "startAddress":"startAddress2",
+            "endAddress":"endAddress2",
+            "distance":"50",
+            "goodsTypeName":"goodsTypeName2",
+            "goodsNum":"goodsNum2",
+            "vehicleTypeName":"vehicleTypeName2",
+            "cost":"80",
+            "loadData":"100"
+		},
+		{
+			"orderId": "3",
+            "startAddress":"startAddress3",
+            "endAddress":"endAddress3",
+            "distance":"90",
+            "goodsTypeName":"goodsTypeName3",
+            "goodsNum":"goodsNum3",
+            "vehicleTypeName":"vehicleTypeName3",
+            "cost":"90",
+            "loadData":"50"
+		}
+	]
+}

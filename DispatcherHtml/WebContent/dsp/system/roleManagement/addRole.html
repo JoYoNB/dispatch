@@ -1,0 +1,136 @@
+<!doctype html>
+<html lang="en">
+<head>
+<!--#include file="/layout/libs.html"-->
+<title>城市配送管理平台</title>
+</head>
+<body>
+	<div class="city-wrapper">
+		<!-- 公共header 开始 -->
+		<!--#include file="/layout/header.html"-->
+		<!-- 公共header 结束 -->
+		
+		<div class="city-title-layout">
+			<div class="city-title">新增角色</div>
+			<div class="city-logo"><a href="javascript:;" title="城市配送管理平台"><img src="/images/logo.png" alt=""></a></div>
+		</div>
+		<div class="city-main-scroll">
+			<div class="city-main">
+				<ul class="city-form">
+					<li class="city-form-item clearfix">
+						<div class="city-form-tip"><i class="must-icon">*</i>角色名称：</div>
+						<input id="name" type="text" class="city-ipt-text edit-ipt-len" placeholder="请输入角色名称">
+					</li>
+					<li class="city-form-item clearfix">
+						<div class="city-form-tip">部门：</div>
+						<div id="deptWidget"></div>
+					</li>
+					<li class="city-form-item clearfix">
+						<div class="city-form-tip">备注：</div>
+						<textarea id="remark" class="city-textarea" placeholder="请输入备注内容"></textarea>
+					</li>
+					<li class="city-form-item clearfix">
+						<div class="city-form-tip">权限分配：</div>
+						<div class="edit-authority">
+						<div id="treeWidget" class="authority-select">
+							<!--  
+							<ul>
+								<li>
+									<div class="level-box">
+										<span class="toggle-level-box"><i class="icon icon-arrDown-fill"></i></span>
+										<label class="city-ipt-label"><input type="checkbox"><i class="city-ipt-checkbox"></i>地图模块</label>
+									</div>
+									<ul>
+										<li><div class="level-box">
+											<span class="toggle-level-box"><i class="icon icon-arrDown-fill"></i></span>
+											<label class="city-ipt-label"><input type="checkbox"><i class="city-ipt-checkbox"></i>地图管理</label></div>
+											<ul>
+												<li><div class="level-box">
+													<span class="toggle-level-box"><i class="icon icon-arrDown-fill"></i></span>
+													<label class="city-ipt-label"><input type="checkbox"><i class="city-ipt-checkbox"></i>位置管理</label></div>
+													<ul>
+														<li><div class="level-box">
+															<label class="city-ipt-label"><input type="checkbox"><i class="city-ipt-checkbox"></i>查找车辆</label></div>
+														</li>
+														<li><div class="level-box">
+															<label class="city-ipt-label"><input type="checkbox"><i class="city-ipt-checkbox"></i>定位车辆</label></div>
+														</li>
+														<li><div class="level-box">
+															<label class="city-ipt-label"><input type="checkbox"><i class="city-ipt-checkbox"></i>关注车辆</label></div>
+													    </li>
+													</ul>
+												</li>
+											</ul>
+										</li>
+									</ul>
+								</li>
+								<li><div class="level-box">
+									<span class="toggle-level-box"><i class="icon icon-arrDown-fill"></i></span>
+									<label class="city-ipt-label"><input type="checkbox"><i class="city-ipt-checkbox"></i>轨迹回放功能</label></div>
+									<ul>
+										<li><div class="level-box close-child">
+											<span class="toggle-level-box"><i class="icon icon-arrLeft-fill"></i></span>
+											<label class="city-ipt-label"><input type="checkbox"><i class="city-ipt-checkbox"></i>轨迹回放功能</label></div>
+											<ul>
+												<li><div class="level-box">
+													<label class="city-ipt-label"><input type="checkbox"><i class="city-ipt-checkbox"></i>查找车辆</label></div>
+												</li>
+												<li><div class="level-box">
+													<label class="city-ipt-label"><input type="checkbox"><i class="city-ipt-checkbox"></i>定位车辆</label></div>
+												</li>
+											</ul>
+										</li>
+									</ul>
+								</li>
+								<li><div class="level-box close-child">
+									<span class="toggle-level-box"><i class="icon icon-arrLeft-fill"></i></span>
+									<label class="city-ipt-label"><input type="checkbox"><i class="city-ipt-checkbox"></i>轨迹回放功能</label></div>
+									<ul>
+										<li><div class="level-box">
+											<label class="city-ipt-label"><input type="checkbox"><i class="city-ipt-checkbox"></i>查找车辆</label></div>
+										</li>
+										<li><div class="level-box">
+											<label class="city-ipt-label"><input type="checkbox"><i class="city-ipt-checkbox"></i>定位车辆</label></div>
+										</li>
+										<li><div class="level-box">
+											<label class="city-ipt-label"><input type="checkbox"><i class="city-ipt-checkbox"></i>关注车辆</label></div>
+									    </li>
+									</ul>
+								</li>
+								<li><div class="level-box close-child">
+									<span class="toggle-level-box"><i class="icon icon-arrLeft-fill"></i></span>
+									<label class="city-ipt-label"><input type="checkbox"><i class="city-ipt-checkbox"></i>轨迹回放功能</label></div>
+									<ul>
+										<li><div class="level-box">
+											<label class="city-ipt-label"><input type="checkbox"><i class="city-ipt-checkbox"></i>查找车辆</label></div>
+										</li>
+										<li><div class="level-box">
+											<label class="city-ipt-label"><input type="checkbox"><i class="city-ipt-checkbox"></i>定位车辆</label></div>
+										</li>
+										<li><div class="level-box">
+											<label class="city-ipt-label"><input type="checkbox"><i class="city-ipt-checkbox"></i>关注车辆</label></div>
+									    </li>
+									</ul>
+								</li>
+							</ul>
+							-->
+							
+						</div>
+					</div>
+					</li>
+					<li class="city-form-item clearfix">
+						<div class="city-form-tip">&nbsp;</div>
+						<a id="saveBtn" href="javascript:void(0);" class="city-btn active">保存</a>
+						<a href="/dsp/system/roleManagement/roleList.html" class="city-btn">取消</a>
+					</li>
+				</ul>
+			</div>
+		</div>
+		<!-- 底部 开始 -->
+		<!--#include file="/layout/footer.html"-->
+		<!-- 底部 结束 -->
+	</div>
+
+<script type="text/javascript" src="/js/system/roleManagement/addRole.js"></script>
+</body>
+</html>

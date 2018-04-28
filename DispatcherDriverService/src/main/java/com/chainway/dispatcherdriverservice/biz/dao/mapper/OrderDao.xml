@@ -1,0 +1,232 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.chainway.dispatcherdriverservice.biz.dao.OrderDao">
+    
+    <!--订单列表-->
+    <select id="getOrderList" parameterType="java.util.Map" resultType="java.util.Map">
+        SELECT
+			t1.order_no AS orderNo,
+			t1.distance,
+			t1.order_status orderStatus,
+			t1.create_time AS createTime,
+			t3.`name` AS goodsTypeName,
+			t1.package_num AS packageNum,
+			t1.volume,
+			t1.weight,
+			t1.fee,
+		    t1.sender_name as senderName,
+		    t1.pre_pickup_time as prePickupTime,
+		    t1.remark,
+			(SELECT NAME FROM t_site WHERE id = t1.start_site_id ) AS startSiteName,
+			(SELECT NAME FROM t_site WHERE id = t1.end_site_id ) AS endSiteName
+		FROM
+			t_order t1
+		INNER JOIN t_order_vehicle_rel t2 ON t1.order_no = t2.order_no
+		LEFT JOIN t_goods_type_dict t3 ON t1.goods_type = t3.id
+		WHERE t1.status=1
+		<if test="orderStatusList!=null">
+		    <foreach collection="orderStatusList" item="orderStatus" open=" AND t1.order_status IN (" close=")" separator="," >
+			  #{orderStatus} 
+			</foreach>
+		</if>
+		AND t2.driver_id =#{driverId}
+		ORDER BY t1.order_no desc
+		<if test="pageSize!=null and pageSize>0">
+			limit #{offset},#{pageSize}
+		</if>
+    </select>
+    <!--订单列表总数  -->
+    <select id="getOrderListCount" parameterType="java.util.Map" resultType="java.lang.Integer">
+        SELECT
+			count(1)
+		FROM
+			t_order t1
+		INNER JOIN t_order_vehicle_rel t2 ON t1.order_no = t2.order_no
+		LEFT JOIN t_goods_type_dict t3 ON t1.goods_type = t3.id
+		WHERE t1.status=1
+		<if test="orderStatusList!=null">
+		    <foreach collection="orderStatusList" item="orderStatus" open=" AND t1.order_status IN (" close=")" separator="," >
+			  #{orderStatus} 
+			</foreach>
+		</if>
+		AND t2.driver_id =#{driverId}
+    </select>
+    
+    <resultMap type="java.util.Map" id="orderInfoMap">
+        <result column="orderNo" property="orderNo"/>
+        <result column="goodsTypeName" property="goodsTypeName"/>
+        <result column="startSiteName" property="startSiteName"/>
+        <result column="endSiteName" property="endSiteName"/>
+        <result column="fee" property="fee"/>
+        <result column="createTime" property="createTime"/>
+        <result column="distance" property="distance"/>
+        <result column="orderStatus" property="orderStatus"/>
+        <result column="packageNum" property="packageNum"/>
+        <result column="prePickupTime" property="prePickupTime"/>
+        <result column="remark" property="remark"/>
+        <result column="senderName" property="senderName"/>
+        <result column="senderPhone" property="senderPhone"/>
+        <result column="vehicleOtherId" property="vehicleOtherId"/>
+        <result column="pickupTime" property="pickupTime"/>
+        <result column="finishTime" property="finishTime"/>
+        <result column="endSiteId" property="endSiteId"/>
+        <result column="comfirmTime" property="comfirmTime"/>
+        <result column="vehicleNo" property="vehicleNo"/>
+        <result column="driverName" property="driverName"/>
+        <result column="driverPhone" property="driverPhone"/>
+        <result column="deptName" property="deptName"/>
+  	    <collection property="orderSites" javaType="java.util.List" ofType="java.util.Map" >
+  	        <result column="siteId" property="siteId"/>
+  	        <result column="siteName" property="siteName"/>
+  	        <result column="linkMan" property="linkMan"/>
+  	        <result column="linkPhone" property="linkPhone"/>
+  	        <result column="idxNo" property="idxNo"/>
+  	        <result column="coordinate" property="coordinate"/>
+  	        <result column="uploadPackageNum" property="uploadPackageNum"/>
+  	        <result column="unloadWeight" property="unloadWeight"/>
+  	        <result column="unloadVolume" property="unloadVolume"/>
+  	        <result column="arrivedTime" property="arrivedTime"/>
+  	        <result column="loadStatus" property="loadStatus"/>
+  	        <result column="address" property="address"/>
+  	    </collection>
+    </resultMap>
+    
+    <!--订单详情-->
+    <select id="getOrderInfo" parameterType="java.util.Map" resultMap="orderInfoMap">
+        SELECT
+			t1.order_no as orderNo,
+			t4.name as goodsTypeName,
+			(SELECT NAME FROM t_site WHERE id = t1.start_site_id ) AS startSiteName,
+			(SELECT NAME FROM t_site WHERE id = t1.end_site_id ) AS endSiteName,
+			t1.fee,t1.create_time AS createTime,
+			t1.distance,
+			t1.order_status orderStatus,
+			t1.package_num as packageNum,
+			t1.pre_pickup_time as prePickupTime,
+			t1.remark,
+			t1.sender_name as senderName,
+			t1.sender_phone as senderPhone,
+			t1.comfirm_time comfirmTime,
+			t1.pickup_time as pickupTime,
+			t1.finish_time as finishTime,
+			t1.end_site_id endSiteId,
+			t2.site_id siteId,
+			t2.load_status loadStatus,
+			t2.site_name as siteName,
+			t2.link_man as linkMan,
+			t2.link_phone as linkPhone,
+			t2.idx_no as idxNo,
+			t2.coordinate,
+			t2.unload_package_num as uploadPackageNum,
+			t2.unload_weight as unloadWeight,
+			t2.unload_volume as unloadVolume,
+			t2.arrived_time as arrivedTime,
+			t2.address,
+			t5.vehicle_other_id as vehicleOtherId,
+			t5.vehicle_no vehicleNo,
+			t5.driver_name driverName,
+			t5.driver_phone driverPhone,
+			(SELECT name deptName FROM t_dept where id=t1.driver_dept) AS deptName
+		from t_order t1 
+		LEFT JOIN t_order_site t2 on t1.order_no=t2.order_no
+		LEFT JOIN t_site t3 on t2.site_id = t3.id
+		LEFT JOIN t_goods_type_dict t4 on t1.goods_type=t4.id
+		INNER JOIN t_order_vehicle_rel t5 ON t1.order_no = t5.order_no
+		WHERE t1.`status` = 1
+		AND t5.driver_id = #{driverId} 
+		AND t1.order_no = #{orderNo}
+		ORDER BY t2.idx_no asc
+    </select>
+    
+    <!--查询订单状态，并锁行  -->
+    <select id="getOrderStatusAndLock" parameterType="java.util.Map" resultType="int">
+		select order_status from t_order where order_no = ${orderNo} for update
+	</select>
+	
+	<!-- 记录订单操作信息 -->
+   <insert id="addOrderLifecycle" parameterType="com.chainway.dispatchercore.dto.OrderLifecycle">
+		INSERT INTO `t_order_lifecycle`(
+			`order_no` ,
+			`operation` ,
+			`operator` ,
+			`operate_time` ,
+			`ip` ,
+			`content`,
+			 order_status
+		)
+		VALUES
+			(
+				#{orderNo} ,
+				#{operation} ,
+				#{operatorId} ,
+				UTC_TIMESTAMP(),
+				#{ip} ,
+				#{content},
+				#{orderStatus}
+			)
+	</insert>
+	
+    <!--确认订单  -->
+    <update id="confirmOrder" parameterType="java.util.Map">
+		UPDATE t_order t1, t_order_vehicle_rel t2
+		SET 
+			 t1.order_status = '${@com.chainway.dispatchercore.common.OrderStatus@WAIT_FOR_PICK_UP}',
+			 t1.comfirm_time = UTC_TIMESTAMP()
+		WHERE t1.order_no = t2.order_no 
+		AND t1.order_status ='${@com.chainway.dispatchercore.common.OrderStatus@ASSIGNED}' 
+		AND t1.order_no=#{orderNo} 
+		AND  t2.driver_id=#{driverId}
+    </update>
+    
+    <!--提货 -->
+    <update id="pickup" parameterType="java.util.Map">
+		UPDATE t_order t1, t_order_vehicle_rel t2
+		SET  t1.order_status = '${@com.chainway.dispatchercore.common.OrderStatus@IN_TRANSIT}'
+		WHERE t1.order_no = t2.order_no 
+		AND t1.order_status ='${@com.chainway.dispatchercore.common.OrderStatus@WAIT_FOR_PICK_UP}' 
+		AND t1.order_no=#{orderNo} 
+		AND  t2.driver_id=#{driverId};
+		
+		UPDATE t_order_site
+		SET load_status = 1,
+		 arrived_time = UTC_TIMESTAMP()
+		WHERE
+			order_no =#{orderNo} 
+		AND site_id =#{siteId}
+    </update>
+    
+    <!--上传签单  -->
+    <update id="uploadReceipt" parameterType="java.util.Map">
+		UPDATE t_order_site SET 
+		  receipt_url = #{receiptUrl},
+		  receipt_remark = #{receiptRemark},
+		  arrived_time = UTC_TIMESTAMP()
+		WHERE
+			order_no = #{orderNo}
+		AND site_id = #{siteId}
+    </update>
+    
+   	<update id="finishOrder" parameterType="java.lang.String" >
+   	    UPDATE t_order 
+   	    	set order_status = com.chainway.dispatchercore.common.OrderStatus@FINISHED 
+   	    where order_no =#{orderNo}
+   	</update>
+    
+    <!--查看签单信息  -->
+   	<select id="getReceiptList" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT
+			receipt_url receiptUrl,
+			receipt_remark receiptRemark
+		FROM
+			t_order_site
+		WHERE
+			order_no = #{orderNo}
+		ORDER BY
+			idx_no ASC
+   	</select>
+   	<!-- 查询订单状态 -->
+   	<select id="getOrderStatus" parameterType="string" resultType="int">
+		select order_status from t_order where order_no = ${orderNo}
+	</select>
+</mapper>

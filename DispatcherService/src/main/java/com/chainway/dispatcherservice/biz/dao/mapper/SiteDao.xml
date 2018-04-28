@@ -1,0 +1,169 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!-- namespace命名规则: 表对应java类的名称 --> 
+<mapper namespace="com.chainway.dispatcherservice.biz.dao.SiteDao">
+
+	<delete id="deleteSiteById" parameterType="java.lang.Integer">
+		DELETE FROM t_site WHERE id=#{siteId}
+	</delete>
+
+	<select id="getSiteById" parameterType="java.util.Map"
+		resultType="java.util.Map">
+		SELECT s.id siteId,
+		s.`name` siteName,
+		d.`name` deptName,
+		l.name linkName,
+		l.phone linkPhone,
+		s.coordinate,
+		s.address
+		FROM t_site s
+		LEFT JOIN t_dept d ON d.`id` = s.dept_id
+		LEFT JOIN t_linkman l ON l.id = s.linkman_id
+		WHERE s.id=#{siteId}
+		AND d.dna LIKE CONCAT(#{deptDNA},'%')
+	</select>
+	
+	<insert id="createSite" parameterType="com.chainway.dispatcherservice.dto.SiteParam">
+		<selectKey order="AFTER" resultType="java.lang.Integer" keyProperty="siteId">
+			SELECT LAST_INSERT_ID() as siteId
+		</selectKey>
+		INSERT INTO t_site
+		(`name`,dept_id,linkman_id,coordinate,province_id,city_id,district_id,address,create_time)
+		VALUES(#{name},#{deptId},#{linkId},#{coordinate},#{provinceId},
+		#{cityId},#{districtId},#{address},UTC_TIMESTAMP())
+	</insert>
+	
+	<select id="getOrderNumBySiteId" parameterType="java.lang.Integer" resultType="java.lang.Integer">
+		SELECT COUNT(order_no) FROM t_order_site WHERE site_id=#{siteId}
+	</select>
+	
+	<update id="modifySite" parameterType="com.chainway.dispatcherservice.dto.SiteParam">
+		UPDATE t_site SET
+		<if test="name!=null and name!=''">
+			`name`=#{name},
+		</if>
+		<if test="deptId!=null and deptId!=''">
+			dept_id = #{deptId},
+		</if>
+		<if test="linkId!=null and linkId!=''">
+			linkman_id=#{linkId},
+		</if>
+		<if test="coordinate!=null and coordinate!=''">
+			coordinate=#{coordinate},
+		</if>
+		<if test="address!=null and address!=''">
+			address=#{address},	
+		</if>
+		id=#{siteId}
+		WHERE id=#{siteId}
+	</update>
+	
+	<insert id="createLinkMan" parameterType="com.chainway.dispatcherservice.dto.SiteParam">
+		<selectKey order="AFTER" resultType="java.lang.Integer" keyProperty="linkId">
+			SELECT LAST_INSERT_ID() as linkId
+		</selectKey>
+		INSERT INTO t_linkman (dept_id,`name`,phone)
+		VALUES(#{consignorDept},#{linkMan},#{linkPhone})
+	</insert>
+
+	<select id="getSiteList" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT s.id id,
+		s.`name` siteName,
+		d.`name` deptName,
+		l.id linkId,
+		l.name linkName,
+		l.phone linkPhone,
+		s.coordinate,
+		s.address,
+		s.`create_time` createTime,
+		s.province_id provinceId,
+		s.city_id cityId,
+		s.district_id districtId
+		FROM t_site s
+		LEFT JOIN t_dept d ON d.`id` = s.dept_id
+		LEFT JOIN t_linkman l ON l.id = s.linkman_id
+		WHERE 1=1
+		<if test="name!=null and name!=''">
+			AND s.name LIKE CONCAT(#{name},'%')
+		</if>
+		<if test="deptId!=null and deptId!=''">
+			AND d.id=#{deptId}
+		</if>
+		<if test="deptDNA!=null and deptDNA!=''">
+			AND d.`dna` LIKE CONCAT(#{deptDNA},'%')
+		</if>
+		<if test="linkMan!=null and linkMan!=''">
+			AND l.`name` LIKE CONCAT(#{linkMan},'%')
+		</if>
+		<if test="linkPhone!=null and linkPhone!=''">
+			AND l.`phone` LIKE CONCAT(#{linkPhone},'%')
+		</if>
+		<if test="downId!=null and downId!=''">
+			AND s.`id` <![CDATA[ > ]]> #{downId}
+		</if>
+		<if test="upId!=null and upId!=''">
+			AND s.`id` <![CDATA[ < ]]> #{upId}
+		</if>
+		<if test="limit==null or limit==''">
+			ORDER BY s.`create_time` DESC
+		</if>
+		<if test="limit!=null and limit!=''">
+			ORDER BY s.id DESC
+			<if test="downId==null or downId==''">
+				LIMIT #{limit}
+			</if>
+		</if>
+		<if test="pageSize!=null and offset!=null">
+			LIMIT #{offset},#{pageSize}
+		</if>
+	</select>
+	<select id="totalSiite" parameterType="java.util.Map"
+		resultType="java.lang.Integer">
+		SELECT count(*)
+		FROM t_site s
+		LEFT JOIN t_dept d ON d.`id` = s.dept_id
+		LEFT JOIN t_linkman l ON l.id = s.linkman_id
+		WHERE 1=1
+		<if test="name!=null and name!=''">
+			AND s.name LIKE CONCAT(#{name},'%')
+		</if>
+		<if test="deptId!=null and deptId!=''">
+			AND d.id=#{deptId}
+		</if>
+		<if test="deptDNA!=null and deptDNA!=''">
+			AND d.`dna` LIKE CONCAT(#{deptDNA},'%')
+		</if>
+		<if test="linkMan!=null and linkMan!=''">
+			AND l.`name` LIKE CONCAT(#{linkMan},'%')
+		</if>
+		<if test="linkPhone!=null and linkPhone!=''">
+			AND l.`phone` LIKE CONCAT(#{linkPhone},'%')
+		</if>
+	</select>
+	
+	<select id="getLinkMan" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT id linkId,`name`,phone
+		FROM t_linkman
+		WHERE 1=1
+		<if test="name!=null and name!=''">
+			AND `name` LIKE CONCAT(#{name},'%')
+		</if>
+		<if test="phone!=null and phone!=''">
+			AND phone LIKE CONCAT(#{phone},'%')
+		</if>
+		AND dept_id = #{deptId}
+	</select>
+	
+	<select id="getSiteForSelect" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT CONCAT(s.id,"@#$%",l.`name`,"@#$%",l.`phone`,"@#$%",s.coordinate,
+		"@#$%",s.district_id,"@#$%",s.address) id,s.`name` FROM t_site s
+		LEFT JOIN t_linkman l ON l.`id` = s.`linkman_id`
+		LEFT JOIN t_dept d ON d.`id` = s.`dept_id`
+		WHERE 1=1
+		<if test="deptDNA!=null and deptDNA!=''">
+			AND d.`dna` LIKE CONCAT(#{deptDNA},'%')
+		</if>
+	</select>
+</mapper>

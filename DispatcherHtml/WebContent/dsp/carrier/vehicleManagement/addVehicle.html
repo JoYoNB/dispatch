@@ -1,0 +1,79 @@
+<!doctype html>
+<html lang="en">
+<head>
+<!--#include file="/layout/libs.html"-->
+<title>城市配送管理平台</title>
+</head>
+<body>
+	<div class="city-wrapper">
+		<!-- 公共header 开始 -->
+		<!--#include file="/layout/carrierHeader.html"-->
+		<!-- 公共header 结束 -->
+		
+		<div class="city-title-layout">
+			<div class="city-title">新建车辆</div>
+			<div class="city-logo"><a href="javascript:;" title="城市配送管理平台"><img src="/images/logo.png" alt=""></a></div>
+		</div>
+		<div class="city-main-scroll">
+			<div class="city-main">
+				<ul class="city-form">
+					<li class="city-form-item clearfix">
+						<div class="city-form-tip"><i class="must-icon">*</i>车牌号：</div>	
+						<input id="plateNo" type="text" class="city-ipt-text w250" placeholder="请输入车牌号">
+					</li>
+					<li class="city-form-item clearfix">
+						<div class="city-form-tip"><i class="must-icon">*</i>设备PN：</div>
+						<input id="equipmentPn" type="text" class="city-ipt-text w250" placeholder="请输入设备PN">
+					</li>
+					<li class="city-form-item clearfix">
+						<div class="city-form-tip"><i class="must-icon">*</i>车辆类型：</div>
+						<div id="vehicleTypeWidget"></div>
+					</li>
+					<li class="city-form-item clearfix">
+						<div class="city-form-tip"><i class="must-icon">*</i>载货属性：</div>
+						<div class="ipt_box ipt-box-len" id="carryTypeWidget"></div>
+					</li>
+					<li class="city-form-item clearfix">
+						<div class="city-form-tip"><i class="must-icon">*</i>最大允许总质量(kg)：</div>
+						<input id="vehicleWeightMax" type="text" class="city-ipt-text w250" placeholder="请输入最大允许总质量">
+					</li>
+					<li class="city-form-item clearfix">
+						<div class="city-form-tip"><i class="must-icon">*</i>整车总长(mm)：</div>
+						<input id="vehicleLength" type="text" class="city-ipt-text w250" placeholder="请输入整车总长">
+					</li>
+					<li class="city-form-item clearfix">
+						<div class="city-form-tip"><i class="must-icon">*</i>货箱内部尺寸(长/宽/高)：</div>
+						<input id="size" type="text" class="city-ipt-text w250" placeholder="请输入货箱内部尺寸">
+					</li>
+					<li class="city-form-item clearfix">
+						<div class="city-form-tip"><i class="must-icon">*</i>载质量(kg)：</div>
+						<input id="carryWeigthMax" type="text" class="city-ipt-text w250" placeholder="请输入载质量">
+					</li>
+					<li class="city-form-item clearfix">
+						<div class="city-form-tip">载质量利用系数：</div>
+						<input id="weigthUseFactor" type="text" class="city-ipt-text w250" placeholder="请输入载质量利用系数">
+					</li>
+					<li class="city-form-item clearfix">
+						<div class="city-form-tip">车辆最小转弯直径(m)：</div>
+						<input id="swerveRadiusMin" type="text" class="city-ipt-text w250" placeholder="请输入车辆最小转弯直径">
+					</li>
+					<li class="city-form-item clearfix">
+						<div class="city-form-tip">比功率(kW/t)：</div>
+						<input id="powerRate" type="text" class="city-ipt-text w250" placeholder="请输入比功率">
+					</li>
+					<li class="city-form-item clearfix">
+						<div class="city-form-tip">&nbsp;</div>
+						<a id="saveBtn" href="javascript:void(0);" class="city-btn active">保存</a>
+						<a href="/dsp/carrier/vehicleManagement/vehicleList.html" class="city-btn">取消</a>
+					</li>
+				</ul>
+			</div>
+		</div>
+		
+		<!-- 底部 开始 -->
+		<!--#include file="/layout/footer.html"-->
+		<!-- 底部 结束 -->
+	</div>
+<script type="text/javascript" src="/js/carrier/vehicleManagement/addVehicle.js"></script>
+</body>
+</html>

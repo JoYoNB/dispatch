@@ -1,0 +1,25 @@
+{
+	"code":0,
+	"data":[
+		{
+         "id": 35,
+         "name": "承运商1",
+         "parentId": null,
+         "status": 1,
+         "dna": "35-",
+         "contacter": "王承运",
+         "phone": "454565657",
+         "email": "76567@345.com",
+         "creater": null,
+         "updater": null,
+         "createTime": null,
+         "thirdPartyDept": 109411,
+         "level": 1,
+         "parentName": null,
+         "isCarrier": null,
+         "isConsignor": null,
+         "isDual": null,
+         "role": null
+     }
+	]
+}

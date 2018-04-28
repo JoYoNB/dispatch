@@ -1,0 +1,41 @@
+<!doctype html>
+<html lang="en">
+<head>
+<!--#include file="/layout/libs.html"-->
+<title>城市配送管理平台</title>
+</head>
+<body>
+	<div class="city-wrapper">
+		<!-- 公共header 开始 -->
+		<!--#include file="/layout/header.html"-->
+		<!-- 公共header 结束 -->
+		<div class="city-title-layout">
+			<div class="city-title">承运商首页</div>
+			<div class="city-logo"><a href="javascript:;" title="城市配送管理平台"><img src="/images/logo.png" alt=""></a></div>
+		</div>
+		<div class="city-main-scroll" style="background: #f7f7f7;">
+            <div id="timeWidget"></div>
+		</div>
+		<!-- 底部 开始 -->
+		<!--#include file="/layout/footer.html"-->
+		<!-- 底部 结束 -->
+	</div>
+	
+<script type="text/javascript">
+$(function(){
+	// 日期调用
+    var timeWidget=$("#timeWidget").TimeWidget({
+    	//format:"yyyy-mm-dd",
+    	onSelected:function(value){
+    		//alert(value);
+    	}
+    });
+    
+    /* setTimeout(function(){
+    	timeWidget.setValue("2018-04-02 00:00:00");
+    },1000); */
+	
+});
+</script>
+</body>
+</html>

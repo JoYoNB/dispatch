@@ -1,0 +1,57 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<!--#include file="/layout/libs.html"-->
+	<title>城市配送管理平台</title>
+</head>
+<body>
+	<div class="city-wrapper">
+		<!-- 公共header 开始 -->
+		<!--#include file="/layout/header.html"-->
+		<!-- 公共header 结束 -->
+		<div class="city-title-layout">
+			<div class="city-title">订单详情</div>
+			<div class="city-logo"><a href="javascript:;" title="城市配送管理平台"><img src="../../../images/logo.png" alt=""></a></div>
+		</div>
+		<div class="city-main-scroll">
+			<div class="city-main">
+				<ul class="city-tap clearfix">
+					<li class="tap-item active"><a href="javascript:;" id="orderBtn">订单详情</a></li>
+					<li class="tap-item"><a href="javascript:;" id="transportBtn">物流详情</a></li>
+				</ul>
+				<div class="city-goods-details" id="orderDetail">
+					<p class="list"><span class="tip">订单编号：</span><span id="orderNo"></span></p>
+					<p class="list"><span class="tip">货物类型：</span><span id="goodsTypeName"></span></p>
+					<p class="list"><span class="tip">车辆类型：</span><span id="vehicleTypeName"></span></p>
+					<br>
+					<p class="list"><span class="tip">起点名称：</span><span id="startSiteName"></span></p>
+					<p class="list"><span class="tip">发货人：</span><span id="senderName"></span></p>
+					<br id="line">
+					<p class="list"><span class="tip">终点名称：</span><span id="endSiteName"></span></p>
+					<p class="list"><span class="tip">收货人：</span><span id="receiverName"></span></p>
+					<p class="list"><span class="tip">卸货量：</span><span id="unload"></span></p>
+					<br>
+					<p class="list"><span class="tip">提货时间：</span><span id="pickupTime"></span></p>
+					<p class="list"><span class="tip">结束时间：</span><span id="finishTime"></span></p>
+					<p class="list"><span class="tip">备注：</span><span id="remark"></span></p>
+					<br>
+					<p class="list"><span class="tip">配送企业：</span><span id="carrierName"></span></p>
+					<p class="list" id="vehicleDesc"><span class="tip">车牌号：</span><span id="plateNo"></span></p>
+					<p class="list" id="driverDesc"><span class="tip">驾驶员：</span><span id="driverName"></span></p>
+					<br>
+					<p class="list"><span class="tip">发布时间：</span><span id="publishTime"></span></p>
+					<p class="list" id="positionDesc"><span class="tip">当前位置：</span><span id="position"></span></p>
+					<br>
+				</div>
+				<ul class="city-transport-details" style="display: none;" id="transportDetail">
+				</ul>
+			</div>
+		</div>
+		<!-- 底部 开始 -->
+		<!--#include file="/layout/footer.html"-->
+		<!-- 底部 结束 -->
+	</div>
+	<script type="text/javascript" src="/js/carrier/orderMgmt/orderDetail.js"></script>
+	<script type="text/javascript" src="/js/OrderStatusUtil.js"></script>
+</body>
+</html>

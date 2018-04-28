@@ -1,0 +1,65 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<!--#include file="/layout/libs.html"-->
+	<title>城市配送管理平台</title>
+</head>
+<body>
+	<div class="city-wrapper">
+		<!-- 公共header 开始 -->
+		<!--#include file="/layout/header.html"-->
+		<!-- 公共header 结束 -->
+		<div class="city-title-layout">
+			<div class="city-title">订单详情</div>
+			<div class="city-logo"><a href="javascript:;" title="城市配送管理平台"><img src="../../../images/logo.png" alt=""></a></div>
+		</div>
+		<div class="city-main-scroll">
+			<div class="city-main city-table-search-active"><!-- city-table-search-active -->
+				<div class="city-search-title">
+					<ul class="city-tap clearfix" id="statusGroup">
+						<li class="tap-item active"><a data-status="1">全部</a></li>
+						<li class="tap-item"><a data-status="10">待发布</a></li>
+						<li class="tap-item"><a data-status="20">已发布</a></li>
+						<li class="tap-item"><a data-status="50">已分配</a></li>
+						<li class="tap-item"><a data-status="70">待提货</a></li>
+						<li class="tap-item"><a data-status="80">配送中</a></li>
+						<li class="tap-item"><a data-status="90">已结束</a></li>
+					</ul>
+					<div class="btns-box">
+						<a id="batchRelease" class="city-btn">发布</a> 
+						<a id="exportOrder" class="city-btn">导出</a>
+						<a id="batchDelete" class="city-btn">删除</a>
+						<a href="/dsp/consignor/order/orderAdd.html" class="city-btn active">新建</a>
+					</div>
+				</div>
+				<!-- 搜索区域 -->
+				<div class="select-box">
+				  	<span class="toggle-select clearfix">条件筛选 <i class="iconfont iconfont-arrow-b fr"></i></span>
+					<span class="change-status"><i class="iconfont iconfont-suo"></i></span>
+					<div class="search-area">
+						<div id="timeComboBox" class="ipt_box"></div>
+						<div class="ipt_box" id="startTimeWidget"></div>
+						<div class="ipt_box" id="endTimeWidget"></div>
+						<div class="ipt_box"><input id="startName" type="text" class="ipt_text ipt_text_search" placeholder="起点名称"></div>
+						<div class="ipt_box"><input id="middleOrEnd" type="text" class="ipt_text ipt_text_search" placeholder="配送点/终点"></div>
+						<div id="orderComboBox" class="ipt_box"></div>
+						<div class="ipt_box"><input id="orderCondition" type="text" class="ipt_text ipt_text_search" placeholder="条件输入"></div>
+						<div id="cargoComboBox" class="ipt_box"></div>
+						<div id="statusComboBox" class="ipt_box"></div>
+						<div class="ipt_box"><input id="queryList" type="button" class="ipt_submit" value="查询"></div>
+						<div class="ipt_box"><input id="reset" type="button" class=city-btn value="重置"></div>
+					</div>
+				</div>
+				<div class="city-table-main" id="tableWidget">
+					
+				</div>
+			</div>
+		</div>
+		<!-- 底部 开始 -->
+		<!--#include file="/layout/footer.html"-->
+		<!-- 底部 结束 -->
+	</div>
+	<script type="text/javascript" src="/js/consignor/order/orderList.js"></script>
+</body>
+</html>

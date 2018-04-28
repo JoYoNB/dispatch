@@ -1,0 +1,17 @@
+{
+	"code":0,
+	"msg":null,
+	"data":[{
+		"name":"土豆",
+		"value":10
+	},{
+		"name":"香芋",
+		"value":20
+	},{
+		"name":"鸡蛋",
+		"value":30
+	},{
+		"name":"豆腐",
+		"value":40
+	}]
+}

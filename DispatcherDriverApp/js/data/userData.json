@@ -1,0 +1,9 @@
+{
+	"data":{
+		"logo":"./images/tips_icon.png",
+		"company":"深圳成为智能",
+		"name":"李四",
+		"deptName":"产品研发",
+		"authStatus":false
+	}
+}

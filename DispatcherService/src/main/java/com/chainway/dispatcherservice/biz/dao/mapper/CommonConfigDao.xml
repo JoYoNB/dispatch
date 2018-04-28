@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!-- namespace命名规则: 表对应java类的名称-->
+<mapper namespace="com.chainway.dispatcherservice.biz.dao.CommonConfigDao">
+	
+	<select id="getCommonConfig" parameterType="com.chainway.dispatchercore.dto.CommonConfig" resultType="com.chainway.dispatchercore.dto.CommonConfig">
+		SELECT
+			`key` ,
+			`value` ,
+			i18n_key i18nKey,
+			type
+		FROM
+			t_common_config
+		WHERE key=#{key}
+	</select>
+	
+	<select id="getCommonConfigList" parameterType="java.util.Map" resultType="com.chainway.dispatchercore.dto.CommonConfig">
+		SELECT
+			`key` ,
+			`value` ,
+			i18n_key i18nKey,
+			type
+		FROM
+			t_common_config
+		where 1=1
+		<if test="keyList!=null">
+			and `key` in 
+			<foreach collection="keyList" item="obj" index="index" separator="," open="(" close=")">
+				#{obj}
+			</foreach>
+		</if>
+	</select>
+	
+</mapper>

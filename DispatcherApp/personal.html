@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black">
+<title>卡友帮配送</title>
+<link rel="stylesheet" href="css/mui.min.css">
+<link rel="stylesheet" href="css/app.css">
+</head>
+
+<body>
+<div class="mui-content personal-content">
+	<div class="mui-scroll-wrapper">
+		<div class="mui-scroll">
+			<div class="personal-header">
+				<div class="personal-details">
+					<span class="auth-icon" id="auth-icon"></span>
+					<span class="personal-logo" id="personal-logo"></span>
+					<div class="personal-msg">
+						<h3 class="company" id="company">--</h3>
+						<p><span class="name" id="name">--</span> | <span class="deptName" id="deptName">--</span></p>
+					</div>
+					<span class="edit-personal-msg"></span>
+				</div>
+				<div class="personal-num-show hide" id="consignor-num-show">
+					<ul>
+						<li class="orderNum"><span>订单量</span><span class="num" id="orderNum">-x-</span></li>
+						<li class="goodsAmount"><span>货物量</span><span class="num" id="goodsAmount">-x-</span></li>
+					</ul>
+				</div>
+				<div class="personal-num-show hide" id="carrier-num-show">
+					<ul>
+						<li class="orderNum"><span>订单量</span><span class="num" id="orderNum">--</span></li>
+						<li class="fPoint"><span>准点率</span><span class="num" id="fPoint">--</span></li>
+						<li class="full"><span>货物完整率</span><span class="num" id="full">--</span></li>
+					</ul>
+				</div>
+			</div>
+			<div class="personal-menu">
+				<ul class="mui-table-view">
+				    <li class="mui-table-view-cell hide">
+				        <a class="mui-navigate-right" data-name="vehicleManage.html" id="vehicleManage">车辆管理</a>
+				    </li>
+				    <li class="mui-table-view-cell hide">
+				        <a class="mui-navigate-right" data-name="driverManage.html" id="driverManage">司机管理</a>
+				    </li>
+				    <li class="mui-table-view-cell hide">
+				        <a class="mui-navigate-right" data-name="siteList.html" id="siteManage">站点管理</a>
+				    </li>
+				</ul>
+			</div>
+			<div class="personal-menu">
+				<ul class="mui-table-view">
+				    <li class="mui-table-view-cell">
+				        <a class="mui-navigate-right" data-name="suggest.html">意见反馈</a>
+				    </li>
+				    <li class="mui-table-view-cell">
+				        <a class="mui-navigate-right" data-name="setAbout.html">关于我们</a>
+				    </li>
+				</ul>
+			</div>
+		</div>
+	</div>
+</div>
+<script src="js/zepto.min.js"></script>
+<script src="js/mui.min.js"></script>
+<script src="js/comUtils.js"></script>
+<script src="js/common.js"></script>
+<script src="js/personal.js"></script>
+
+</body>
+</html>

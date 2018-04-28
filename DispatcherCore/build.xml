@@ -1,0 +1,35 @@
+<project name="DispatcherCore" default="jar" xmlns:ivy="antlib:org.apache.ivy.ant">
+	<property file="build.properties"/>
+	<property name="dir.classes" value="target/classes" />
+	<property name="dir.src" value="src/main/java" />
+	<property name="dir.app.config" value="src/main/config" />
+	<property name="project.name" value="${project.name}" />
+	
+	<path id="project.class.path">
+		<fileset dir="${tomcat.home}/lib">
+			<include name="*.jar" />
+		</fileset>
+	</path>
+	
+	<target name="compile">
+		<javac debug="true" deprecation="true" destdir="${dir.classes}" nowarn="false" source="1.8" target="1.8" includeantruntime="false">
+			<src path="${dir.src}" />
+			<classpath refid="project.class.path" />
+		</javac>
+		<copy todir="${dir.classes}">
+			<fileset dir="${dir.src}">
+				<exclude name="**/*.java"/>
+			</fileset>
+		</copy>
+	</target>
+	<!-- 本身工程的jar -->
+	<target name="jar" depends="compile">
+		<jar destfile="${project.lib.dir}/${project.name}.jar">
+			<fileset dir="${dir.classes}">
+			    <include name="com/**"/>
+			</fileset>
+		</jar>
+	</target>
+	
+	
+</project>

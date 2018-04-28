@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.chainway.dispatcherdriverservice.biz.dao.CommonDao">
+    <update id="updateVehicleLoadRate" parameterType="java.util.Map">
+        UPDATE t_vehicle
+			SET load_rate = #{loadRate}
+		WHERE
+			vehicle_id = (SELECT vehicle_id FROM t_driver WHERE driver_id =#{driverId} limit 1)	
+    </update>
+    
+    
+</mapper>

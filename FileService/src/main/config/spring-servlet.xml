@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>   
+<beans 
+	xmlns="http://www.springframework.org/schema/beans"     
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+    xmlns:mvc="http://www.springframework.org/schema/mvc"
+    xmlns:p="http://www.springframework.org/schema/p"     
+    xmlns:context="http://www.springframework.org/schema/context"
+    xmlns:aop="http://www.springframework.org/schema/aop"     
+   	xsi:schemaLocation="http://www.springframework.org/schema/beans 
+   		http://www.springframework.org/schema/beans/spring-beans-4.0.xsd   
+       	http://www.springframework.org/schema/aop 
+       	http://www.springframework.org/schema/aop/spring-aop-4.0.xsd   
+       	http://www.springframework.org/schema/tx 
+       	http://www.springframework.org/schema/tx/spring-tx-4.0.xsd   
+       	http://www.springframework.org/schema/context 
+       	http://www.springframework.org/schema/context/spring-context-4.0.xsd
+       	http://www.springframework.org/schema/mvc
+		http://www.springframework.org/schema/mvc/spring-mvc-4.0.xsd">
+	
+  	<context:annotation-config />
+    <!-- 把标记了@Controller注解的类转换为bean -->
+    <context:component-scan base-package="com.chainway.fileservice" />
+    <!-- 配置AOP -->
+	<aop:aspectj-autoproxy />
+	
+    <!-- 转换日期格式等 ,加上这个，然后dto那里就可以用@DateTimeFormat(pattern="yyyy-MM-dd HH:mm:ss") 来注解日期对象了-->
+    <mvc:annotation-driven conversion-service="conversionService" />
+	<bean id="conversionService" class="org.springframework.format.support.FormattingConversionServiceFactoryBean"></bean>
+	
+	<bean id="stringHttpMessageConverter" class="org.springframework.http.converter.StringHttpMessageConverter">  
+         <property name="supportedMediaTypes">
+         	<list><value>text/plain;charset=UTF-8</value></list>
+         </property>  
+    </bean>
+    <!-- 启动Spring MVC的注解功能，完成请求和注解POJO的映射 -->
+	<bean class="org.springframework.web.servlet.mvc.annotation.AnnotationMethodHandlerAdapter">
+		<property name="messageConverters">
+			<list>
+				<!--  -->
+				<ref bean="mappingJacksonHttpMessageConverter" />
+				<!--  
+				<ref bean="stringHttpMessageConverter"/>
+				-->
+			</list>
+		</property>
+	</bean>
+	
+    <!-- 使用jsp作为视图 -->
+	<bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+		<property name="viewClass">
+			<value>org.springframework.web.servlet.view.JstlView</value>
+		</property>
+		<property name="prefix" value="/html/"></property>
+		<property name="suffix" value=".jsp"></property>
+	</bean>
+    
+    <bean id="mappingJacksonHttpMessageConverter" class="org.springframework.http.converter.json.MappingJackson2HttpMessageConverter">
+		<property name="supportedMediaTypes">
+			<list>
+				<value>text/html;charset=UTF-8</value>
+			</list>
+		</property>
+	</bean>
+	
+ </beans> 

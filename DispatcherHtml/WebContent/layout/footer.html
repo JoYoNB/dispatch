@@ -1,0 +1,52 @@
+<div class="city-footer clearfix">
+	<div class="fl clearfix">
+		<a id="bottomNavIndex" href="javascript:void(0);" class="active"><i class="iconfont iconfont-home"></i>首页</a>
+		<a id="bottomNav" href="javascript:void(0);"></a>
+	</div>
+	<div class="fr">
+		<div class=""><a href="javascript:;">深圳市卡友帮智能物流服务有限公司</a> &nbsp;&nbsp;&nbsp; 版本号: <span class="version">1.0.0</span></div>
+	</div>
+</div>
+<script>
+/*
+ * js要依赖于jquery.js,common.js 
+ *
+ **/
+var Footer={
+	init:function(){
+		var self=this;
+		self._bind();
+	},
+	_bind:function(){
+		var self=this;
+		$("#bottomNavIndex").click(function(){
+			//根据不同的角色，显示不同的首页
+			var roleCode=CommonUtils.Cookie.get(Constant.PROJECT_NAME+"_user_role");
+			if("admin"==roleCode||roleCode.indexOf("common")>-1){
+				//admin和普通用户是看不到货主/承运商的业务菜单的
+				location.href="/"+Constant.PROJECT_NAME+"/settlement/index.html";
+			}else if(roleCode.indexOf("consignor")>-1){
+				//货主
+				location.href="/"+Constant.PROJECT_NAME+"/index.html";
+			}else if(roleCode.indexOf("carrier")>-1){
+				//承运商
+				location.href="/"+Constant.PROJECT_NAME+"/carrier/index.html";
+			}else if(roleCode.indexOf("dual")>-1){
+				//货主/承运商
+				location.href="/"+Constant.PROJECT_NAME+"/carrier/index.html";
+			}
+			
+		});
+	},
+	nav:function(nav,url){
+		var self=this;
+		$("#bottomNav").html(nav);
+		$("#bottomNav").click(function(){
+			location.href="/"+Constant.PROJECT_NAME+"/"+url;
+		});
+	}
+}
+$(function(){
+	Footer.init();
+});
+</script>

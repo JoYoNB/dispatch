@@ -1,0 +1,94 @@
+@charset "utf-8";
+
+//-	主色调
+$color: #336699;
+
+//- 主色调 - 浅
+$color_0:#e0eefb;
+
+//- 主色调 - 深
+$color_1:#275a8d;
+
+//-	副色调
+$color2: #ff9900;
+
+//- 副色调 - 深
+$color2_1:#f29100;
+
+//-	副色调 - 浅
+$color2_0: #fff9f0;
+
+//-	阴影
+@mixin box-shadow($shadow...){
+	-webkit-box-shadow: $shadow;
+	box-shadow: $shadow;
+}
+
+//-	媒体查询
+@mixin max-screen($res){
+	@media only screen and ( max-width: $res ){
+		@content;
+	}
+}
+
+//-	过渡
+@mixin transition($opt...){
+	-moz-transition: $opt;
+	-webkit-transition: $opt;
+	transition: $opt;
+}
+
+//-	半径
+@mixin radius($r...){
+	-moz-border-radius: $r;
+	-webkit-border-radius: $r;
+	border-radius: $r;
+}
+
+//-	转换
+@mixin transform($opt...){
+	-moz-transform: $opt;
+	-webkit-transform: $opt;
+	transform: $opt;
+}
+
+//-	定义动画
+@mixin keyframes($name){
+	@-moz-keyframes #{$name}{ @content; }
+	@-webkit-keyframes #{$name}{ @content; }
+	@keyframes #{$name}{ @content; }
+}
+
+//-	动画
+@mixin animation($opt...){
+	-moz-animation: $opt;
+	-webkit-animation: $opt;
+	animation: $opt;
+}
+
+//-	行内块
+@mixin inline{display:inline-block;*display:inline;*zoom:1;}
+
+//-	透明度
+@mixin opacity($opt){
+	opacity: $opt/100;filter: alpha(opacity=$opt);
+}
+
+//-	定位
+@mixin position{
+	position: absolute;left: 0;right: 0;top: 0;bottom: 0;
+}
+
+//-	单行溢出
+@mixin ellipsis{
+	white-space: nowrap;text-overflow: ellipsis;overflow: hidden;
+}
+
+//-	多行溢出
+@mixin line-clamp($line){
+	overflow : hidden;text-overflow: ellipsis;display: -webkit-box;-webkit-line-clamp: $line;-webkit-box-orient: vertical;
+}
+
+@mixin btn($w,$h,$bg,$color){
+	width: $w;height: $h;line-height: $h;background: $bg;border: 1px solid $color;cursor:pointer;@include box-shadow(0 0 3px #ddd);
+}

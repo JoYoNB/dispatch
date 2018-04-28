@@ -1,0 +1,88 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<!--#include file="/layout/libs.html"-->
+	<title>城市配送管理平台</title>
+</head>
+<body>
+	<div class="city-wrapper">
+		<!-- 公共header 开始 -->
+		<!--#include file="/layout/header.html"-->
+		<!-- 公共header 结束 -->
+		
+		<div class="city-title-layout">
+			<div class="city-title">订单列表</div>
+			<div class="city-logo"><a href="javascript:;" title="城市配送管理平台"><img src="/images/logo.png" alt=""></a></div>
+		</div>
+		<div class="city-main-scroll">
+			<div class="mian-head clearfix">
+				<div class="city-search-title">
+					<ul class="city-tap clearfix">
+						<li class="tap-item active"><a href="javascript:;" data="">全部</a></li>
+						<li class="tap-item"><a href="javascript:;" data="20">已发布</a></li>
+						<li class="tap-item"><a href="javascript:;" data="40">待分配</a></li>
+						<li class="tap-item"><a href="javascript:;" data="50">已分配</a></li>
+						<li class="tap-item"><a href="javascript:;" data="70">待提货</a></li>
+						<li class="tap-item"><a href="javascript:;" data="80">配送中</a></li>
+						<li class="tap-item"><a href="javascript:;" data="90">已结束</a></li>
+					</ul>
+					<div class="btns-box">
+						<a href="javascript:;" class="city-btn" id="acceptBtn">接单</a>
+						<a href="javascript:;" class="city-btn" id="assignBtn">分配</a>
+					</div>
+				</div>
+				<!-- 搜索区域 -->
+				<div class="select-box">
+				  	<span class="toggle-select clearfix">条件筛选 <i class="iconfont iconfont-arrow-b fr"></i></span>
+					<span class="change-status"><i class="iconfont iconfont-suo"></i></span>
+					<div class="search-area">
+						<div class="ipt_box">
+							<select class="city-ipt-select"  id="timeFlag">
+								<option value="-1">请选择</option>
+								<option value="4">今天</option>
+								<option value="5">昨天</option>
+								<option value="0">本周</option>
+								<option value="1">上周</option>
+								<option value="2">本月</option>
+								<option value="3">上月</option>
+							</select>
+						</div>
+						<div class="ipt_box"><div id="timeWidgetStart"></div></div>
+						<div class="ipt_box"><div id="timeWidgetEnd"></div></div>
+						<div class="ipt_box">
+							<div id="goodsTypeWidget"></div>
+						</div>
+						<div class="ipt_box">
+							<input type="text" id="orderNo" placeholder="请输入订单号"/>
+							<input type="hidden" id="orderStatus" />
+						</div>
+						<div class="ipt_box">
+							<input type="text" id="startSiteName" placeholder="订单起点名称"/>
+						</div>
+						<div class="ipt_box">
+							<input type="text" id="endSiteName" placeholder="订单配送点或终点名称"/>
+						</div>
+						<div class="ipt_box">
+							<input type="text" id="plateNo" placeholder="请输入车牌号"/>
+						</div>
+						<div class="ipt_box">
+							<input type="text" id="driverName" placeholder="请输入驾驶员姓名"/>
+						</div>
+						<div class="ipt_box"><input type="button" id="queryBtn" class="ipt_submit" value="查询"></div>
+					</div>
+				</div>
+				<!-- 搜索区域结束-->
+			</div>
+			<div id="tableWidget" class="city-table-main">
+			</div>
+		</div>
+		<!-- 底部 开始 -->
+		<!--#include file="/layout/footer.html"-->
+		<!-- 底部 结束 -->
+	</div>
+	<script type="text/javascript" src="/js/carrier/assignment/assignment.js"></script>
+	<script type="text/javascript" src="/js/carrier/assignment/VehicleWidget.js"></script>
+	<script type="text/javascript" src="/js/carrier/orderMgmt/orderMgmt.js"></script>
+	<script type="text/javascript" src="/js/OrderStatusUtil.js"></script>
+</body>
+</html>

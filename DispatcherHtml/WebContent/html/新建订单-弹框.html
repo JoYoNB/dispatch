@@ -1,0 +1,213 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<link rel="stylesheet" href="../css/index.css">
+	<title>城市配送管理平台</title>
+</head>
+<body>
+	<div class="city-wrapper">
+		<div class="city-header clearfix">
+			<ul class="city-menu clearfix">
+				<li class="city-menu-item"><a href="javascript:;" class="city-menu-a" title="首页">首页</a></li>
+				<li class="city-menu-item"><a href="javascript:;" class="city-menu-a" title="配送监控">配送监控</a></li>
+				<li class="city-menu-item active"><a href="javascript:;" class="city-menu-a" title="订单列表">订单列表</a></li>
+				<li class="city-menu-item"><a href="javascript:;" class="city-menu-a" title="站点管理">站点管理</a></li>
+			</ul>
+			<ul class="city-submenu clearfix">
+				<li class="city-submenu-item">
+					<a href="javascript:;" class="city-person"><i class="iconfont iconfont-person"></i>用户名<i class="iconfont iconfont-arrow-b"></i></a>
+					<ul class="city-submenu-group hidden">
+						<li class="city-submenu-group-item"><a href="javascript:;">个人中心</a></li>
+						<li class="city-submenu-group-item"><a href="javascript:;">修改密码</a></li>
+					</ul>
+				</li>
+				<li class="city-submenu-item"><a href="javascript:;" title="全屏"><i class="iconfont iconfont-fullscreen"></i></a></li>
+				<li class="city-submenu-item"><a href="javascript:;" title="退出"><i class="iconfont iconfont-logout"></i></a></li>
+			</ul>
+		</div>
+		<div class="city-title-layout">
+			<div class="city-title">新建订单</div>
+			<div class="city-logo"><a href="javascript:;" title="城市配送管理平台"><img src="../images/logo.png" alt=""></a></div>
+		</div>
+		<div class="city-main-scroll">
+			<div class="city-main">
+				<ul class="city-form">
+					<li class="city-form-item clearfix">
+						<div class="city-form-tip">货物类型：</div>
+						<select class="city-ipt-select w250">
+							<option value="">请选择</option>
+							<option value="">货物类型1</option>
+							<option value="">货物类型2</option>
+							<option value="">货物类型3</option>
+							<option value="">货物类型4</option>
+						</select>
+					</li>
+					<li class="city-form-item clearfix">
+						<div class="city-form-tip">车辆类型：</div>
+						<select class="city-ipt-select w250">
+							<option value="">请选择</option>
+							<option value="">车辆类型1</option>
+							<option value="">车辆类型2</option>
+							<option value="">车辆类型3</option>
+							<option value="">车辆类型4</option>
+						</select>
+					</li>
+					<li class="city-form-item clearfix">
+						<div class="city-form-tip">总运输量：</div>
+						<input type="text" class="city-ipt-text w250" placeholder="请输入总运输量">
+						<select class="city-ipt-select w80">
+							<option value="">件</option>
+							<option value="">方</option>
+							<option value="">吨</option>
+						</select>
+					</li>
+					<li class="city-form-item clearfix">
+						<div class="city-form-tip">起点名称：</div>
+						<select class="city-ipt-select w250">
+							<option value="">请选择</option>
+							<option value="">起点名称1</option>
+							<option value="">起点名称2</option>
+							<option value="">起点名称3</option>
+							<option value="">起点名称4</option>
+						</select>
+						<span class="city-form-tap w80">发货人：</span>
+						<select class="city-ipt-select w250">
+							<option value="">请选择</option>
+							<option value="">发货人1</option>
+							<option value="">发货人2</option>
+							<option value="">发货人3</option>
+							<option value="">发货人4</option>
+						</select>
+					</li>
+					<li class="city-form-item clearfix">
+						<div class="city-form-tip">配送点名称：</div>
+						<select class="city-ipt-select w250">
+							<option value="">请选择</option>
+							<option value="">配送点名称1</option>
+							<option value="">配送点名称2</option>
+							<option value="">配送点名称3</option>
+							<option value="">配送点名称4</option>
+						</select>
+						<span class="city-form-tap w80">收货人：</span>
+						<select class="city-ipt-select w250">
+							<option value="">请选择</option>
+							<option value="">收货人1</option>
+							<option value="">收货人2</option>
+							<option value="">收货人3</option>
+							<option value="">收货人4</option>
+						</select>
+						<span class="city-form-tap w80">卸货量：</span>
+						<input type="text" class="city-ipt-text w120" placeholder="请输入卸货量">
+						<select class="city-ipt-select w80">
+							<option value="">件</option>
+							<option value="">方</option>
+							<option value="">吨</option>
+						</select>
+						<a href="javascript:;" class="address-add"><i class="icon icon-add"></i></a>
+						<a href="javascript:;" class="address-btn"><i class="iconfont iconfont-remove"></i></a>
+					</li>
+					<li class="city-form-item clearfix">
+						<div class="city-form-tip">终点名称：</div>
+						<select class="city-ipt-select w250">
+							<option value="">请选择</option>
+							<option value="">终点名称1</option>
+							<option value="">终点名称2</option>
+							<option value="">终点名称3</option>
+							<option value="">终点名称4</option>
+						</select>
+						<span class="city-form-tap w80">收货人：</span>
+						<select class="city-ipt-select w250">
+							<option value="">请选择</option>
+							<option value="">收货人1</option>
+							<option value="">收货人2</option>
+							<option value="">收货人3</option>
+							<option value="">收货人4</option>
+						</select>
+						<span class="city-form-tap w80">卸货量：</span>
+						<input type="text" class="city-ipt-text w120" placeholder="请输入卸货量">
+						<select class="city-ipt-select w80">
+							<option value="">件</option>
+							<option value="">方</option>
+							<option value="">吨</option>
+						</select>
+						<a href="javascript:;" class="address-add"><i class="icon icon-add"></i></a>
+						<a href="javascript:;" class="address-btn"><i class="iconfont iconfont-add"></i></a>
+					</li>
+					<li class="city-form-item clearfix">
+						<div class="city-form-tip">提货时间：</div>
+						<input type="text" class="city-ipt-text city-ipt-text-time w250" readonly="true" placeholder="请选择">
+					</li>
+					<li class="city-form-item clearfix">
+						<div class="city-form-tip">送达时间：</div>
+						<input type="text" class="city-ipt-text city-ipt-text-time w250" readonly="true" placeholder="请选择">
+					</li>
+					<li class="city-form-item clearfix">
+						<div class="city-form-tip">备注：</div>
+						<textarea class="city-textarea" placeholder="请输入备注"></textarea>
+					</li>
+					<li class="city-form-item clearfix">
+						<div class="city-form-tip">订单总价：</div>
+						<span class="red">￥<span class="fonts16">999</span></span>
+					</li>
+					<li class="city-form-item clearfix">
+						<div class="city-form-tip">支付方式：</div>
+						<label class="city-ipt-label"><input type="radio" name="money"><span class="city-ipt-radio"></span>支付宝</label>
+						<label class="city-ipt-label"><input type="radio" name="money"><span class="city-ipt-radio"></span>微信</label>
+					</li>
+					<li class="city-form-item clearfix">
+						<div class="city-form-tip">&nbsp;</div>
+						<a href="javascript:;" class="city-btn active">支付</a>
+						<a href="javascript:;" class="city-btn">保存</a>
+						<a href="javascript:;" class="city-btn">取消</a>
+					</li>
+				</ul>
+			</div>
+		</div>
+		<div class="city-footer clearfix">
+			<div class="fl clearfix">
+				<a href="javascript:;" class="active"><i class="iconfont iconfont-home"></i>首页</a>
+				<a href="javascript:;">订单列表</a>
+				<a href="javascript:;">新建订单</a>
+			</div>
+			<div class="fr">
+				<div class=""><a href="javascript:;">深圳市卡友帮智能物流服务有限公司</a> &nbsp;&nbsp;&nbsp; 版本号: <span class="version">1.0.0</span></div>
+			</div>
+		</div>
+	</div>
+	<div class="city-popup-wrapper active">
+		<div class="city-popup">
+			<div class="city-popup-content">
+				<div class="city-add-address">
+					<div class="city-add-address-left fl">
+						<div class="tit">配送点</div>
+						<div class="item clearfix">
+							<div class="tip">站点名称</div>
+							<input type="text" class="city-ipt-text" placeholder="请输入站点名称">
+						</div>
+						<div class="item clearfix">
+							<div class="tip">选择地址</div>
+							<input type="text" class="city-ipt-text" readonly="true" placeholder="拖动地图位置图标选择">
+						</div>
+						<div class="item clearfix">
+							<div class="tip">发货人</div>
+							<input type="text" class="city-ipt-text" placeholder="请输入收货人姓名">
+						</div>
+						<div class="item clearfix">
+							<div class="tip">手机号码</div>
+							<input type="text" class="city-ipt-text" placeholder="请输入收货人姓名">
+						</div>
+						<div class="item clearfix">
+							<a href="javascript:;" class="city-btn active fl">保存并选择</a>
+							<a href="javascript:;" class="city-btn fr">取消</a>
+						</div>
+					</div>
+					<div class="city-add-address-right fr">
+						<div id="myMap" class="map-wrapper"><img src="../images/_pic2.jpg" alt=""></div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</body>
+</html>

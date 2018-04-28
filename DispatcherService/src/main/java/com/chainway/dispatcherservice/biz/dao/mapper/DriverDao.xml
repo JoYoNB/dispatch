@@ -1,0 +1,140 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.chainway.dispatcherservice.biz.dao.DriverDao">
+    <sql id="Base_Column_List">
+	    t1.driver_id as driverId,t1.driver_id as id, t1.driver_name as driverName, t1.password, t1.gmt_zone as gmtZone, t1.vehicle_id as vehicleId, 
+	    t1.phone_no as phoneNo , t1.dept_id as deptId, t1.status, t1.entry_time as entryTime, t1.create_time as createTime, 
+	    t1.update_time as updateTime, t1.remark, t1.online_status as onlineStatus
+  	</sql>
+    
+    <!--新增  -->
+    <insert id="add" parameterType="com.chainway.dispatchercore.dto.Driver"> 
+        INSERT INTO t_driver 
+		  (driver_name,password,gmt_zone,vehicle_id,phone_no,dept_id,entry_time,create_time,update_time,remark)
+		VALUES
+		  (#{driverName},#{password},#{gmtZone},#{vehicleId},#{phoneNo},#{deptId},#{entryTime},UTC_TIMESTAMP(),UTC_TIMESTAMP(),#{remark});
+    </insert>
+    
+    <!--查询单个司机  -->
+    <select id="getDriver" parameterType="java.util.Map" resultType="com.chainway.dispatchercore.dto.Driver">
+        SELECT <include refid="Base_Column_List"/> from t_driver t1 where  t1.status=1 and t1.driver_id=#{driverId}
+    </select>
+    
+    <!--查询司机列表  -->
+    <select id="getDriverList" parameterType="java.util.Map" resultType="java.util.Map">
+        SELECT
+			<include refid="Base_Column_List"/>,
+			t3.plate_no plateNo,t2.name deptName,
+			<!--统计司机新增订单数量  -->
+			(SELECT count(1) FROM t_order tb1 INNER JOIN t_order_vehicle_rel tb2 ON tb1.order_no = tb2.order_no
+			WHERE tb1.status=1 AND tb2.driver_id =t1.driver_id
+			<if test="startTime!=null and endTime!=null and startTime !='' and endTime !=''">
+				 AND  tb1.finish_time between #{startTime} and #{endTime}
+			</if>) as addOrderCount,
+			<!--统计司机历史订单数量  -->
+			(SELECT count(1) FROM t_order tb1  INNER JOIN t_order_vehicle_rel tb2 ON tb1.order_no = tb2.order_no
+			WHERE tb1.status=1 AND tb2.driver_id =t1.driver_id) as orderCount
+		FROM
+			t_driver t1
+		left JOIN t_dept t2 ON t1.dept_id = t2.id  AND t2. STATUS = 1
+		left JOIN t_vehicle t3 ON t1.vehicle_id= t3.vehicle_id 	AND t3.status=1
+		WHERE
+			t1. STATUS = 1
+		<include refid="getDriverListCondition"/>
+		<if test="pageSize!=null and pageSize>0">
+		    limit #{offset},#{pageSize}
+		</if>
+    </select>
+   
+    <!--列表查询条件  -->
+    <sql id="getDriverListCondition">
+		<if test="driverId!=null and driverId!=''">
+		  AND t1.driver_id =#{driverId}
+		</if>
+		<if test="driverName!=null and driverName!=''">
+		  AND t1.driver_name like CONCAT('%',#{driverName},'%')
+		</if>
+		<if test="phoneNo!=null and phoneNo!=''">
+		  AND t1.phone_no like CONCAT('%',#{phoneNo},'%')
+		</if>
+		<if test="deptDNA!=null and deptDNA!=''">
+          AND  t2.dna like CONCAT(#{deptDNA},'%')
+        </if>
+        <if test="deptId!=null and deptDNA==null">
+          AND  t2.dna like CONCAT((select dna from t_dept where id=#{deptId}),'%')
+        </if>
+        <if test="vehicleTypeId!=null and vehicleTypeId!=''">
+          AND  t3.vehicle_type_id=#{vehicleTypeId}
+        </if>
+        <if test="plateNo!=null and plateNo!=''">
+          AND  t3.plate_no like CONCAT('%',#{plateNo},'%') 
+        </if>
+        <if test="equipmentPn!=null and equipmentPn!=''">
+          AND  t3.equipment_pn like CONCAT('%',#{equipmentPn},'%')
+        </if>
+        <if test="vehicleId!=null and vehicleId!=''">
+           AND t3.vehicle_id=#{vehicleId}
+        </if>
+    </sql>
+    
+    <!--查询列表总数  -->
+    <select id="getDriverListCount" parameterType="java.util.Map" resultType="java.lang.Integer">
+        SELECT
+			count(1)
+		FROM
+			t_driver t1
+		left JOIN t_dept t2 ON t1.dept_id = t2.id  AND t2. STATUS = 1
+		left JOIN t_vehicle t3 ON t1.vehicle_id= t3.vehicle_id 	AND t3.status=1
+		WHERE
+			t1. STATUS = 1
+		<include refid="getDriverListCondition"/>
+    </select>
+   
+	<!-- 修改司机 -->
+    <update id="update" parameterType="com.chainway.dispatchercore.dto.Driver">
+         update t_driver
+        <set>
+		      <if test="driverName != null">
+		        driver_name = #{driverName},
+		      </if>
+		      <if test="password != null">
+		        password = #{password},
+		      </if>
+		      <if test="gmtZone != null">
+		        gmt_zone = #{gmtZone},
+		      </if>
+		      <if test="vehicleId != null">
+		        vehicle_id = #{vehicleId},
+		      </if>
+		      <if test="phoneNo != null">
+		        phone_no = #{phoneNo},
+		      </if>
+		      <if test="deptId != null">
+		        dept_id = #{deptId},
+		      </if>
+		      <if test="status != null">
+		        status = #{status},
+		      </if>
+		      <if test="entryTime != null">
+		        entry_time = #{entryTime},
+		      </if>
+		      <if test="createTime != null">
+		        create_time = #{createTime},
+		      </if>
+		      <if test="remark != null">
+		        remark = #{remark},
+		      </if>
+		      <if test="onlineStatus != null">
+		        online_status = #{onlineStatus},
+		      </if>
+		      update_time = UTC_TIMESTAMP()
+    	</set>
+   		 where driver_id = #{driverId}
+    </update>
+    
+    <!--删除司机  -->
+    <update id="delete" parameterType="java.util.Map">
+        update t_driver set status=2 where driver_id =#{driverId}
+    </update>
+</mapper>

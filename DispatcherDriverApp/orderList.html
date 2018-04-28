@@ -1,0 +1,51 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+	<meta name="apple-mobile-web-app-capable" content="yes">
+	<meta name="apple-mobile-web-app-status-bar-style" content="black">
+	<title>卡友帮配送</title>
+	<link rel="stylesheet" href="css/mui.min.css">
+	<link rel="stylesheet" href="css/index.css">
+</head>
+<body>
+	<header class="mui-bar mui-bar-nav ct-bar">
+		<h1 class="mui-title ct-title"><img src="images/logo.png" alt="卡友帮配送" class="ct-logo"></h1>
+	</header>
+	<div class="mui-content ct-content">
+		<div class="ct-fullscreen">
+			<div class="mui-slider mui-fullscreen">
+				<div class="mui-scroll-wrapper mui-slider-indicator mui-segmented-control mui-segmented-control-inverted ct-tabs">
+				    <div class="mui-scroll">
+				        <a class="mui-control-item J_orderControl mui-active" href="#J_allOrdersWrap" data-type="-1">当前订单</a>
+				        <a class="mui-control-item J_orderControl" href="#J_ordersWrap0" data-type="0">历史订单</a>
+				    </div>
+				</div>
+				<div class="ct-table-view-wrap mui-slider-group">
+					<div class="mui-slider-item mui-control-content" id="J_allOrdersWrap">
+						<div class="mui-scroll-wrapper J_scrollWrap">
+					    	<div class="mui-scroll">
+					    		<ul class="mui-table-view ct-table-view"></ul>
+					    	</div>
+					    </div>
+					</div>
+					<div class="mui-slider-item mui-control-content" id="J_ordersWrap0">
+						<div class="mui-scroll-wrapper J_scrollWrap">
+					    	<div class="mui-scroll">
+					    		<ul class="mui-table-view ct-table-view"></ul>
+					    	</div>
+					    </div>
+					</div>
+					<div class="mui-slider-item mui-control-content hide"></div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<script src="js/mui.min.js"></script>
+	<script src="js/common.js"></script>
+	<script src="js/common/common.js"></script>
+	<script src="js/comUtils.js"></script>
+	<script src="js/orderList.js"></script>
+</body>
+</html>

@@ -1,0 +1,276 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!-- namespace命名规则: 表对应java类的名称-->
+<mapper namespace="com.chainway.dispatcherservice.biz.dao.UserDao">
+	
+	<insert id="addUser" parameterType="com.chainway.dispatchercore.dto.User">
+		<selectKey resultType="int" keyProperty="id">
+			SELECT
+			LAST_INSERT_ID()
+		</selectKey>
+		insert into t_user(
+		name,
+		account,
+		password,
+		status,
+		dept_id,
+		email,
+		phone,
+		role_id,
+		gmt_zone,
+		creater,
+		updater,
+		create_time,
+		update_time
+		)value(
+		#{name},
+		#{account},
+		#{password},
+		1,
+		#{deptId},
+		#{email},
+		#{phone},
+		#{roleId},
+		#{gmtZone},
+		#{creater},
+		#{updater},
+		UTC_TIMESTAMP(),
+		UTC_TIMESTAMP()
+		)
+	</insert>
+	
+	<update id="deleteUser" parameterType="com.chainway.dispatchercore.dto.User">
+		update t_user set status=2,update_time=UTC_TIMESTAMP()
+		<if test="updater!=null">
+		,updater=#{updater}
+		</if>
+		where id=#{id}
+	</update>
+	
+	<update id="updateUser" parameterType="com.chainway.dispatchercore.dto.User">
+		update t_user set updater=#{updater},update_time=UTC_TIMESTAMP()
+		<if test="name!=null and name!=''">
+		,name=#{name}
+		</if>
+		<if test="password!=null and password!=''">
+		,password=#{password}
+		</if>
+		<if test="status!=null and status!=2">
+		,status=#{status}
+		</if>
+		<if test="deptId!=null">
+		,dept_id=#{deptId}
+		</if>
+		<if test="roleId!=null">
+		,role_id=#{roleId}
+		</if>
+		<if test="phone!=null and phone!=''">
+		,phone=#{phone}
+		</if>
+		<if test="email!=null and email!=''">
+		,email=#{email}
+		</if>
+		<if test="gmtZone!=null and gmtZone!=''">
+		,gmt_zone=#{gmtZone}
+		</if>
+		
+		where id=#{id}
+	</update>
+	
+	<select id="getUser" parameterType="com.chainway.dispatchercore.dto.User" resultType="com.chainway.dispatchercore.dto.User">
+		select 
+		tu.id,
+		tu.name,
+		tu.account,
+		tu.password,
+		tu.status,
+		tu.dept_id as deptId,
+		tu.role_id as roleId,
+		tu.email,
+		tu.phone,
+		tu.gmt_zone as gmtZone,
+		
+		td.dna as deptDNA,
+		td.name as deptName,
+		
+		tr.code as roleCode,
+		tr.name as roleName
+		
+		from t_user tu
+		inner join t_role tr on tr.id=tu.role_id
+		inner join t_dept td on td.id=tu.dept_id
+		
+		where 1=2
+		<if test="id!=null">
+			or tu.id=#{id}
+		</if>
+		<if test="account!=null and account!=''">
+			or (
+			tu.account=#{account}
+			<if test="status!=null">
+				and tu.status=#{status}
+			</if>
+			)
+		</if>
+	</select>
+	
+	<sql id="getUserListConditions">
+		<if test="likeName!=null and likeName!=''">
+			and tu.name like concat('%',#{likeName},'%')
+		</if>
+		<if test="account!=null and account!=''">
+			and tu.account=#{account}
+		</if>
+		<if test="name!=null and name!=''">
+			and tu.name=#{name}
+		</if>
+		<if test="deptId!=null">
+			and tu.dept_id=#{deptId}
+		</if>
+		<if test="deptDNA!=null and deptDNA!=''">
+			and td.dna like concat(#{deptDNA},'%')
+		</if>
+		<if test="phone!=null and phone!=''">
+			and tu.phone=#{phone}
+		</if>
+		<if test="email!=null and email!=''">
+			and tu.email=#{email}
+		</if>
+		<if test="status!=null and status!=2">
+			and tu.status=#{status}
+		</if>
+		<if test="roleId!=null">
+			and tu.role_id=#{roleId}
+		</if>
+		
+	</sql>
+	<select id="getUserList" parameterType="java.util.Map" resultType="com.chainway.dispatchercore.dto.User">
+		select 
+		tu.id,
+		tu.name,
+		tu.account,
+		tu.password,
+		tu.status,
+		tu.dept_id as deptId,
+		tu.role_id as roleId,
+		tu.email,
+		tu.phone,
+		tu.gmt_zone as gmtZone,
+		
+		td.dna as deptDNA,
+		td.name as deptName,
+		
+		tr.code as roleCode,
+		tr.name as roleName
+		
+		from t_user tu
+		inner join t_role tr on tr.id=tu.role_id
+		inner join t_dept td on td.id=tu.dept_id
+		where tu.status!=2
+		<include refid="getUserListConditions"></include>
+		order by tu.update_time desc,tu.name
+		<if test="pageSize!=null and offset!=null">
+		limit #{offset},#{pageSize}
+		</if>
+	</select>
+	
+	<select id="getUserListCount" parameterType="java.util.Map" resultType="int">
+		select count(1) as n
+		
+		from t_user tu
+		inner join t_role tr on tr.id=tu.role_id
+		inner join t_dept td on td.id=tu.dept_id
+		where tu.status!=2
+		<include refid="getUserListConditions"></include>
+	</select>
+	
+	<resultMap id="roleResultMap" type="com.chainway.dispatchercore.dto.Role"> 
+  		<id column="id" property="id" /> 
+  		<result column="name" property="name" />
+  		<result column="code" property="code" />
+  		<result column="type" property="type" />
+  		<result column="status" property="status" />
+  		<result column="deptId" property="deptId" />
+  		<collection property="authList" javaType="ArrayList" ofType="com.chainway.dispatchercore.dto.Auth">
+  			<id column="authId" property="id" /> 
+  		    <result column="authCode" property="code" />
+  		    <result column="authName" property="name" />
+  		</collection>
+ 	</resultMap>
+ 	
+	<select id="getRole" parameterType="com.chainway.dispatchercore.dto.Role" resultMap="roleResultMap">
+		select 
+		tr.id,
+		tr.name,
+		tr.`code`,
+		tr.type,
+		tr.`status`,
+		tr.dept_id as deptId,
+		
+		ta.id as authId,
+		ta.`code` as authCode,
+		ta.`name` as authName
+		
+		from t_role tr 
+		left join t_role_auth_ref trar on trar.role_id=tr.id
+		left join t_auth ta on ta.id=trar.auth_id 
+		
+		where tr.id=#{id}
+		and ta.`code` is not NULL
+	</select>
+	
+	<select id="getAdminRole" parameterType="com.chainway.dispatchercore.dto.Role" resultMap="roleResultMap">
+		select 
+		tr.id,
+		tr.name,
+		tr.`code`,
+		tr.type,
+		tr.`status`,
+		tr.dept_id as deptId,
+		
+		ta.id as authId,
+		ta.`code` as authCode,
+		ta.`name` as authName
+		
+		from t_role tr,t_auth ta 
+		
+		where tr.code='admin'
+	</select>
+	
+	<!-- 查找用户管辖的用户Id -->
+	<select id="getUserIdList" parameterType="com.chainway.dispatchercore.dto.Dept" resultType="java.lang.String">
+		select tu.id from t_user tu 
+		inner join t_dept td on td.id=tu.dept_id
+		where tu.`status`!=2
+		and td.`status`=1
+		<if test="dna!=null and dna!='' and id==null">
+			and td.dna like CONCAT(#{dna},'%')
+		</if>
+		<if test="id!=null and dna==null">
+			and td.dna like CONCAT((select dna from t_dept where id=#{id}),'%')
+		</if>
+	</select>
+	
+	<!-- 个人信息 -->
+	<select id="myInfo" parameterType="com.chainway.dispatchercore.dto.User" resultType="java.util.Map">
+		SELECT
+			tu.id ,
+			tu.`name` ,
+			tu.account ,
+			td1.id deptId ,
+			td1.`name` deptName ,
+			td2.id companyId ,
+			td2.`name` companyName ,
+			tc.logo,
+			tc.auth_status authStatus
+		FROM
+			t_user tu
+		INNER JOIN t_dept td1 ON tu.dept_id = td1.id
+		INNER JOIN t_dept td2 ON SUBSTRING_INDEX(td1.dna , '-' , 1) = td2.id
+		INNER JOIN t_customer_info tc ON td2.id = tc.dept_id
+		WHERE
+			tu.id = #{id}
+	</select>
+</mapper>

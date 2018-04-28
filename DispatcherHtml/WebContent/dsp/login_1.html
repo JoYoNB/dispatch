@@ -1,0 +1,119 @@
+<html>
+<head>
+<title>登录</title>
+<!--#include file="/layout/libs.html"-->
+</head>
+<body>
+	<table>
+		<tr>
+			<td>用户名:</td>
+			<td><input type="text" id="account"></td>
+		</tr>
+		<tr>
+			<td>密   码:</td>
+			<td><input type="password" id="password"></td>
+		</tr>
+		<tr>
+			<td>验证码:</td>
+			<td><input type="text" id="validateCode"><img id="validateCodeImg" alt="" src=""></td>
+		</tr>
+	</table>
+	<p><a id="loginBtn" href="javascript:void(0);">登录</a></p>
+
+<script type="text/javascript">
+var Login={
+	_randomToken:null,
+	init:function(){
+		var self=this;
+		//加载验证码
+		self._updateValidateCode();
+		
+		self._bind();
+	},
+	_bind:function(){
+		var self=this;
+		
+		//点击切换验证码
+		$("#validateCodeImg").unbind("click").click(function(){
+			self._updateValidateCode();
+		});
+		
+		$("#loginBtn").unbind("click").click(function(){
+			self._login();
+		});
+	},
+	_login:function(){
+		var self=this;
+		
+		var account=$("#account").val();
+		var password=$("#password").val();
+		var validateCode=$("#validateCode").val();
+		
+		var param={
+			account:account,
+			password:password,
+			validateCode:validateCode,
+			randomCode:self._randomToken
+		};
+		
+		CommonUtils.async({
+			url:"/DispatcherWeb/common/login.json",
+			data:param,
+			success:function(result){
+				if(result.code==0){
+					//登录成功，保存用户信息进入cookie
+					var user=result.data;
+					
+					var token=user.token;
+					var name=user.name;
+					var roleCode=user.roleCode;
+					var id=user.id;
+					
+					var role=user.role||{};
+					var authList=role.authList||[];
+					
+					var _auths="";
+					for(var i=0,len=authList.length;i<len;i++){
+						var _a=authList[i];
+						var _code=_a.code;
+						if(i==0){
+							_auths+=_code;
+						}else{
+							_auths+=","+_code;
+						}
+					}
+					
+					CommonUtils.Cookie.add(Constant.PROJECT_NAME+"_token",token);
+					CommonUtils.Cookie.add(Constant.PROJECT_NAME+"_user_name",name);
+					CommonUtils.Cookie.add(Constant.PROJECT_NAME+"_user_id",id);
+					CommonUtils.Cookie.add(Constant.PROJECT_NAME+"_user_role",roleCode);
+					CommonUtils.Cookie.add(Constant.PROJECT_NAME+"_user_authList",_auths);
+					
+					//缓存完后，500毫秒后，跳转index页面，防止没缓存后就跳转丢失cookie信息
+					setTimeout(function(){
+						location.href="/dsp/index.html";
+					},500);
+				}
+			},
+			error:function(result){
+				
+			}
+		});
+	},
+	_updateValidateCode:function(){
+		var self=this;
+		
+		var token=(new Date()).getTime();
+		var r=Math.random()+"";
+		token=token+r.replace(".","");
+		self._randomToken=token;
+		
+		$("#validateCodeImg").attr("src","/DispatcherWeb/common/captcha.json?r="+token);
+	}
+}
+$(function(){
+	Login.init();
+});
+</script>
+</body>
+</html>

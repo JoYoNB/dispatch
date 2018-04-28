@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!-- namespace命名规则: 表对应java类的名称-->
+<mapper namespace="com.chainway.dispatcherservice.biz.dao.OrderLifecycleDao">
+
+	<insert id="add" parameterType="com.chainway.dispatchercore.dto.OrderLifecycle">
+		INSERT INTO `t_order_lifecycle`(
+			`order_no` ,
+			`operation` ,
+			`operator` ,
+			`operate_time` ,
+			`ip` ,
+			`content`,
+			 order_status,
+			 pay_status
+		)
+		VALUES
+			(
+				#{orderNo} ,
+				#{operation} ,
+				#{operatorId} ,
+				UTC_TIMESTAMP(),
+				#{ip} ,
+				#{content},
+				#{orderStatus},
+				#{payStatus}
+			)
+	</insert>
+	<select id="query" parameterType="java.util.Map" resultType="com.chainway.dispatchercore.dto.OrderLifecycle">
+		SELECT
+			tol.`order_no` orderNo,
+			tol.`operation` operation,
+			tol.`operator` operatorId,
+			tu.`name` operatorName,
+			tu.phone operatorPhone,
+			<if test="userTimeZone!=null">
+				DATE_FORMAT(CONVERT_TZ(tol.`operate_time`,'+00:00',#{userTimeZone}),'%Y-%m-%d %H:%i:%s') operateTime,
+			</if>
+			<if test="userTimeZone==null">
+				tol.`operate_time` operateTime,
+			</if>
+			tol.`ip` ip,
+			tol.`content` content,
+			tol.order_status orderStatus,
+			tol.pay_status payStatus
+		FROM
+			t_order_lifecycle tol
+		LEFT JOIN
+			t_user tu
+		ON tol.operator=tu.id
+		WHERE
+			order_no = #{orderNo}
+		<if test="operations!=null and operations!=''">
+             AND operation IN (
+				<foreach collection="operations" item="obj"  index="index" separator=",">
+					#{obj}
+				</foreach>
+			)
+		</if>
+		ORDER BY operate_time ASC
+	</select>
+</mapper>

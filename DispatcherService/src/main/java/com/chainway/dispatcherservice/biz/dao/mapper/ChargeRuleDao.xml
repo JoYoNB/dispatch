@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!-- namespace命名规则: 表对应java类的名称-->
+<mapper namespace="com.chainway.dispatcherservice.biz.dao.ChargeRuleDao">
+
+	<insert id="add" parameterType="com.chainway.dispatcherservice.dto.ChargeRule">
+		INSERT INTO `t_charge_rule`(
+			`vehicle_type_id` ,
+			`city_id` ,
+			`starting_mileage` ,
+			`starting_price` ,
+			`price` ,
+			`creater` ,
+			`create_time` ,
+			`updater` ,
+			`update_time`
+		)
+		VALUES
+			(
+				#{vehicleTypeId} ,
+				#{cityId} ,
+				#{startingMileage} ,
+				#{startingPrice} ,
+				#{price} ,
+				#{createrId} ,
+				UTC_TIMESTAMP(),
+				#{updaterId} ,
+				UTC_TIMESTAMP()
+			);
+	</insert>
+	<delete id="delete">
+		DELETE
+		FROM
+			t_charge_rule
+		WHERE id=#{id}
+	</delete>
+	<update id="update" parameterType="com.chainway.dispatcherservice.dto.ChargeRule">
+		UPDATE t_charge_rule
+		SET 
+			`vehicle_type_id`=#{vehicleTypeId} ,
+			`city_id`=#{cityId} ,
+			`starting_mileage`=#{startingMileage} ,
+			`starting_price`=#{startingPrice} ,
+			`price`=#{price} ,
+			`updater`=#{updaterId} ,
+			`update_time`=UTC_TIMESTAMP()
+		WHERE id=#{id}
+	</update>
+	<sql id="getListConditions">
+		WHERE 1=1
+		<if test="areaName!=null and areaName!=''">
+			and (ta1.`name` LIKE CONCAT('%',#{areaName},'%') OR ta2.`name` LIKE CONCAT('%',#{areaName},'%'))
+		</if>
+		<if test="vehicleTypeName!=null and vehicleTypeName!=''">
+			and tv.`name` LIKE CONCAT('%',#{vehicleTypeName},'%') 
+		</if>
+		<if test="vehicleTypeId!=null and vehicleTypeId!=''">
+			and tc.vehicle_type_id=#{vehicleTypeId}
+		</if>
+		<if test="cityId!=null and cityId!=''">
+			and tc.city_id=#{cityId}
+		</if>
+	</sql>
+	<select id="getList" parameterType="java.util.Map" resultType="com.chainway.dispatcherservice.dto.ChargeRule">
+		SELECT
+			tc.id ,
+			tc.starting_mileage startingMileage,
+			tc.starting_price startingPrice,
+			tc.price ,
+			tc.create_time createTime,
+			tc.vehicle_type_id vehicleTypeId,
+			tv.`name` vehicleTypeName,
+			tv.i18n_key vehicleTypeI18nKey,
+			ta1.id cityId,
+			ta1.`name` cityName,
+			ta1.i18n_key cityI18nKey,
+			ta2.id provinceId,
+			ta2.`name` provinceName,
+			ta2.i18n_key provinceI18nKey
+		FROM
+			`t_charge_rule` tc
+		INNER JOIN t_vehicle_type_dict tv ON tc.vehicle_type_id = tv.id
+		INNER JOIN(SELECT id ,name ,parent ,i18n_key FROM t_area WHERE LEVEL = 2 ) ta1 ON tc.city_id = ta1.id
+		INNER JOIN(SELECT id ,NAME ,parent ,i18n_key FROM t_area WHERE LEVEL = 1 ) ta2 ON ta1.parent = ta2.id
+		<include refid="getListConditions"></include>
+		ORDER BY tc.update_time DESC
+		<if test="pageSize!=null and offset!=null">
+			LIMIT #{offset},#{pageSize}
+		</if>
+	</select>
+	<select id="getListCount" parameterType="java.util.Map" resultType='int'>
+		SELECT
+			count(1) AS n
+		FROM
+			`t_charge_rule` tc
+		INNER JOIN t_vehicle_type_dict tv ON tc.vehicle_type_id = tv.id
+		INNER JOIN(SELECT id ,name ,parent ,i18n_key FROM t_area WHERE LEVEL = 2 ) ta1 ON tc.city_id = ta1.id
+		INNER JOIN(SELECT id ,NAME ,parent ,i18n_key FROM t_area WHERE LEVEL = 1 ) ta2 ON ta1.parent = ta2.id
+		<include refid="getListConditions"></include>
+	</select>
+	
+	<select id="getInfo" parameterType="java.util.Map" resultType="com.chainway.dispatcherservice.dto.ChargeRule">
+		SELECT
+			tc.id ,
+			tc.starting_mileage startingMileage,
+			tc.starting_price startingPrice,
+			tc.price ,
+			tc.create_time createTime,
+			tc.vehicle_type_id vehicleTypeId,
+			tv.`name` vehicleTypeName,
+			tv.i18n_key vehicleTypeI18nKey,
+			ta1.id cityId,
+			ta1.`name` cityName,
+			ta1.i18n_key cityI18nKey,
+			ta2.id provinceId,
+			ta2.`name` provinceName,
+			ta2.i18n_key provinceI18nKey
+		FROM
+			`t_charge_rule` tc
+		INNER JOIN t_vehicle_type_dict tv ON tc.vehicle_type_id = tv.id
+		INNER JOIN(SELECT id ,name ,parent ,i18n_key FROM t_area WHERE LEVEL = 2 ) ta1 ON tc.city_id = ta1.id
+		INNER JOIN(SELECT id ,NAME ,parent ,i18n_key FROM t_area WHERE LEVEL = 1 ) ta2 ON ta1.parent = ta2.id
+		WHERE tc.id=#{id}
+	</select>
+</mapper>

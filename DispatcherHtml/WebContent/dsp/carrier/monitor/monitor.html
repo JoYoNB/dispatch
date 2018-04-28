@@ -1,0 +1,60 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<!--#include file="/layout/libs.html"-->
+	<!-- 加载地图资源 -->
+	<!--#include file="/layout/maplibs.html" -->
+	<title>城市配送管理平台</title>
+</head>
+<body>
+	<div class="city-wrapper">
+		<!-- 公共header 开始 -->
+		<!--#include file="/layout/header.html"-->
+		<!-- 公共header 结束 -->
+		<div class="city-main-scroll city-main-scroll2">
+			<div class="city-control-container">
+				<div class="city-orderlist-part clearfix">
+					<div class="city-control-item city-order-main">
+						<form id="searchForm">
+							<div class="city-order-search">
+								<div class="ipt_box clearfix">
+									<div id="deptWidget" class="ipt_box"></div>
+								</div>
+								<div class="ipt_box ipt_submitBox clearfix">
+									<input type="text" class="city-ipt-text city-ipt-padding fl " name="content" id="content">
+									<select class="city-ipt-select w90" id="fieldId">
+										<option value="0">订单号</option>
+										<option value="1">车牌号</option>
+										<option value="2">驾驶员</option>
+									</select>
+									<a href="javascript:;" class="city-btn active fr w72 searchBtn">查询</a>
+								</div>
+							</div>
+						</form>
+						<ul class="city-tap clearfix">
+							<li class="tap-item active status-all"><a href="javascript:;">全部<span class="num" id="total"></span></a></li>
+							<li class="tap-item status-empty"><a href="javascript:;">空载<span class="num" id="noLoad"></span></a></li>
+							<li class="tap-item status-half"><a href="javascript:;">半载<span class="num" id="halfLoad"></span></a></li>
+							<li class="tap-item status-full"><a href="javascript:;">满载<span class="num" id="fullLoad"></span></a></li>
+							<li class="tap-item status-offline"><a href="javascript:;">离线<span class="num" id="offLine"></span></a></li>
+						</ul>
+						<div class="city-order-lists">
+							<ul class="vehicleList">
+							</ul>
+						</div>
+					</div>
+				</div>
+				<div class="city-map-part">
+					<div class="city-map" id="allmap">
+					</div>
+				</div>
+			</div>
+		</div>
+		<!-- 底部 开始 -->
+		<!--#include file="/layout/footer.html"-->
+		<!-- 底部 结束 -->
+	</div>
+	<script type="text/javascript" src="/js/carrier/monitor/monitor.js"></script>
+</body>
+</html>
